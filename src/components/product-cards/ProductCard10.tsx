@@ -119,7 +119,7 @@ const ContentWrapper = styled(Box)({
 // ====================================================================
 type ProductCardProps = {
   off: number;
-  slug: string;
+  URLKey: string;
   price: number;
   title: string;
   imgUrl: string;
@@ -130,7 +130,7 @@ type ProductCardProps = {
 // ====================================================================
 
 const ProductCard10: FC<ProductCardProps> = (props) => {
-  const { off, id, title, price, imgUrl, rating, hideRating, slug } = props;
+  const { off, id, title, price, imgUrl, rating, hideRating, URLKey } = props;
 
   const { enqueueSnackbar } = useSnackbar();
   const { state, dispatch } = useAppContext();
@@ -140,12 +140,12 @@ const ProductCard10: FC<ProductCardProps> = (props) => {
   const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
   const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
 
-  const cartItem: CartItem = state.cart.find((item) => item.slug === slug);
+  const cartItem: CartItem = state.cart.find((item) => item.URLKey === URLKey);
 
   const handleCartAmountChange = (amount: number, type?: "remove") => () => {
     dispatch({
       type: "CHANGE_CART_AMOUNT",
-      payload: { price, imgUrl, id, name: title, qty: amount, slug },
+      payload: { price, imgUrl, id, name: title, qty: amount, URLKey },
     });
 
     // SHOW ALERT PRODUCT ADDED OR REMOVE
@@ -164,7 +164,7 @@ const ProductCard10: FC<ProductCardProps> = (props) => {
         )}
 
         <ImageBox className="hoverImgBox">
-          <Link href={`/product/${slug}`}>
+          <Link href={`/product/${URLKey}`}>
             <LazyImage alt={title} width={190} height={190} src={imgUrl} />
           </Link>
         </ImageBox>
@@ -172,7 +172,7 @@ const ProductCard10: FC<ProductCardProps> = (props) => {
         <ProductViewDialog
           openDialog={openModal}
           handleCloseDialog={toggleDialog}
-          product={{ title, price, id, slug, imgGroup: [imgUrl, imgUrl] }}
+          product={{ title, price, id, URLKey, imgGroup: [imgUrl, imgUrl] }}
         />
 
         <HoverButtonBox className="hoverButtonBox">
@@ -223,7 +223,7 @@ const ProductCard10: FC<ProductCardProps> = (props) => {
       </ImageWrapper>
 
       <ContentWrapper>
-        <Link href={`/product/${slug}`}>
+        <Link href={`/product/${URLKey}`}>
           <H3
             mb={1}
             title={title}

@@ -116,7 +116,7 @@ const ButtonBox = styled(FlexBox)(({ theme }) => ({
 // =============================================================
 type ProductCardProps = {
   off: number;
-  slug: string;
+  URLKey: string;
   title: string;
   price: number;
   imgUrl: string;
@@ -137,7 +137,7 @@ const ProductCard14: FC<ProductCardProps> = (props) => {
     rating,
     hideRating,
     hoverEffect,
-    slug,
+    URLKey,
   } = props;
 
   const { palette } = useTheme();
@@ -150,13 +150,13 @@ const ProductCard14: FC<ProductCardProps> = (props) => {
   const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
 
   const cartItem: CartItem | undefined = state.cart.find(
-    (item) => item.slug === slug
+    (item) => item.URLKey === URLKey
   );
 
   const handleCartAmountChange = (amount: number, type?: "remove") => () => {
     dispatch({
       type: "CHANGE_CART_AMOUNT",
-      payload: { price, imgUrl, id, name: title, qty: amount, slug },
+      payload: { price, imgUrl, id, name: title, qty: amount, URLKey },
     });
 
     // SHOW ALERT PRODUCT ADDED OR REMOVE
@@ -175,7 +175,7 @@ const ProductCard14: FC<ProductCardProps> = (props) => {
         )}
 
         <ImageBox>
-          <Link href={`/product/${slug}`}>
+          <Link href={`/product/${URLKey}`}>
             <LazyImage alt={title} src={imgUrl} width={190} height={190} />
           </Link>
 
@@ -206,12 +206,12 @@ const ProductCard14: FC<ProductCardProps> = (props) => {
       <ProductViewDialog
         openDialog={openModal}
         handleCloseDialog={toggleDialog}
-        product={{ title, price, id, slug, imgGroup: [imgUrl, imgUrl] }}
+        product={{ title, price, id, URLKey, imgGroup: [imgUrl, imgUrl] }}
       />
 
       <ContentWrapper>
         <Box flex="1 1 0" minWidth="0px" mr={1}>
-          <Link href={`/product/${slug}`}>
+          <Link href={`/product/${URLKey}`}>
             <H3
               mb={1}
               title={title}

@@ -99,7 +99,7 @@ const ProductCard16: FC<Props> = (props) => {
     hideRating,
     discount,
     id,
-    slug,
+    URLKey,
     title,
     price,
     thumbnail,
@@ -117,13 +117,13 @@ const ProductCard16: FC<Props> = (props) => {
   const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
 
   const cartItem: CartItem | undefined = state.cart.find(
-    (item) => item.slug === slug
+    (item) => item.URLKey === URLKey
   );
 
   const handleCartAmountChange = (qty: number) => () => {
     dispatch({
       type: "CHANGE_CART_AMOUNT",
-      payload: { price, id, qty, slug, imgUrl: thumbnail, name: title },
+      payload: { price, id, qty, URLKey, imgUrl: thumbnail, name: title },
     });
 
     enqueueSnackbar("Added to Cart", { variant: "success" });
@@ -136,7 +136,7 @@ const ProductCard16: FC<Props> = (props) => {
           <StyledChip color="primary" size="small" label={`${discount}% off`} />
         )}
 
-        <Link href={`/product/${slug}`}>
+        <Link href={`/product/${URLKey}`}>
           <LazyImage
             alt={title}
             width={550}
@@ -176,7 +176,7 @@ const ProductCard16: FC<Props> = (props) => {
       <ProductViewDialog
         openDialog={openModal}
         handleCloseDialog={toggleDialog}
-        product={{ title, price, id, slug, imgGroup: images }}
+        product={{ title, price, id, URLKey, imgGroup: images }}
       />
 
       <ContentWrapper>
@@ -192,7 +192,7 @@ const ProductCard16: FC<Props> = (props) => {
           )}
         </FlexRowCenter>
 
-        <Link href={`/product/${slug}`}>
+        <Link href={`/product/${URLKey}`}>
           <H3
             my="6px"
             title={title}

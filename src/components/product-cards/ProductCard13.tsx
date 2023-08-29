@@ -91,7 +91,7 @@ const ContentWrapper = styled(FlexBox)({
 // ===============================================================
 type ProductCardProps = {
   off: number;
-  slug: string;
+  URLKey: string;
   title: string;
   price: number;
   imgUrl: string;
@@ -112,7 +112,7 @@ const ProductCard13: FC<ProductCardProps> = (props) => {
     rating,
     hideRating,
     hoverEffect,
-    slug,
+    URLKey,
   } = props;
 
   const { enqueueSnackbar } = useSnackbar();
@@ -124,14 +124,14 @@ const ProductCard13: FC<ProductCardProps> = (props) => {
   const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
 
   const cartItem: CartItem | undefined = state.cart.find(
-    (item) => item.slug === slug
+    (item) => item.URLKey === URLKey
   );
 
   const handleCartAmountChange =
     (amount: number, type?: "add" | "remove") => () => {
       dispatch({
         type: "CHANGE_CART_AMOUNT",
-        payload: { price, imgUrl, id, name: title, qty: amount, slug },
+        payload: { price, imgUrl, id, name: title, qty: amount, URLKey },
       });
 
       if (type === "remove") {
@@ -148,7 +148,7 @@ const ProductCard13: FC<ProductCardProps> = (props) => {
           <StyledChip color="primary" size="small" label={`${off}% off`} />
         )}
 
-        <Link href={`/product/${slug}`}>
+        <Link href={`/product/${URLKey}`}>
           {/* <img alt={title} src={imgUrl} width="100%" /> */}
           <LazyImage alt={title} src={imgUrl} width={450} height={450} />
         </Link>
@@ -182,12 +182,12 @@ const ProductCard13: FC<ProductCardProps> = (props) => {
       <ProductViewDialog
         openDialog={openModal}
         handleCloseDialog={toggleDialog}
-        product={{ title, price, id, slug, imgGroup: [imgUrl, imgUrl] }}
+        product={{ title, price, id, URLKey, imgGroup: [imgUrl, imgUrl] }}
       />
 
       <ContentWrapper>
         <Box flex="1 1 0" minWidth="0px" mr={1}>
-          <Link href={`/product/${slug}`}>
+          <Link href={`/product/${URLKey}`}>
             <H3
               mb={1}
               title={title}

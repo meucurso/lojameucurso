@@ -56,7 +56,6 @@ const ProductCard9: FC<ProductCardProps> = (props) => {
         imgUrl,
         id,
         URLKey,
-        ShortDescription,
       },
     });
   };

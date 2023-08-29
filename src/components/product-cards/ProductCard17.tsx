@@ -119,7 +119,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 interface ProductCardProps {
   off: number;
   sx?: SxProps;
-  slug: string;
+  URLKey: string;
   price: number;
   title: string;
   imgUrl: string;
@@ -143,7 +143,7 @@ const ProductCard17: FC<ProductCardProps> = (props) => {
     rating,
     hideRating,
     productColors,
-    slug,
+    URLKey,
   } = props;
 
   const { palette } = useTheme();
@@ -151,14 +151,14 @@ const ProductCard17: FC<ProductCardProps> = (props) => {
   const { state, dispatch } = useAppContext();
 
   const cartItem: CartItem | undefined = state.cart.find(
-    (item) => item.slug === slug
+    (item) => item.URLKey === URLKey
   );
 
   const handleCartAmountChange =
     (amount: number, type?: "add" | "remove") => () => {
       dispatch({
         type: "CHANGE_CART_AMOUNT",
-        payload: { price, imgUrl, id, name: title, qty: amount, slug },
+        payload: { price, imgUrl, id, name: title, qty: amount, URLKey },
       });
 
       if (type === "remove") {
@@ -170,7 +170,7 @@ const ProductCard17: FC<ProductCardProps> = (props) => {
 
   return (
     <StyledCard sx={sx}>
-      <Link href={`/product/${slug}`}>
+      <Link href={`/product/${URLKey}`}>
         <ImgBox id="imgBox">
           {status && (
             <StatusChipBox>
@@ -197,7 +197,7 @@ const ProductCard17: FC<ProductCardProps> = (props) => {
       <ContentWrapper>
         <FlexBox>
           <Box flex="1 1 0" minWidth="0px" mr={1}>
-            <Link href={`/product/${slug}`}>
+            <Link href={`/product/${URLKey}`}>
               <H3
                 mb={1}
                 title={title}

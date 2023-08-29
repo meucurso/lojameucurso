@@ -12,7 +12,7 @@ type InitialState = { cart: CartItem[] };
 
 export type CartItem = {
   URLKey: string;
-  ShortDescription: string;
+  ShortDescription?: string;
   qty: number;
   name: string;
   // slug: string;
@@ -48,9 +48,7 @@ const reducer = (state: InitialState, action: ActionType) => {
       let exist = cartList.find((item) => item.id === cartItem.id);
 
       if (cartItem.qty < 1) {
-        const filteredCart = cartList.filter(
-          (item) => item.id !== cartItem.id
-        );
+        const filteredCart = cartList.filter((item) => item.id !== cartItem.id);
         return { ...state, cart: filteredCart };
       }
 
@@ -78,15 +76,10 @@ type AppProviderProps = { children: ReactNode };
 export const AppProvider: FC<AppProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
-  const contextValue = useMemo(
-    () => ({ state, dispatch }),
-    [state, dispatch]
-  );
+  const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
   return (
-    <AppContext.Provider value={contextValue}>
-      {children}
-    </AppContext.Provider>
+    <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
   );
 };
 

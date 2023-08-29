@@ -58,7 +58,7 @@ const ProductCard20: FC<ProductCardProps> = ({ product }) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const cartItem: CartItem | undefined = state.cart.find(
-    (item) => item.slug === product.slug
+    (item) => item.URLKey === product.URLKey
   );
 
   // handle favourite
@@ -68,7 +68,7 @@ const ProductCard20: FC<ProductCardProps> = ({ product }) => {
   const handleAddToCart = (product: Product) => {
     const payload = {
       id: product.id,
-      slug: product.slug,
+      URLKey: product.URLKey,
       name: product.title,
       price: product.price,
       imgUrl: product.thumbnail,
@@ -82,7 +82,7 @@ const ProductCard20: FC<ProductCardProps> = ({ product }) => {
   return (
     <Card height="100%">
       <CardMedia>
-        <Link href={`/product/${product.slug}`}>
+        <Link href={`/product/${product.URLKey}`}>
           <LazyImage
             width={300}
             height={300}
@@ -113,7 +113,7 @@ const ProductCard20: FC<ProductCardProps> = ({ product }) => {
         handleCloseDialog={() => setOpenDialog(false)}
         product={{
           id: product.id,
-          slug: product.slug,
+          URLKey: product.URLKey,
           title: product.title,
           price: product.price,
           imgGroup: [product.thumbnail, product.thumbnail],
