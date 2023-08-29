@@ -35,10 +35,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
   };
 
   const getTotalPrice = () => {
-    return cartList.reduce(
-      (accum, item) => accum + item.price * item.qty,
-      0
-    );
+    return cartList.reduce((accum, item) => accum + item.price * item.qty, 0);
   };
 
   const handleNavigate = (path: string) => () => {
@@ -50,9 +47,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
     <Box width="100%" maxWidth={380}>
       <Box
         overflow="auto"
-        height={`calc(100vh - ${
-          !!cartList.length ? "80px - 3.25rem" : "0px"
-        })`}
+        height={`calc(100vh - ${!!cartList.length ? "80px - 3.25rem" : "0px"})`}
       >
         <FlexBetween mx={3} height={74}>
           <FlexBox gap={1} alignItems="center" color="black">
@@ -157,7 +152,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
                 textOverflow: "ellipsis",
               }}
             >
-              <Link href={`/product/${item.slug}`}>
+              <Link href={`/product/${item.URLKey}`}>
                 <H5 ellipsis fontSize="14px" className="title">
                   {item.name}
                 </H5>
