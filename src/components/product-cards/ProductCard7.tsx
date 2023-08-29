@@ -29,7 +29,7 @@ const Wrapper = styled(Card)(({ theme }) => ({
 type ProductCardProps = {
   qty: number;
   name: string;
-  ShortDescription: string;
+  ShortDescription?: string;
   URLKey: string;
   price: number;
   imgUrl?: string;
@@ -65,13 +65,7 @@ const ProductCard7: FC<ProductCardProps> = ({
 
   return (
     <Wrapper>
-      <Image
-        alt={name}
-        width={140}
-        height={140}
-        display="block"
-        src={imgUrl}
-      />
+      <Image alt={name} width={140} height={140} display="block" src={imgUrl} />
 
       <IconButton
         size="small"
