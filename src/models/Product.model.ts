@@ -2,12 +2,12 @@ import Shop from "./Shop.model";
 import Review from "./Review.model";
 
 interface Product {
-  URLKey: string;
-  ProductId: number;
-  SmallImageUrl: string;
-  Name: string;
-  SpecialPrice: number;
-  Price: number;
+  URLKey?: string;
+  ProductId?: number;
+  SmallImageUrl?: string;
+  Name?: string;
+  SpecialPrice?: number;
+  Price?: number;
   ShortDescription?: string;
   description?: string;
   shortDescription?: string;
@@ -24,7 +24,7 @@ interface Product {
   status?: string;
   colors?: string[];
   images?: string[];
-  categories: any[];
+  categories?: any[];
   reviews?: Review[];
   published?: boolean;
 }
