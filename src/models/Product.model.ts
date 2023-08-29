@@ -8,7 +8,7 @@ interface Product {
   Name: string;
   SpecialPrice: number;
   Price: number;
-  ShortDescription: string;
+  ShortDescription?: string;
   description?: string;
   shortDescription?: string;
   slug?: string;

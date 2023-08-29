@@ -70,7 +70,7 @@ const ContentWrapper = styled(Box)({
 type ProductCardProps = {
   title: string;
   URLKey: string;
-  ShortDescription: string;
+  ShortDescription?: string;
   price: number;
   imgUrl: string;
   rating?: number;
@@ -101,32 +101,24 @@ const ProductCard1: FC<ProductCardProps> = ({
   const [isFavorite, setIsFavorite] = useState(false);
 
   const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
-  const toggleDialog = useCallback(
-    () => setOpenModal((open) => !open),
-    []
-  );
+  const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
   const cartItem: CartItem | undefined = state.cart.find(
     (item) => item.URLKey === URLKey
   );
 
-  const handleCartAmountChange =
-    (product: CartItem, type?: "remove") => () => {
-      dispatch({ type: "CHANGE_CART_AMOUNT", payload: product });
-      // SHOW ALERT PRODUCT ADDED OR REMOVE
-      if (type === "remove")
-        enqueueSnackbar("Remove from Cart", { variant: "error" });
-      else enqueueSnackbar("Added to Cart", { variant: "success" });
-    };
+  const handleCartAmountChange = (product: CartItem, type?: "remove") => () => {
+    dispatch({ type: "CHANGE_CART_AMOUNT", payload: product });
+    // SHOW ALERT PRODUCT ADDED OR REMOVE
+    if (type === "remove")
+      enqueueSnackbar("Remove from Cart", { variant: "error" });
+    else enqueueSnackbar("Added to Cart", { variant: "success" });
+  };
 
   return (
     <StyledBazaarCard hoverEffect={hoverEffect}>
       <ImageWrapper>
         {!!discount && (
-          <StyledChip
-            color="primary"
-            size="small"
-            label={`${discount}% off`}
-          />
+          <StyledChip color="primary" size="small" label={`${discount}% off`} />
         )}
 
         <HoverIconWrapper className="hover-box">
@@ -204,9 +196,7 @@ const ProductCard1: FC<ProductCardProps> = ({
             alignItems="center"
             className="add-cart"
             flexDirection="column-reverse"
-            justifyContent={
-              !!cartItem?.qty ? "space-between" : "flex-start"
-            }
+            justifyContent={!!cartItem?.qty ? "space-between" : "flex-start"}
           >
             <Button
               color="primary"
