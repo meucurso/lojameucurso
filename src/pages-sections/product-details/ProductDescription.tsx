@@ -8,10 +8,10 @@ type ProductDescriptionProps = { product: Product };
 // ======================================================
 
 const ProductDescription: FC<ProductDescriptionProps> = ({ product }) => {
-  const { description } = product;
+  const { ShortDescription } = product;
   return (
     <Box>
-      <Box>{description}</Box>
+      <Box>{ShortDescription}</Box>
     </Box>
   );
 };
