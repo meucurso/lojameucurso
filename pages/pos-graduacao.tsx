@@ -86,7 +86,7 @@ const PosGraduacao = (props) => {
                   <h1>Cursos em Destaque</h1>
                 </Grid>
               </Grid>
-              <Section6 products={props.featureProducts} />
+              <Section6 products={props.postGraduateProducts} />
             </Container>
           </Box>
           <TenMotives />
@@ -98,12 +98,12 @@ const PosGraduacao = (props) => {
 export default PosGraduacao;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const featureProducts = await api.getFeatureProducts();
+  const postGraduateProducts = await api.getProductsById("97");
   const postGraduateBanners = await api.getPostGraduateBanner();
 
   return {
     props: {
-      featureProducts,
+      postGraduateProducts,
       postGraduateBanners,
     },
   };
