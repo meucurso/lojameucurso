@@ -15,8 +15,9 @@ import { calculateDiscount, currency } from "lib";
 
 // styled components
 const StyledBazaarCard = styled(BazaarCard)({
-  height: "100%",
+  height: "350px",
   margin: "auto",
+  marginBottom: "1rem",
   display: "flex",
   overflow: "hidden",
   borderRadius: "8px",
@@ -68,14 +69,15 @@ const ContentWrapper = styled(Box)({
 
 // ========================================================
 type ProductCardProps = {
-  title: string;
-  URLKey: string;
+  title?: string;
+  URLKey?: string;
   ShortDescription?: string;
-  price: number;
-  imgUrl: string;
+  SpecialPrice?: number;
+  price?: number;
+  imgUrl?: string;
   rating?: number;
   discount?: number;
-  id: string | number;
+  id?: string | number;
   hideRating?: boolean;
   hoverEffect?: boolean;
   showProductSize?: boolean;
@@ -101,25 +103,33 @@ const ProductCard1: FC<ProductCardProps> = ({
   const [isFavorite, setIsFavorite] = useState(false);
 
   const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
-  const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
+  const toggleDialog = useCallback(
+    () => setOpenModal((open) => !open),
+    []
+  );
   const cartItem: CartItem | undefined = state.cart.find(
     (item) => item.URLKey === URLKey
   );
 
-  const handleCartAmountChange = (product: CartItem, type?: "remove") => () => {
-    dispatch({ type: "CHANGE_CART_AMOUNT", payload: product });
-    // SHOW ALERT PRODUCT ADDED OR REMOVE
-    if (type === "remove")
-      enqueueSnackbar("Remove from Cart", { variant: "error" });
-    else enqueueSnackbar("Added to Cart", { variant: "success" });
-  };
+  const handleCartAmountChange =
+    (product: CartItem, type?: "remove") => () => {
+      dispatch({ type: "CHANGE_CART_AMOUNT", payload: product });
+      // SHOW ALERT PRODUCT ADDED OR REMOVE
+      if (type === "remove")
+        enqueueSnackbar("Remove from Cart", { variant: "error" });
+      else enqueueSnackbar("Added to Cart", { variant: "success" });
+    };
 
   return (
     <StyledBazaarCard hoverEffect={hoverEffect}>
       <ImageWrapper>
-        {!!discount && (
-          <StyledChip color="primary" size="small" label={`${discount}% off`} />
-        )}
+        {/* {!!discount && (
+          <StyledChip
+            color="primary"
+            size="small"
+            label={`${discount}% off`}
+          />
+        )} */}
 
         <HoverIconWrapper className="hover-box">
           <IconButton onClick={toggleDialog}>
@@ -136,11 +146,21 @@ const ProductCard1: FC<ProductCardProps> = ({
         </HoverIconWrapper>
 
         <Link href={`/product/${URLKey}`}>
-          <LazyImage
+          {/* <LazyImage
             priority
             src={imgUrl}
             width={500}
             height={500}
+            alt={title}
+          /> */}
+          <img
+            style={{
+              objectFit: "contain",
+              aspectRatio: "16/9",
+            }}
+            src={imgUrl}
+            width={"100%"}
+            height={220}
             alt={title}
           />
         </Link>
@@ -149,7 +169,7 @@ const ProductCard1: FC<ProductCardProps> = ({
       <ProductViewDialog
         openDialog={openModal}
         handleCloseDialog={toggleDialog}
-        product={{ title, price, id, URLKey, imgGroup: [imgUrl, imgUrl] }}
+        product={{ title, price, id, URLKey, imgUrl }}
       />
 
       <ContentWrapper>
@@ -168,9 +188,9 @@ const ProductCard1: FC<ProductCardProps> = ({
               </H3>
             </Link>
 
-            {!hideRating && (
+            {/* {!hideRating && (
               <BazaarRating value={rating || 0} color="warn" readOnly />
-            )}
+            )} */}
 
             {showProductSize && (
               <Span color="grey.600" mb={1} display="block">
@@ -180,14 +200,15 @@ const ProductCard1: FC<ProductCardProps> = ({
 
             <FlexBox alignItems="center" gap={1} mt={0.5}>
               <Box fontWeight="600" color="primary.main">
-                {calculateDiscount(price, discount)}
+                {/* {calculateDiscount(price, discount)} */}
+                {currency(price)}
               </Box>
 
-              {!!discount && (
+              {/* {!!discount && (
                 <Box color="grey.600" fontWeight="600">
                   <del>{currency(price)}</del>
                 </Box>
-              )}
+              )} */}
             </FlexBox>
           </Box>
 
@@ -196,9 +217,11 @@ const ProductCard1: FC<ProductCardProps> = ({
             alignItems="center"
             className="add-cart"
             flexDirection="column-reverse"
-            justifyContent={!!cartItem?.qty ? "space-between" : "flex-start"}
+            justifyContent={
+              !!cartItem?.qty ? "space-between" : "flex-start"
+            }
           >
-            <Button
+            {/* <Button
               color="primary"
               variant="outlined"
               sx={{ padding: "3px" }}
@@ -213,7 +236,7 @@ const ProductCard1: FC<ProductCardProps> = ({
               })}
             >
               <Add fontSize="small" />
-            </Button>
+            </Button> */}
 
             {!!cartItem?.qty && (
               <Fragment>
