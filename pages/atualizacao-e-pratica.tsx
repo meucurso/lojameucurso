@@ -48,7 +48,7 @@ const AtualizacaoEPratica = (props) => {
                   <H1>Cursos em Destaque</H1>
                 </Grid>
               </Grid>
-              <Section6 products={props.featureProducts} />
+              <Section6 products={props.updatePracticceProducts} />
             </Container>
           </Box>
           <Box sx={{ backgroundColor: "#fff" }}></Box>
@@ -60,13 +60,13 @@ const AtualizacaoEPratica = (props) => {
 export default AtualizacaoEPratica;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const featureProducts = await api.getFeatureProducts();
+  const updatePracticceProducts = await api.getProductsById("96");
   const constestCarousel = await api.getContestCarousel();
   const updatePracticceBanners = await api.getUpdatePracticeBanner();
 
   return {
     props: {
-      featureProducts,
+      updatePracticceProducts,
       constestCarousel,
       updatePracticceBanners,
     },
