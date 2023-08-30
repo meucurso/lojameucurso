@@ -136,11 +136,4 @@ const ProductSearchResult: NextPage = () => {
   );
 };
 
-const sortOptions = [
-  { label: "Relevance", value: "Relevance" },
-  { label: "Date", value: "Date" },
-  { label: "Price Low to High", value: "Price Low to High" },
-  { label: "Price High to Low", value: "Price High to Low" },
-];
-
 export default ProductSearchResult;
