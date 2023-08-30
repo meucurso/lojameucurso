@@ -1,6 +1,13 @@
 import { NextPage } from "next";
 import { useEffect, useRef, useState } from "react";
-import { Box, Chip, Container, Grid, Pagination, styled } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Container,
+  Grid,
+  Pagination,
+  styled,
+} from "@mui/material";
 import SEO from "components/SEO";
 import SaleNavbar from "components/navbar/SaleNavbar";
 import SaleLayout from "components/layouts/SaleLayout";
@@ -51,15 +58,17 @@ const StyledChip = styled(Chip)<{ selected: number }>(
   })
 );
 
-const CategoryWrapper = styled(Box)<{ show: number }>(({ show, theme }) => ({
-  left: 0,
-  zIndex: 99,
-  width: "100%",
-  position: "fixed",
-  top: show ? 0 : -90,
-  boxShadow: theme.shadows[2],
-  transition: "top 0.3s ease-in-out",
-}));
+const CategoryWrapper = styled(Box)<{ show: number }>(
+  ({ show, theme }) => ({
+    left: 0,
+    zIndex: 99,
+    width: "100%",
+    position: "fixed",
+    top: show ? 0 : -90,
+    boxShadow: theme.shadows[2],
+    transition: "top 0.3s ease-in-out",
+  })
+);
 
 const SalePage1: NextPage = () => {
   const PRODUCT_PER_PAGE = 28;
@@ -153,7 +162,7 @@ const SalePage1: NextPage = () => {
             <Grid item lg={3} md={4} sm={6} xs={12} key={item.id}>
               <ProductCard1
                 id={item.id}
-                slug={item.slug}
+                URLKey={item.URLKey}
                 title={item.title}
                 price={item.price}
                 rating={item.rating}
