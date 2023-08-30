@@ -8,7 +8,7 @@ import Banner from "models/Banners";
 
 const getToken = async () => {
   const response = await axios.post(
-    "http://apiecommerce.meucurso.com.br/api/login",
+    "https://apiecommerce.meucurso.com.br/api/login",
     {
       Email: "lucas.martins@meucurso.com.br",
       Password: "M3ucUrc0@5yEAp1",
@@ -20,7 +20,7 @@ const getToken = async () => {
 const getProducts = async (): Promise<Product[]> => {
   const token = await getToken();
   const response = await axios.get(
-    "http://apiecommerce.meucurso.com.br/Products/List",
+    "https://apiecommerce.meucurso.com.br/Products/List",
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -33,7 +33,7 @@ const getProducts = async (): Promise<Product[]> => {
 const getProductBySlug = async (URLKey: any) => {
   const token = await getToken();
   const response = await axios.get(
-    `http://apiecommerce.meucurso.com.br/Products/Id?URLKey=${URLKey}`,
+    `https://apiecommerce.meucurso.com.br/Products/Id?URLKey=${URLKey}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,7 +46,7 @@ const getProductBySlug = async (URLKey: any) => {
 const getProductsById = async (categoryId: string) => {
   const token = await getToken();
   const response = await axios.get(
-    `http://apiecommerce.meucurso.com.br/Products/List?CategoryId=${categoryId}`,
+    `https://apiecommerce.meucurso.com.br/Products/List?CategoryId=${categoryId}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -110,7 +110,7 @@ const getCategories = async (): Promise<Category[]> => {
 const getIndexBanners = async (): Promise<Banner[]> => {
   const token = await getToken();
   const response = await axios.get(
-    "http://apiecommerce.meucurso.com.br/Banners/List?bannerCategoryId=1",
+    "https://apiecommerce.meucurso.com.br/Banners/List?bannerCategoryId=1",
     {
       headers: {
         Authorization: `Bearer ${token}`,
