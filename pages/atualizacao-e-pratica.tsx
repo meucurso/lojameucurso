@@ -70,5 +70,6 @@ export const getStaticProps: GetStaticProps = async () => {
       constestCarousel,
       updatePracticceBanners,
     },
+    revalidate: 25,
   };
 };

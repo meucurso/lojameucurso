@@ -27,7 +27,7 @@ const Wrapper = styled(Card)({
 
 // ===========================================================
 type ProductCardProps = {
-  id: string;
+  ProductId: string;
   off?: number;
   URLKey: string;
   ShortDescription?: string;
@@ -39,7 +39,7 @@ type ProductCardProps = {
 // ===========================================================
 
 const ProductCard9: FC<ProductCardProps> = (props) => {
-  const { imgUrl, title, price, off, rating, id, URLKey } = props;
+  const { imgUrl, title, price, off, rating, ProductId, URLKey } = props;
 
   const { state, dispatch } = useAppContext();
   const cartItem: CartItem | undefined = state.cart.find(
@@ -54,7 +54,7 @@ const ProductCard9: FC<ProductCardProps> = (props) => {
         qty: amount,
         price,
         imgUrl,
-        id,
+        ProductId,
         URLKey,
       },
     });

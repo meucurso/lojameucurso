@@ -3,7 +3,11 @@ import Link from "next/link";
 import { useSnackbar } from "notistack";
 import { currency } from "lib";
 import { Box, Button, IconButton, Rating, styled } from "@mui/material";
-import { Favorite, FavoriteBorder, RemoveRedEye } from "@mui/icons-material";
+import {
+  Favorite,
+  FavoriteBorder,
+  RemoveRedEye,
+} from "@mui/icons-material";
 import LazyImage from "components/LazyImage";
 import { FlexRowCenter } from "components/flex-box";
 import { H4, Paragraph, Small } from "components/Typography";
@@ -67,7 +71,7 @@ const ProductCard20: FC<ProductCardProps> = ({ product }) => {
   // handle add to cart
   const handleAddToCart = (product: Product) => {
     const payload = {
-      id: product.id,
+      ProductId: product.id,
       URLKey: product.URLKey,
       name: product.title,
       price: product.price,
@@ -99,7 +103,10 @@ const ProductCard20: FC<ProductCardProps> = ({ product }) => {
           <RemoveRedEye color="disabled" fontSize="small" />
         </AddToCartButton>
 
-        <FavouriteButton className="product-actions" onClick={handleFavorite}>
+        <FavouriteButton
+          className="product-actions"
+          onClick={handleFavorite}
+        >
           {isFavorite ? (
             <Favorite color="primary" fontSize="small" />
           ) : (

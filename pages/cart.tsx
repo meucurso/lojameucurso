@@ -27,7 +27,7 @@ const Cart: NextPage = () => {
         {/* CART PRODUCT LIST */}
         <Grid item md={8} xs={12}>
           {cartList.map((item) => (
-            <ProductCard7 key={item.id} {...item} />
+            <ProductCard7 key={item.ProductId} {...item} />
           ))}
         </Grid>
 
@@ -43,6 +43,13 @@ const Cart: NextPage = () => {
             </FlexBetween>
             <FlexBetween mb={2}>
               <Span color="grey.600">Cupom:</Span>
+
+              <Span fontSize={18} fontWeight={600} lineHeight="1">
+                {currency(getTotalPrice())}
+              </Span>
+            </FlexBetween>
+            <FlexBetween mb={2}>
+              <Span color="grey.600">Frete:</Span>
 
               <Span fontSize={18} fontWeight={600} lineHeight="1">
                 {currency(getTotalPrice())}
@@ -81,8 +88,6 @@ const Cart: NextPage = () => {
               sx={{ mb: 2 }}
             /> */}
 
-            <Divider sx={{ mb: 2 }} />
-
             <TextField
               fullWidth
               size="small"
@@ -102,10 +107,10 @@ const Cart: NextPage = () => {
 
             <Divider sx={{ mb: 2 }} />
 
-            {/* <Span fontWeight={600} mb={2} display="block">
-              Shipping Estimates
-            </Span>
-
+            {/* <Span fontWeight={600} mb={0} display="block">
+              Frete
+            </Span> */}
+            {/* 
             <Autocomplete
               fullWidth
               sx={{ mb: 2 }}
@@ -138,23 +143,23 @@ const Cart: NextPage = () => {
               ))}
             </TextField> */}
 
-            {/* <TextField
+            <TextField
               fullWidth
               size="small"
-              label="Zip Code"
+              label="C.E.P"
               placeholder="3100"
               variant="outlined"
               sx={{ mt: 2 }}
-            /> */}
+            />
 
-            {/* <Button
+            <Button
               variant="outlined"
               color="primary"
               fullWidth
               sx={{ my: 2 }}
             >
-              Calculate Shipping
-            </Button> */}
+              Calcular frete
+            </Button>
 
             <Button
               fullWidth
@@ -163,7 +168,7 @@ const Cart: NextPage = () => {
               variant="contained"
               LinkComponent={Link}
             >
-              Checkout Now
+              Realizar Checkout
             </Button>
           </Card>
         </Grid>

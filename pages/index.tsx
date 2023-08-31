@@ -115,6 +115,7 @@ export const getStaticProps: GetStaticProps = async () => {
       bestWeekProducts,
       indexBannersData,
     },
+    revalidate: 25,
   };
 };
 

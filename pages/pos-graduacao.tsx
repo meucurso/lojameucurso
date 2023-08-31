@@ -106,5 +106,6 @@ export const getStaticProps: GetStaticProps = async () => {
       postGraduateProducts,
       postGraduateBanners,
     },
+    revalidate: 25,
   };
 };

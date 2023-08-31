@@ -149,5 +149,6 @@ export const getStaticProps: GetStaticProps = async () => {
       featureProducts,
       bannerOAB1,
     },
+    revalidate: 25,
   };
 };

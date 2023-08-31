@@ -33,12 +33,12 @@ type ProductCardProps = {
   URLKey: string;
   price: number;
   imgUrl?: string;
-  id: string | number;
+  ProductId: string | number;
 };
 // =========================================================
 
 const ProductCard7: FC<ProductCardProps> = ({
-  id,
+  ProductId,
   name,
   qty,
   price,
@@ -52,7 +52,7 @@ const ProductCard7: FC<ProductCardProps> = ({
     dispatch({
       type: "CHANGE_CART_AMOUNT",
       payload: {
-        id,
+        ProductId,
         name,
         price,
         imgUrl,
@@ -65,7 +65,13 @@ const ProductCard7: FC<ProductCardProps> = ({
 
   return (
     <Wrapper>
-      <Image alt={name} width={140} height={140} display="block" src={imgUrl} />
+      <Image
+        alt={name}
+        width={140}
+        height={140}
+        display="block"
+        src={imgUrl}
+      />
 
       <IconButton
         size="small"

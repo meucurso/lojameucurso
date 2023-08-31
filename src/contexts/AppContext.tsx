@@ -18,7 +18,7 @@ export type CartItem = {
   // slug: string;
   price: number;
   imgUrl?: string;
-  id: string | number;
+  ProductId: string | number;
 };
 
 type CartActionType = { type: "CHANGE_CART_AMOUNT"; payload: CartItem };
@@ -45,17 +45,23 @@ const reducer = (state: InitialState, action: ActionType) => {
     case "CHANGE_CART_AMOUNT":
       let cartList = state.cart;
       let cartItem = action.payload;
-      let exist = cartList.find((item) => item.id === cartItem.id);
+      let exist = cartList.find(
+        (item) => item.ProductId === cartItem.ProductId
+      );
 
       if (cartItem.qty < 1) {
-        const filteredCart = cartList.filter((item) => item.id !== cartItem.id);
+        const filteredCart = cartList.filter(
+          (item) => item.ProductId !== cartItem.ProductId
+        );
         return { ...state, cart: filteredCart };
       }
 
       // IF PRODUCT ALREADY EXITS IN CART
       if (exist) {
         const newCart = cartList.map((item) =>
-          item.id === cartItem.id ? { ...item, qty: cartItem.qty } : item
+          item.ProductId === cartItem.ProductId
+            ? { ...item, qty: cartItem.qty }
+            : item
         );
 
         return { ...state, cart: newCart };
@@ -76,10 +82,15 @@ type AppProviderProps = { children: ReactNode };
 export const AppProvider: FC<AppProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
-  const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
+  const contextValue = useMemo(
+    () => ({ state, dispatch }),
+    [state, dispatch]
+  );
 
   return (
-    <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
+    <AppContext.Provider value={contextValue}>
+      {children}
+    </AppContext.Provider>
   );
 };
 

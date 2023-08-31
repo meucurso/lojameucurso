@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { FC, useCallback, useState } from "react";
-import { Box, Chip, Divider, styled, SxProps, useTheme } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Divider,
+  styled,
+  SxProps,
+  useTheme,
+} from "@mui/material";
 import PreviewIcon from "@mui/icons-material/RemoveRedEye";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
 import ShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
@@ -98,7 +105,7 @@ const ProductCard16: FC<Props> = (props) => {
     sx,
     hideRating,
     discount,
-    id,
+    ProductId,
     URLKey,
     title,
     price,
@@ -114,7 +121,10 @@ const ProductCard16: FC<Props> = (props) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
-  const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
+  const toggleDialog = useCallback(
+    () => setOpenModal((open) => !open),
+    []
+  );
 
   const cartItem: CartItem | undefined = state.cart.find(
     (item) => item.URLKey === URLKey
@@ -123,7 +133,14 @@ const ProductCard16: FC<Props> = (props) => {
   const handleCartAmountChange = (qty: number) => () => {
     dispatch({
       type: "CHANGE_CART_AMOUNT",
-      payload: { price, id, qty, URLKey, imgUrl: thumbnail, name: title },
+      payload: {
+        price,
+        ProductId,
+        qty,
+        URLKey,
+        imgUrl: thumbnail,
+        name: title,
+      },
     });
 
     enqueueSnackbar("Added to Cart", { variant: "success" });
@@ -133,7 +150,11 @@ const ProductCard16: FC<Props> = (props) => {
     <StyledCard sx={sx}>
       <ImgBox id="imgBox">
         {discount !== 0 && (
-          <StyledChip color="primary" size="small" label={`${discount}% off`} />
+          <StyledChip
+            color="primary"
+            size="small"
+            label={`${discount}% off`}
+          />
         )}
 
         <Link href={`/product/${URLKey}`}>
@@ -176,7 +197,7 @@ const ProductCard16: FC<Props> = (props) => {
       <ProductViewDialog
         openDialog={openModal}
         handleCloseDialog={toggleDialog}
-        product={{ title, price, id, URLKey, imgGroup: images }}
+        product={{ title, price, ProductId, URLKey, imgGroup: images }}
       />
 
       <ContentWrapper>
@@ -209,7 +230,9 @@ const ProductCard16: FC<Props> = (props) => {
         {!hideRating && (
           <FlexRowCenter>
             <BazaarRating value={rating || 0} color="warn" readOnly />{" "}
-            <Span sx={{ color: palette.grey[600] }}>{`(${rating}.0)`}</Span>
+            <Span
+              sx={{ color: palette.grey[600] }}
+            >{`(${rating}.0)`}</Span>
           </FlexRowCenter>
         )}
       </ContentWrapper>

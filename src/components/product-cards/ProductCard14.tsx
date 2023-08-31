@@ -1,10 +1,22 @@
 import Link from "next/link";
 import { FC, Fragment, useCallback, useState } from "react";
-import { Add, Favorite, FavoriteBorder, Remove } from "@mui/icons-material";
+import {
+  Add,
+  Favorite,
+  FavoriteBorder,
+  Remove,
+} from "@mui/icons-material";
 import PreviewIcon from "@mui/icons-material/RemoveRedEye";
 import FavoriteIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { Box, Button, Chip, Divider, styled, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Divider,
+  styled,
+  useTheme,
+} from "@mui/material";
 import { useSnackbar } from "notistack";
 import LazyImage from "components/LazyImage";
 import BazaarCard from "components/BazaarCard";
@@ -121,7 +133,7 @@ type ProductCardProps = {
   price: number;
   imgUrl: string;
   rating?: number;
-  id: string | number;
+  ProductId: string | number;
   hideRating?: boolean;
   hoverEffect?: boolean;
 };
@@ -130,7 +142,7 @@ type ProductCardProps = {
 const ProductCard14: FC<ProductCardProps> = (props) => {
   const {
     off,
-    id,
+    ProductId,
     title,
     price,
     imgUrl,
@@ -147,25 +159,36 @@ const ProductCard14: FC<ProductCardProps> = (props) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
-  const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
+  const toggleDialog = useCallback(
+    () => setOpenModal((open) => !open),
+    []
+  );
 
   const cartItem: CartItem | undefined = state.cart.find(
     (item) => item.URLKey === URLKey
   );
 
-  const handleCartAmountChange = (amount: number, type?: "remove") => () => {
-    dispatch({
-      type: "CHANGE_CART_AMOUNT",
-      payload: { price, imgUrl, id, name: title, qty: amount, URLKey },
-    });
+  const handleCartAmountChange =
+    (amount: number, type?: "remove") => () => {
+      dispatch({
+        type: "CHANGE_CART_AMOUNT",
+        payload: {
+          price,
+          imgUrl,
+          ProductId,
+          name: title,
+          qty: amount,
+          URLKey,
+        },
+      });
 
-    // SHOW ALERT PRODUCT ADDED OR REMOVE
-    if (type === "remove") {
-      enqueueSnackbar("Remove from Cart", { variant: "error" });
-    } else {
-      enqueueSnackbar("Added to Cart", { variant: "success" });
-    }
-  };
+      // SHOW ALERT PRODUCT ADDED OR REMOVE
+      if (type === "remove") {
+        enqueueSnackbar("Remove from Cart", { variant: "error" });
+      } else {
+        enqueueSnackbar("Added to Cart", { variant: "success" });
+      }
+    };
 
   return (
     <StyledBazaarCard hoverEffect={hoverEffect}>
@@ -206,7 +229,13 @@ const ProductCard14: FC<ProductCardProps> = (props) => {
       <ProductViewDialog
         openDialog={openModal}
         handleCloseDialog={toggleDialog}
-        product={{ title, price, id, URLKey, imgGroup: [imgUrl, imgUrl] }}
+        product={{
+          title,
+          price,
+          ProductId,
+          URLKey,
+          imgGroup: [imgUrl, imgUrl],
+        }}
       />
 
       <ContentWrapper>
@@ -227,7 +256,9 @@ const ProductCard14: FC<ProductCardProps> = (props) => {
           {!hideRating && (
             <Box display="flex" alignItems="center">
               <BazaarRating value={rating || 0} color="warn" readOnly />{" "}
-              <Span sx={{ color: palette.grey[600] }}>{`(${rating}.0)`}</Span>
+              <Span
+                sx={{ color: palette.grey[600] }}
+              >{`(${rating}.0)`}</Span>
             </Box>
           )}
 

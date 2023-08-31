@@ -102,5 +102,6 @@ export const getStaticProps: GetStaticProps = async () => {
       featureProducts,
       firstStepsBanner,
     },
+    revalidate: 25,
   };
 };

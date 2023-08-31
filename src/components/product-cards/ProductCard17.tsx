@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { CSSProperties, FC, Fragment } from "react";
-import { Box, Button, Chip, styled, useTheme, SxProps } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  styled,
+  useTheme,
+  SxProps,
+} from "@mui/material";
 import { Add, Remove } from "@mui/icons-material";
 import BazaarRating from "components/BazaarRating";
 import { FlexBox } from "components/flex-box";
@@ -125,7 +132,7 @@ interface ProductCardProps {
   imgUrl: string;
   status: string;
   rating?: number;
-  id: string | number;
+  ProductId: string | number;
   hideRating?: boolean;
   productColors: string[];
 }
@@ -136,7 +143,7 @@ const ProductCard17: FC<ProductCardProps> = (props) => {
     sx,
     off,
     status,
-    id,
+    ProductId,
     title,
     price,
     imgUrl,
@@ -158,7 +165,14 @@ const ProductCard17: FC<ProductCardProps> = (props) => {
     (amount: number, type?: "add" | "remove") => () => {
       dispatch({
         type: "CHANGE_CART_AMOUNT",
-        payload: { price, imgUrl, id, name: title, qty: amount, URLKey },
+        payload: {
+          price,
+          imgUrl,
+          ProductId,
+          name: title,
+          qty: amount,
+          URLKey,
+        },
       });
 
       if (type === "remove") {
@@ -218,7 +232,9 @@ const ProductCard17: FC<ProductCardProps> = (props) => {
                   color="warn"
                   readOnly
                 />{" "}
-                <Span sx={{ color: palette.grey[600] }}>{`(${rating}.0)`}</Span>
+                <Span
+                  sx={{ color: palette.grey[600] }}
+                >{`(${rating}.0)`}</Span>
               </Box>
             )}
 
@@ -246,7 +262,9 @@ const ProductCard17: FC<ProductCardProps> = (props) => {
             alignItems="center"
             className="add-cart"
             flexDirection="column-reverse"
-            justifyContent={!!cartItem?.qty ? "space-between" : "flex-start"}
+            justifyContent={
+              !!cartItem?.qty ? "space-between" : "flex-start"
+            }
           >
             <StyledButton
               variant="outlined"
@@ -263,7 +281,10 @@ const ProductCard17: FC<ProductCardProps> = (props) => {
 
                 <StyledButton
                   variant="outlined"
-                  onClick={handleCartAmountChange(cartItem?.qty - 1, "remove")}
+                  onClick={handleCartAmountChange(
+                    cartItem?.qty - 1,
+                    "remove"
+                  )}
                 >
                   <Remove fontSize="small" />
                 </StyledButton>

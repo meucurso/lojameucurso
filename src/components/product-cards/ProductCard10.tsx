@@ -124,13 +124,22 @@ type ProductCardProps = {
   title: string;
   imgUrl: string;
   rating?: number;
-  id: string | number;
+  ProductId: string | number;
   hideRating?: boolean;
 };
 // ====================================================================
 
 const ProductCard10: FC<ProductCardProps> = (props) => {
-  const { off, id, title, price, imgUrl, rating, hideRating, URLKey } = props;
+  const {
+    off,
+    ProductId,
+    title,
+    price,
+    imgUrl,
+    rating,
+    hideRating,
+    URLKey,
+  } = props;
 
   const { enqueueSnackbar } = useSnackbar();
   const { state, dispatch } = useAppContext();
@@ -138,23 +147,36 @@ const ProductCard10: FC<ProductCardProps> = (props) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
-  const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
+  const toggleDialog = useCallback(
+    () => setOpenModal((open) => !open),
+    []
+  );
 
-  const cartItem: CartItem = state.cart.find((item) => item.URLKey === URLKey);
+  const cartItem: CartItem = state.cart.find(
+    (item) => item.URLKey === URLKey
+  );
 
-  const handleCartAmountChange = (amount: number, type?: "remove") => () => {
-    dispatch({
-      type: "CHANGE_CART_AMOUNT",
-      payload: { price, imgUrl, id, name: title, qty: amount, URLKey },
-    });
+  const handleCartAmountChange =
+    (amount: number, type?: "remove") => () => {
+      dispatch({
+        type: "CHANGE_CART_AMOUNT",
+        payload: {
+          price,
+          imgUrl,
+          ProductId,
+          name: title,
+          qty: amount,
+          URLKey,
+        },
+      });
 
-    // SHOW ALERT PRODUCT ADDED OR REMOVE
-    if (type === "remove") {
-      enqueueSnackbar("Remove from Cart", { variant: "error" });
-    } else {
-      enqueueSnackbar("Added to Cart", { variant: "success" });
-    }
-  };
+      // SHOW ALERT PRODUCT ADDED OR REMOVE
+      if (type === "remove") {
+        enqueueSnackbar("Remove from Cart", { variant: "error" });
+      } else {
+        enqueueSnackbar("Added to Cart", { variant: "success" });
+      }
+    };
 
   return (
     <StyledBazaarCard>
@@ -172,7 +194,13 @@ const ProductCard10: FC<ProductCardProps> = (props) => {
         <ProductViewDialog
           openDialog={openModal}
           handleCloseDialog={toggleDialog}
-          product={{ title, price, id, URLKey, imgGroup: [imgUrl, imgUrl] }}
+          product={{
+            title,
+            price,
+            ProductId,
+            URLKey,
+            imgGroup: [imgUrl, imgUrl],
+          }}
         />
 
         <HoverButtonBox className="hoverButtonBox">
@@ -204,7 +232,10 @@ const ProductCard10: FC<ProductCardProps> = (props) => {
                 color="primary"
                 variant="outlined"
                 className="addCartButton"
-                onClick={handleCartAmountChange(cartItem.qty - 1, "remove")}
+                onClick={handleCartAmountChange(
+                  cartItem.qty - 1,
+                  "remove"
+                )}
               >
                 <Remove /> Remove from Cart
               </Button>

@@ -18,7 +18,6 @@ type ProductIntroProps = { singleProduct: Product };
 const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
   const {
     Name,
-    id,
     price,
     shortDescription,
     title,
@@ -47,10 +46,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
     };
 
   // CHECK PRODUCT EXIST OR NOT IN THE CART
-  const cartItem = state.cart.find((item) => item.id === id);
-
-  // HANDLE SELECT IMAGE
-  const handleImageClick = (ind: number) => () => setSelectedImage(ind);
+  const cartItem = state.cart.find((item) => item.ProductId === ProductId);
 
   // HANDLE CHANGE CART
   const handleCartAmountChange = (amount: number) => () => {
@@ -62,7 +58,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
         name: singleProduct.Name,
         imgUrl: singleProduct.SmallImageUrl,
         ShortDescription: singleProduct.ShortDescription,
-        id,
+        ProductId,
         URLKey: singleProduct.URLKey,
       },
     });
@@ -185,7 +181,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             </Button>
           ) : (
             <FlexBox alignItems="center" mb={4.5}>
-              <Button
+              {/* <Button
                 size="small"
                 sx={{ p: 1 }}
                 color="primary"
@@ -193,13 +189,14 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
                 onClick={handleCartAmountChange(cartItem?.qty - 1)}
               >
                 <Remove fontSize="small" />
-              </Button>
+              </Button> */}
 
-              <H3 fontWeight="600" mx={2.5}>
-                {cartItem?.qty.toString().padStart(2, "0")}
+              <H3 fontWeight="bolder" mx={2.5}>
+                {/* {cartItem?.qty.toString().padStart(2, "0")} */}
+                Produto já adicionado no carrinho
               </H3>
 
-              <Button
+              {/* <Button
                 size="small"
                 sx={{ p: 1 }}
                 color="primary"
@@ -207,7 +204,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
                 onClick={handleCartAmountChange(cartItem?.qty + 1)}
               >
                 <Add fontSize="small" />
-              </Button>
+              </Button> */}
             </FlexBox>
           )}
 

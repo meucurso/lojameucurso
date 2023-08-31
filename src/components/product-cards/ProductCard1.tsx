@@ -78,7 +78,7 @@ type ProductCardProps = {
   imgUrl?: string;
   rating?: number;
   discount?: number;
-  id?: string | number;
+  ProductId?: string | number;
   hideRating?: boolean;
   hoverEffect?: boolean;
   showProductSize?: boolean;
@@ -86,7 +86,7 @@ type ProductCardProps = {
 // ========================================================
 
 const ProductCard1: FC<ProductCardProps> = ({
-  id,
+  ProductId,
   URLKey,
   title,
   price,
@@ -170,7 +170,7 @@ const ProductCard1: FC<ProductCardProps> = ({
       <ProductViewDialog
         openDialog={openModal}
         handleCloseDialog={toggleDialog}
-        product={{ title, price, id, URLKey, imgUrl }}
+        product={{ title, price, ProductId, URLKey, imgUrl }}
       />
 
       <ContentWrapper>
@@ -251,7 +251,7 @@ const ProductCard1: FC<ProductCardProps> = ({
                   sx={{ padding: "3px" }}
                   onClick={handleCartAmountChange(
                     {
-                      id,
+                      ProductId,
                       URLKey,
                       ShortDescription,
                       price,

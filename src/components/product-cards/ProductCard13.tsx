@@ -96,7 +96,7 @@ type ProductCardProps = {
   price: number;
   imgUrl: string;
   rating?: number;
-  id: string | number;
+  ProductId: string | number;
   hideRating?: boolean;
   hoverEffect?: boolean;
 };
@@ -105,7 +105,7 @@ type ProductCardProps = {
 const ProductCard13: FC<ProductCardProps> = (props) => {
   const {
     off,
-    id,
+    ProductId,
     title,
     price,
     imgUrl,
@@ -121,7 +121,10 @@ const ProductCard13: FC<ProductCardProps> = (props) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const toggleIsFavorite = () => setIsFavorite((fav) => !fav);
-  const toggleDialog = useCallback(() => setOpenModal((open) => !open), []);
+  const toggleDialog = useCallback(
+    () => setOpenModal((open) => !open),
+    []
+  );
 
   const cartItem: CartItem | undefined = state.cart.find(
     (item) => item.URLKey === URLKey
@@ -131,7 +134,14 @@ const ProductCard13: FC<ProductCardProps> = (props) => {
     (amount: number, type?: "add" | "remove") => () => {
       dispatch({
         type: "CHANGE_CART_AMOUNT",
-        payload: { price, imgUrl, id, name: title, qty: amount, URLKey },
+        payload: {
+          price,
+          imgUrl,
+          ProductId,
+          name: title,
+          qty: amount,
+          URLKey,
+        },
       });
 
       if (type === "remove") {
@@ -182,7 +192,13 @@ const ProductCard13: FC<ProductCardProps> = (props) => {
       <ProductViewDialog
         openDialog={openModal}
         handleCloseDialog={toggleDialog}
-        product={{ title, price, id, URLKey, imgGroup: [imgUrl, imgUrl] }}
+        product={{
+          title,
+          price,
+          ProductId,
+          URLKey,
+          imgGroup: [imgUrl, imgUrl],
+        }}
       />
 
       <ContentWrapper>
@@ -247,7 +263,10 @@ const ProductCard13: FC<ProductCardProps> = (props) => {
                 color="primary"
                 variant="outlined"
                 sx={{ padding: "3px" }}
-                onClick={handleCartAmountChange(cartItem?.qty - 1, "remove")}
+                onClick={handleCartAmountChange(
+                  cartItem?.qty - 1,
+                  "remove"
+                )}
               >
                 <Remove fontSize="small" />
               </Button>

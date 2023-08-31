@@ -76,7 +76,7 @@ const ProductCard18: FC<ProductCardProps> = ({ product }) => {
   // handle add to cart
   const handleAddToCart = (product: Product) => () => {
     const payload = {
-      id: product.ProductId,
+      ProductId: product.ProductId,
       URLKey: product.URLKey,
       name: product.Name,
       price: product.SpecialPrice,
