@@ -132,7 +132,7 @@ const ProductCard1: FC<ProductCardProps> = ({
           />
         )} */}
 
-        <HoverIconWrapper className="hover-box">
+        {/* <HoverIconWrapper className="hover-box">
           <IconButton onClick={toggleDialog}>
             <RemoveRedEye color="disabled" fontSize="small" />
           </IconButton>
@@ -144,7 +144,7 @@ const ProductCard1: FC<ProductCardProps> = ({
               <FavoriteBorder fontSize="small" color="disabled" />
             )}
           </IconButton>
-        </HoverIconWrapper>
+        </HoverIconWrapper> */}
 
         <Link href={`/product/${URLKey}`}>
           {/* <LazyImage
