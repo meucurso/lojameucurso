@@ -17,7 +17,7 @@ const RelatedProducts: FC<RelatedProductsProps> = ({ productsData }) => {
         {productsData.map((item, ind) => (
           <Grid item lg={3} md={4} sm={6} xs={12} key={ind}>
             <ProductCard1
-              id={item.id}
+              ProductId={item.ProductId}
               URLKey={item.URLKey}
               title={item.title}
               price={item.price}
