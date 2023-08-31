@@ -12,7 +12,7 @@ const SearchInputWithCategory: FC = () => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const handleSearch = (e: any) => {
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchQuery) {
       router.push(`/search?Name=${searchQuery}`);
