@@ -35,7 +35,10 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
   };
 
   const getTotalPrice = () => {
-    return cartList.reduce((accum, item) => accum + item.price * item.qty, 0);
+    return cartList.reduce(
+      (accum, item) => accum + item.price * item.qty,
+      0
+    );
   };
 
   const handleNavigate = (path: string) => () => {
@@ -47,7 +50,9 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
     <Box width="100%" maxWidth={380}>
       <Box
         overflow="auto"
-        height={`calc(100vh - ${!!cartList.length ? "80px - 3.25rem" : "0px"})`}
+        height={`calc(100vh - ${
+          !!cartList.length ? "80px - 3.25rem" : "0px"
+        })`}
       >
         <FlexBetween mx={3} height={74}>
           <FlexBox gap={1} alignItems="center" color="black">
@@ -100,7 +105,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
           <FlexBox
             py={2}
             px={2.5}
-            key={item.id}
+            key={item.ProductId}
             alignItems="center"
             borderBottom={`1px solid ${palette.divider}`}
           >
@@ -137,7 +142,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
               </Button>
             </FlexBox>
 
-            <Link href={`/product/${item.id}`}>
+            <Link href={`/product/${item.ProductId}`}>
               <Avatar
                 alt={item.name}
                 src={item.imgUrl}
