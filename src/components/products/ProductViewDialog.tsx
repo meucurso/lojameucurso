@@ -96,7 +96,8 @@ const ProductViewDialog: FC<ProductViewDialogProps> = (props) => {
                   style={{
                     width: "100%",
                     objectFit: "contain",
-                    height: "400",
+                    aspectRatio: "16/9",
+                    height: "400px",
                   }}
                   alt=""
                 />
@@ -135,7 +136,7 @@ const ProductViewDialog: FC<ProductViewDialogProps> = (props) => {
                 justifyContent={"center"}
                 textAlign={"justify"}
               >
-                {!cartItem?.qty && (
+                {/* {!cartItem?.qty && (
                   <Button
                     color="primary"
                     variant="contained"
@@ -145,37 +146,12 @@ const ProductViewDialog: FC<ProductViewDialogProps> = (props) => {
                     Adicionar ao Carrinho
                   </Button>
 
-                  // <FlexBox alignItems="center">
-                  //   <Button
-                  //     size="small"
-                  //     color="primary"
-                  //     variant="outlined"
-                  //     sx={{ p: ".6rem", height: 45 }}
-                  //     onClick={handleCartAmountChange(cartItem?.qty - 1)}
-                  //   >
-                  //     <Remove fontSize="small" />
-                  //   </Button>
-
-                  //   <H3 fontWeight="600" mx={2.5}>
-                  //     {cartItem?.qty.toString().padStart(2, "0")}
-                  //   </H3>
-
-                  //   <Button
-                  //     size="small"
-                  //     color="primary"
-                  //     variant="outlined"
-                  //     sx={{ p: ".6rem", height: 45 }}
-                  //     onClick={handleCartAmountChange(cartItem?.qty + 1)}
-                  //   >
-                  //     <Add fontSize="small" />
-                  //   </Button>
-                  // </FlexBox>
-                )}
+                )} */}
                 <Button
                   color="primary"
                   variant="contained"
                   sx={{ height: 45 }}
-                  href={`/product/${product.URLKeyString}`}
+                  href={`/product/${product.URLKey}`}
                 >
                   Mais detalhes
                 </Button>
