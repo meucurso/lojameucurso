@@ -53,7 +53,9 @@ const ProductViewDialog: FC<ProductViewDialogProps> = (props) => {
   const { product, openDialog, handleCloseDialog } = props;
 
   const { state, dispatch } = useAppContext();
-  const cartItem = state.cart.find((item) => item.id === product.id);
+  const cartItem = state.cart.find(
+    (item) => item.ProductId === product.ProductId
+  );
 
   const handleCartAmountChange = (amount: number) => () => {
     dispatch({
