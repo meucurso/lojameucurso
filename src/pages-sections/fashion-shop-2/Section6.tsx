@@ -37,7 +37,7 @@ const Section6: FC<Section6Props> = ({ products }) => {
           sx={carouselStyled}
         >
           {products.map((product) => (
-            <ProductCard18 key={product.id} product={product} />
+            <ProductCard18 key={product.ProductId} product={product} />
           ))}
         </Carousel>
       </Container>
