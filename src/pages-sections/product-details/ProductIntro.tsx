@@ -88,7 +88,12 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
               alt={title}
             /> */}
             <img
-              style={{ maxWidth: "100%", height: "auto" }}
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "contain",
+                aspectRatio: "16/9",
+              }}
               loading="eager"
               src={singleProduct.SmallImageUrl}
               alt={singleProduct.Name}
