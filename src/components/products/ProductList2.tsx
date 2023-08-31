@@ -14,8 +14,8 @@ const ProductList2: FC<ProductListProps> = ({ products }) => {
     <Box>
       {products.map((item) => (
         <ProductCard9
-          id={item.id}
-          key={item.id}
+          ProductId={item.ProductId}
+          key={item.ProductId}
           URLKey={item.URLKey}
           title={item.title}
           price={item.price}

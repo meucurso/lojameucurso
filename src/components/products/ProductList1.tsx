@@ -14,9 +14,9 @@ const ProductList1: FC<ProductListProps> = ({ products }) => {
     <Fragment>
       <Grid container spacing={3}>
         {products.map((item: Product) => (
-          <Grid item lg={4} sm={6} xs={12} key={item.id}>
+          <Grid item lg={4} sm={6} xs={12} key={item.ProductId}>
             <ProductCard1
-              id={item.ProductId}
+              ProductId={item.ProductId}
               URLKey={item.URLKey}
               title={item.Name}
               price={item.SpecialPrice}

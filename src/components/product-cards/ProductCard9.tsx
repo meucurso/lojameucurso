@@ -27,7 +27,7 @@ const Wrapper = styled(Card)({
 
 // ===========================================================
 type ProductCardProps = {
-  ProductId: string;
+  ProductId: string | number;
   off?: number;
   URLKey: string;
   ShortDescription?: string;
