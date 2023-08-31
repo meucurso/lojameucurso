@@ -32,6 +32,7 @@ const ImageWrapper = styled(Box)(({ theme }) => ({
   textAlign: "center",
   position: "relative",
   display: "inline-block",
+  padding: "1rem",
   [theme.breakpoints.down("sm")]: { display: "block" },
 }));
 
