@@ -31,7 +31,7 @@ type ProductCardProps = {
   name: string;
   ShortDescription?: string;
   URLKey: string;
-  price: number;
+  price?: number;
   imgUrl?: string;
   ProductId: string | number;
 };
