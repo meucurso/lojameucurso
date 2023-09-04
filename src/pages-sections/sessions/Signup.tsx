@@ -169,7 +169,7 @@ const Signup: FC = () => {
 
       {/* <SocialButtons /> */}
       <FlexRowCenter mt="1.25rem">
-        <Box>Você ja tem uma conta??</Box>
+        <Box>Você ja tem uma conta?</Box>
         <Link href="/login">
           <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
             Entre
@@ -191,7 +191,13 @@ const initialValues = {
 const formSchema = yup.object().shape({
   name: yup.string().required("Nome obrigatório"),
   email: yup.string().email("invalid email").required("Email obrigatório"),
-  password: yup.string().required("Senha obrigatória"),
+  password: yup
+    .string()
+    .required("Senha obrigatória")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
+      "Sua senha deve conter no mínimo 8 caracteres, uma letra maiúscula, um número e um caractere especial"
+    ),
   re_password: yup
     .string()
     .oneOf([yup.ref("password"), null], "As senhas não são iguais")

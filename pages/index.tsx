@@ -56,10 +56,10 @@ const IndexPage: NextPage<IndexPageProps> = (props) => {
         <Section4 products={props.products} />
 
         {/* OFFER BANNERS */}
-        <Section5 />
+        {/* <Section5 /> */}
 
         {/* FEATURED PRODUCTS */}
-        <Section6 products={props.featureProducts} />
+        {/* <Section6 products={props.featureProducts} /> */}
 
         {/* SUMMER SALE OFFER AREA */}
         {/* <Section7 /> */}

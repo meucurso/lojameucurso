@@ -89,6 +89,7 @@ const ProductCard1: FC<ProductCardProps> = ({
   ProductId,
   URLKey,
   title,
+  SpecialPrice,
   price,
   imgUrl,
   rating = 5,
@@ -170,7 +171,7 @@ const ProductCard1: FC<ProductCardProps> = ({
       <ProductViewDialog
         openDialog={openModal}
         handleCloseDialog={toggleDialog}
-        product={{ title, price, ProductId, URLKey, imgUrl }}
+        product={{ title, SpecialPrice, ProductId, URLKey, imgUrl }}
       />
 
       <ContentWrapper>
@@ -201,15 +202,14 @@ const ProductCard1: FC<ProductCardProps> = ({
 
             <FlexBox alignItems="center" gap={1} mt={0.5}>
               <Box fontWeight="600" color="primary.main">
-                {/* {calculateDiscount(price, discount)} */}
-                {currency(price)}
+                {/* {calculateDiscount(SpecialPrice, discount)} */}
+
+                {currency(SpecialPrice)}
               </Box>
 
-              {/* {!!discount && (
-                <Box color="grey.600" fontWeight="600">
-                  <del>{currency(price)}</del>
-                </Box>
-              )} */}
+              <Box color="grey.600" fontWeight="600">
+                <del>{currency(price)}</del>
+              </Box>
             </FlexBox>
           </Box>
 
@@ -230,7 +230,7 @@ const ProductCard1: FC<ProductCardProps> = ({
                 id,
                 ShortDescription,
                 URLKey,
-                price,
+                SpecialPrice,
                 imgUrl,
                 name: title,
                 qty: (cartItem?.qty || 0) + 1,
@@ -254,7 +254,7 @@ const ProductCard1: FC<ProductCardProps> = ({
                       ProductId,
                       URLKey,
                       ShortDescription,
-                      price,
+                      SpecialPrice,
                       imgUrl,
                       name: title,
                       qty: (cartItem?.qty || 0) - 1,

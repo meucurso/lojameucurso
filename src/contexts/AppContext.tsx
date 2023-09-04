@@ -16,7 +16,8 @@ export type CartItem = {
   qty: number;
   name: string;
   // slug: string;
-  price: number;
+  price?: number;
+  SpecialPrice?: number;
   imgUrl?: string;
   ProductId: string | number;
 };

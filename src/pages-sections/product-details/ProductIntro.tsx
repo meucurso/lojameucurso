@@ -165,6 +165,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
           ))}
 
           <Box pt={1} mb={3}>
+            <s>{currency(singleProduct.Price)}</s>
             <H2 color="primary.main" mb={0.5} lineHeight="1">
               {currency(singleProduct.SpecialPrice)}
             </H2>
@@ -181,7 +182,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             </Button>
           ) : (
             <FlexBox alignItems="center" mb={4.5}>
-              {/* <Button
+              <Button
                 size="small"
                 sx={{ p: 1 }}
                 color="primary"
@@ -189,14 +190,13 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
                 onClick={handleCartAmountChange(cartItem?.qty - 1)}
               >
                 <Remove fontSize="small" />
-              </Button> */}
+              </Button>
 
               <H3 fontWeight="bolder" mx={2.5}>
-                {/* {cartItem?.qty.toString().padStart(2, "0")} */}
-                Produto já adicionado no carrinho
+                {cartItem?.qty.toString().padStart(2, "0")}
               </H3>
 
-              {/* <Button
+              <Button
                 size="small"
                 sx={{ p: 1 }}
                 color="primary"
@@ -204,7 +204,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
                 onClick={handleCartAmountChange(cartItem?.qty + 1)}
               >
                 <Add fontSize="small" />
-              </Button> */}
+              </Button>
             </FlexBox>
           )}
 

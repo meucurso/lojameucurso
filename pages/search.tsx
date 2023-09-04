@@ -118,7 +118,8 @@ const Search: NextPage = () => {
               <Grid item lg={3} md={4} sm={6} xs={12} key={item.ProductId}>
                 <ProductCard1
                   title={item.Name}
-                  price={item.SpecialPrice}
+                  SpecialPrice={item.SpecialPrice}
+                  price={item.Price}
                   imgUrl={item.SmallImageUrl}
                   URLKey={item.URLKey}
                 />

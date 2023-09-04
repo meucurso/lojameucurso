@@ -9,16 +9,18 @@ type ProductDescriptionProps = { product: Product | null };
 
 const ProductDescription: FC<ProductDescriptionProps> = ({ product }) => {
   if (!product) {
-    // Se product for nulo, você pode renderizar uma mensagem alternativa ou retornar null
     return <Box>No product data available.</Box>;
   }
 
-  // Se product não for nulo, você pode continuar com a renderização
   const { ShortDescription } = product;
   return (
-    <Box>
-      <Box>{ShortDescription}</Box>
-    </Box>
+    <div style={{ height: "130vh", width: "100%" }}>
+      <iframe
+        src="https://docs.google.com/viewer?srcid=151h2GBBUftSDTiaL0oCQR6ARetu6VH2Q&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
+        width="100%"
+        height="100%"
+      ></iframe>
+    </div>
   );
 };
 

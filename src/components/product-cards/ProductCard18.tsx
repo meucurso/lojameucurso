@@ -159,6 +159,7 @@ const ProductCard18: FC<ProductCardProps> = ({ product }) => {
           <Small color="grey.500">{product.categories[0]}</Small>
         )} */}
         <Paragraph fontWeight="bold">{product.Name}</Paragraph>
+        <s>{currency(product.Price)}</s>
         <H4 fontWeight={700} py={0.5}>
           {currency(product.SpecialPrice)}
         </H4>
