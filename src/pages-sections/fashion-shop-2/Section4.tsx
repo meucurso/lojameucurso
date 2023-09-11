@@ -33,8 +33,8 @@ const Section4: FC<Section4Props> = ({ products }) => {
         visibleSlides={visibleSlides}
         sx={carouselStyled}
       >
-        {products.map((product) => (
-          <ProductCard18 key={product.ProductId} product={product} />
+        {products.map((product, index) => (
+          <ProductCard18 key={index} product={product} />
         ))}
       </Carousel>
     </Container>

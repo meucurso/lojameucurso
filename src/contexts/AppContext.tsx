@@ -12,9 +12,11 @@ type InitialState = { cart: CartItem[] };
 
 export type CartItem = {
   URLKey: string;
+  ProductChildren?: any;
   ShortDescription?: string;
   qty: number;
   name: string;
+  SKU?: any;
   // slug: string;
   price?: number;
   SpecialPrice?: number;

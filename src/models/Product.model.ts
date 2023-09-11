@@ -2,6 +2,10 @@ import Shop from "./Shop.model";
 import Review from "./Review.model";
 
 interface Product {
+  SKU?: any;
+  ProductGroupId?: any;
+  childrenProducts?: any;
+  ProductChildren?: any;
   URLKey?: string;
   ProductId?: number;
   SmallImageUrl?: string;

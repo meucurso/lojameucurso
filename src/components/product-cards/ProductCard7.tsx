@@ -28,12 +28,12 @@ const Wrapper = styled(Card)(({ theme }) => ({
 // =========================================================
 type ProductCardProps = {
   qty: number;
-  name: string;
+  name?: string;
   ShortDescription?: string;
-  URLKey: string;
+  URLKey?: string;
   price?: number;
   imgUrl?: string;
-  ProductId: string | number;
+  ProductId?: string | number;
 };
 // =========================================================
 

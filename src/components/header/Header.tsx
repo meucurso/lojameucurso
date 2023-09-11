@@ -23,6 +23,17 @@ import MobileMenu from "components/navbar/MobileMenu";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import CategoryMenu from "components/categories/CategoryMenu";
 import ShoppingBagOutlined from "components/icons/ShoppingBagOutlined";
+import Avatar from "@mui/material/Avatar";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
+import PersonAdd from "@mui/icons-material/PersonAdd";
+import Settings from "@mui/icons-material/Settings";
+import Logout from "@mui/icons-material/Logout";
+import { useSession, signOut } from "next-auth/react";
 
 // styled component
 export const HeaderWrapper = styled(Box)(({ theme }) => ({
@@ -64,6 +75,17 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
   const toggleDialog = () => setDialogOpen(!dialogOpen);
   const toggleSidenav = () => setSidenavOpen(!sidenavOpen);
   const toggleSearchBar = () => setSearchBarOpen(!searchBarOpen);
+
+  const { data: session } = useSession();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   // LOGIN AND MINICART DRAWER
   const DIALOG_DRAWER = (
@@ -190,24 +212,110 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
 
         {/* LOGIN AND CART BUTTON */}
         <FlexBox gap={1.5} alignItems="center">
-          <Box
-            component={IconButton}
-            p={1.25}
-            bgcolor="grey.200"
-            onClick={toggleDialog}
-          >
-            <PersonOutline />
-          </Box>
+          {!session && (
+            <>
+              <Tooltip title="Entrar">
+                <Box
+                  component={Button}
+                  p={1.25}
+                  bgcolor="grey.200"
+                  href="/login"
+                  color={"grey"}
+                >
+                  <PersonOutline />
+                </Box>
+              </Tooltip>
+            </>
+          )}
 
+          {/* Quando estiver logado */}
+          {session && (
+            <>
+              <Tooltip title="Sua conta">
+                <Box
+                  onClick={handleClick}
+                  component={Button}
+                  p={0.5}
+                  bgcolor="grey.200"
+                >
+                  <p style={{ fontSize: "10px", marginLeft: "5px" }}>
+                    {session.user.Name}
+                  </p>
+                  <Box color={"grey"} component={IconButton}>
+                    <PersonOutline />
+                  </Box>
+                </Box>
+              </Tooltip>
+
+              <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={open}
+                onClose={handleClose}
+                onClick={handleClose}
+                PaperProps={{
+                  elevation: 0,
+                  sx: {
+                    overflow: "visible",
+                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                    mt: 1.5,
+                    "& .MuiAvatar-root": {
+                      width: 32,
+                      height: 32,
+                      ml: -0.5,
+                      mr: 1,
+                    },
+                    "&:before": {
+                      content: '""',
+                      display: "block",
+                      position: "absolute",
+                      top: 0,
+                      right: 14,
+                      width: 10,
+                      height: 10,
+                      bgcolor: "background.paper",
+                      transform: "translateY(-50%) rotate(45deg)",
+                      zIndex: 0,
+                    },
+                  },
+                }}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+              >
+                {/* <MenuItem onClick={handleClose}>
+              <Avatar /> Profile
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <Avatar /> My account
+            </MenuItem> */}
+
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <Settings fontSize="small" />
+                  </ListItemIcon>
+                  Configurações
+                </MenuItem>
+                <MenuItem onClick={() => signOut()}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" />
+                  </ListItemIcon>
+                  Sair
+                </MenuItem>
+              </Menu>
+            </>
+          )}
           <Badge badgeContent={state.cart.length} color="primary">
-            <Box
-              p={1.25}
-              bgcolor="grey.200"
-              component={IconButton}
-              onClick={toggleSidenav}
-            >
-              <ShoppingBagOutlined />
-            </Box>
+            <Tooltip title="Carrinho">
+              <Box
+                color={"grey"}
+                p={1.25}
+                bgcolor="grey.200"
+                component={Button}
+                onClick={toggleSidenav}
+              >
+                <ShoppingBagOutlined />
+              </Box>
+            </Tooltip>
           </Badge>
         </FlexBox>
 

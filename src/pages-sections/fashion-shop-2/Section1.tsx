@@ -3,6 +3,7 @@ import { Box, Container } from "@mui/material";
 import Carousel from "components/carousel/Carousel";
 import { CarouselCard1 } from "components/carousel-cards";
 import MainCarouselItem from "models/Market-1.model";
+import Link from "next/link";
 
 // ======================================================
 type Props = { carouselData?: MainCarouselItem[] };
@@ -25,16 +26,17 @@ const Section1: FC<Props> = ({ carouselData }) => {
           {carouselData
             ?.sort((a, b) => (a.Order > b.Order ? 1 : -1))
             .map((item, ind) => (
-              <CarouselCard1
-                key={ind}
-                buttonColor="dark"
-                title={item.title}
-                imgUrl={item.BannerLargeURL}
-                imgUrlMobile={item.BannerSmallURL}
-                buttonLik={item.buttonLik}
-                buttonText={item.buttonText}
-                description={item.description}
-              />
+              <Link key={ind} href={item.URL}>
+                <CarouselCard1
+                  buttonColor="dark"
+                  title={item.title}
+                  imgUrl={item.BannerLargeURL}
+                  imgUrlMobile={item.BannerSmallURL}
+                  buttonLik={item.buttonLik}
+                  buttonText={item.buttonText}
+                  description={item.description}
+                />
+              </Link>
             ))}
         </Carousel>
       </Container>

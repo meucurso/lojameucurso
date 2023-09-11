@@ -15,6 +15,7 @@ import Product from "models/Product.model";
 import Service from "models/Service.model";
 import Category from "models/Category.model";
 import api from "utils/__api__/meu-curso";
+import { signOut, useSession } from "next-auth/react";
 
 // =======================================================
 type IndexPageProps = {
@@ -44,6 +45,7 @@ const IndexPage: NextPage<IndexPageProps> = (props) => {
       />
       <Box bgcolor="white">
         {/* HERO SECTION CAROUSEL */}
+
         <Section1 carouselData={props.indexBannersData} />
 
         {/* SERVICE CARDS */}
@@ -80,7 +82,7 @@ const IndexPage: NextPage<IndexPageProps> = (props) => {
       </Box>
 
       {/* POPUP NEWSLETTER FORM */}
-      <Newsletter />
+      {/* <Newsletter /> */}
 
       {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
       {/* <Setting /> */}

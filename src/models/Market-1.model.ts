@@ -1,4 +1,5 @@
 interface MainCarouselItem {
+  URL?: string;
   index: number;
   Order: number;
   title?: string;

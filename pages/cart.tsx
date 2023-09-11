@@ -14,7 +14,7 @@ import { currency } from "lib";
 
 const Cart: NextPage = () => {
   const { state } = useAppContext();
-  const cartList: CartItem[] = state.cart;
+  const cartList: any = state.cart;
 
   const getTotalPrice = () =>
     cartList.reduce((accum, item) => accum + item.price * item.qty, 0);

@@ -8,6 +8,10 @@ import BazaarImage from "components/BazaarImage";
 import BazaarTextField from "components/BazaarTextField";
 import EyeToggleButton from "./EyeToggleButton";
 import { FlexBox, FlexRowCenter } from "components/flex-box";
+import { useRouter } from "next/router";
+
+import { signIn } from "next-auth/react";
+import { useSnackbar } from "notistack";
 
 const fbStyle = { background: "#3B5998", color: "white" };
 const googleStyle = { background: "#4285F4", color: "white" };
@@ -34,13 +38,30 @@ export const Wrapper = styled<FC<WrapperProps & CardProps>>(
 
 const Login = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
+  const { push } = useRouter();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const togglePasswordVisibility = useCallback(() => {
     setPasswordVisibility((visible) => !visible);
   }, []);
 
   const handleFormSubmit = async (values: any) => {
-    console.log(values);
+    const result = await signIn("credentials", {
+      ...values,
+      redirect: false,
+      callbackUrl: "/",
+    });
+
+    if (result?.status === 200) {
+      return push(result?.url);
+    } else if (result?.status === 401) {
+      return enqueueSnackbar("Usuário ou senha inválidos!", {
+        variant: "error",
+      });
+    } else {
+      return alert(result?.error);
+    }
   };
 
   const {

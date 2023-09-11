@@ -15,6 +15,8 @@ import SettingsProvider from "contexts/SettingContext";
 import SnackbarProvider from "components/SnackbarProvider";
 import createEmotionCache from "createEmotionCache";
 
+import { SessionProvider } from "next-auth/react";
+
 import "nprogress/nprogress.css";
 import "simplebar-react/dist/simplebar.min.css";
 import "../src/__server__";
@@ -30,12 +32,18 @@ nProgress.configure({ showSpinner: false });
 const clientSideEmotionCache = createEmotionCache();
 
 export interface MyAppProps extends AppProps {
+  session: any;
   emotionCache?: EmotionCache;
   Component: NextPage & { getLayout?: (page: ReactElement) => ReactNode };
 }
 
 const App = (props: MyAppProps) => {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const {
+    session,
+    Component,
+    emotionCache = clientSideEmotionCache,
+    pageProps,
+  } = props;
 
   const getLayout = Component.getLayout ?? ((page) => page);
 
@@ -44,21 +52,28 @@ const App = (props: MyAppProps) => {
       <Head>
         <meta charSet="utf-8" />
         <meta name="description" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        />
+        <meta
+          httpEquiv="Content-Type"
+          content="text/html; charset=utf-8"
+        />
         <OpenGraphTags />
         <title>MeuCurso - Do seu jeito. No seu tempo.</title>
       </Head>
-
-      <SettingsProvider>
-        <AppProvider>
-          <MuiTheme>
-            <SnackbarProvider>
-              <RTL>{getLayout(<Component {...pageProps} />)}</RTL>
-            </SnackbarProvider>
-          </MuiTheme>
-        </AppProvider>
-      </SettingsProvider>
+      <SessionProvider session={session}>
+        <SettingsProvider>
+          <AppProvider>
+            <MuiTheme>
+              <SnackbarProvider>
+                <RTL>{getLayout(<Component {...pageProps} />)}</RTL>
+              </SnackbarProvider>
+            </MuiTheme>
+          </AppProvider>
+        </SettingsProvider>
+      </SessionProvider>
     </CacheProvider>
   );
 };

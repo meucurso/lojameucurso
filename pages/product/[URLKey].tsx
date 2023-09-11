@@ -37,11 +37,9 @@ const ProductDetails = ({ singleProduct }) => {
 
   const handleOptionClick = (_, value: number) => setSelectedOption(value);
 
-  // Show a loading state when the fallback is rendered
   if (router.isFallback) {
     return <h1>Carregando...</h1>;
   }
-
   return (
     <ShopLayout1>
       <SEO
@@ -90,7 +88,6 @@ const ProductDetails = ({ singleProduct }) => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const singleProduct = await api.getProductBySlug(params.URLKey);
-
   return {
     props: {
       singleProduct,

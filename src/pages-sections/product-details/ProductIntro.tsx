@@ -10,6 +10,7 @@ import { FlexBox, FlexRowCenter } from "../../components/flex-box";
 import Product from "models/Product.model";
 import { currency } from "lib";
 import productVariants from "data/product-variants";
+import ChildrenTree from "./ChildrenTree";
 
 // ================================================================
 type ProductIntroProps = { singleProduct: Product };
@@ -18,52 +19,54 @@ type ProductIntroProps = { singleProduct: Product };
 const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
   const {
     Name,
+    ProductChildren,
     price,
     shortDescription,
     title,
     SmallImageUrl,
     SpecialPrice,
     ProductId,
-
+    SKU,
     thumbnail,
     URLKey,
   } = singleProduct;
 
   const { state, dispatch } = useAppContext();
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [selectVariants, setSelectVariants] = useState({
-    option: "option 1",
-    type: "type 1",
-  });
+  const [selectVariants, setSelectVariants] = useState([]);
 
   // HANDLE CHAMGE TYPE AND OPTIONS
-  const handleChangeVariant =
-    (variantName: string, value: string) => () => {
-      setSelectVariants((state) => ({
-        ...state,
-        [variantName.toLowerCase()]: value,
-      }));
-    };
+  // const handleChangeVariant =
+  //   (variantName: string, value: string) => () => {
+  //     setSelectVariants((state) => ({
+  //       ...state,
+  //       [variantName.toLowerCase()]: value,
+  //     }));
+  //   };
 
   // CHECK PRODUCT EXIST OR NOT IN THE CART
   const cartItem = state.cart.find((item) => item.ProductId === ProductId);
 
   // HANDLE CHANGE CART
   const handleCartAmountChange = (amount: number) => () => {
+    const cartItem = {
+      price: singleProduct.SpecialPrice,
+      qty: amount,
+      name: singleProduct.Name,
+      imgUrl: singleProduct.SmallImageUrl,
+      ShortDescription: singleProduct.ShortDescription,
+      ProductId,
+      ProductChildren,
+      SKU: singleProduct.SKU,
+      URLKey: singleProduct.URLKey,
+    };
+
+    console.log("Item enviado para o carrinho:", cartItem);
+
     dispatch({
       type: "CHANGE_CART_AMOUNT",
-      payload: {
-        price: singleProduct.SpecialPrice,
-        qty: amount,
-        name: singleProduct.Name,
-        imgUrl: singleProduct.SmallImageUrl,
-        ShortDescription: singleProduct.ShortDescription,
-        ProductId,
-        URLKey: singleProduct.URLKey,
-      },
+      payload: cartItem,
     });
   };
-
   return (
     <Box width="100%">
       <Grid container spacing={3} justifyContent="space-around">
@@ -122,7 +125,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
 
         <Grid item md={6} xs={12} alignItems="center">
           <H1 mb={1}>{singleProduct.Name}</H1>
-
+          <ChildrenTree familyTree={singleProduct} />
           <FlexBox
             flexDirection={"column"}
             justifyContent={"center"}
@@ -144,25 +147,25 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             <H6 lineHeight="1">(50)</H6>
           </FlexBox> */}
 
-          {productVariants.map((variant) => (
-            <Box key={variant.id} mb={2}>
-              <H6 mb={1}>{variant.title}</H6>
+          {/* {singleProduct.ProductChildren.map((variant) => (
+            <Box key={variant.ProductId} mb={2}>
+              <H6 mb={1}>{variant.Name}</H6>
 
-              {variant.values.map(({ id, value }) => (
+              {variant.ProductChildren.map((item) => (
                 <Chip
-                  key={id}
-                  label={value}
-                  onClick={handleChangeVariant(variant.title, value)}
+                  key={item?.ProductId}
+                  label={item?.Name}
+                  onClick={handleChangeVariant(item?.Name, item)}
                   sx={{ borderRadius: "4px", mr: 1, cursor: "pointer" }}
                   color={
-                    selectVariants[variant.title.toLowerCase()] === value
+                    selectVariants[variant.Name.toLowerCase()] === item
                       ? "primary"
                       : "default"
                   }
                 />
               ))}
             </Box>
-          ))}
+          ))} */}
 
           <Box pt={1} mb={3}>
             <s>{currency(singleProduct.Price)}</s>
