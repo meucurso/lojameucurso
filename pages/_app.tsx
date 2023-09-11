@@ -32,7 +32,7 @@ nProgress.configure({ showSpinner: false });
 const clientSideEmotionCache = createEmotionCache();
 
 export interface MyAppProps extends AppProps {
-  session: any;
+  session?: any;
   emotionCache?: EmotionCache;
   Component: NextPage & { getLayout?: (page: ReactElement) => ReactNode };
 }
