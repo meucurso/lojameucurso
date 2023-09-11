@@ -19,60 +19,67 @@ export const contestCarouselData = [
   {
     BannerLargeURL:
       "https://www.meucurso.com.br/media/wysiwyg/Concursos_banner-wide.png",
-    imgUrlBannerSmallURLMobile:
+    BannerSmallURL:
       "https://www.meucurso.com.br/media/wysiwyg/Concursos_banner.png",
+    URL: "test",
   },
   {
     BannerLargeURL:
       "https://www.meucurso.com.br/media/wysiwyg/magis_bnn_full.png",
     BannerSmallURL:
       "https://www.meucurso.com.br/media/wysiwyg/magis_bnn_mob.jpg",
+    URL: "test",
   },
 ];
 //  banner oab2 data
 export const bannerOAB2Data = [
   {
-    imgUrl: "https://www.meucurso.com.br/media/wysiwyg/partiuoab_2.jpg",
-    imgUrlMobile:
+    BannerLargeURL:
+      "https://www.meucurso.com.br/media/wysiwyg/partiuoab_2.jpg",
+    BannerSmallURL:
       "https://www.meucurso.com.br/media/wysiwyg/partiuoabmob_1.jpg",
   },
 ];
 //  banner oab1 data
 export const bannerOAB1Data = [
   {
-    imgUrl:
+    BannerLargeURL:
       "https://www.meucurso.com.br/media/wysiwyg/banner_primeirafase_1.jpg",
-    imgUrlMobile:
+    BannerSmallURL:
       "https://www.meucurso.com.br/media/wysiwyg/banner_primeirafase_1.jpg",
   },
 ];
 // banner postgraduate data
 export const bannerPostGraduateData = [
   {
-    imgUrl:
+    BannerLargeURL:
       "https://www.meucurso.com.br/media/wysiwyg/Banners_Semana_do_Advogado.jpg",
-    imgUrlMobile:
+    BannerSmallURL:
       "https://www.meucurso.com.br/media/wysiwyg/Banners_Semana_do_Advogado_mob.jpg",
+    URL: "test",
   },
   {
-    imgUrl:
+    BannerLargeURL:
       "https://www.meucurso.com.br/media/wysiwyg/bnnSolu_o_de_Conflitos.png",
-    imgUrlMobile:
+    BannerSmallURL:
       "https://www.meucurso.com.br/media/wysiwyg/bnnSolu_o_de_Conflitos-mob.png",
+    URL: "test",
   },
 ];
 export const bannerUpdatePracticeData = [
   {
-    imgUrl:
+    BannerLargeURL:
       "https://www.meucurso.com.br/media/wysiwyg/Processual_Civil.jpg",
-    imgUrlMobile:
+    BannerSmallURL:
       "https://www.meucurso.com.br/media/wysiwyg/capaProcessual_Civil.jpg",
+    URL: "test",
   },
   {
-    imgUrl:
+    BannerLargeURL:
       "https://www.meucurso.com.br/media/wysiwyg/Banners_previdenciario_1.jpg",
-    imgUrlMobile:
+    BannerSmallURL:
       "https://www.meucurso.com.br/media/wysiwyg/capa_atualiza_o_e_pr_tica_.jpg",
+    URL: "test",
   },
 ];
 export const firstStepsData = [
@@ -81,6 +88,7 @@ export const firstStepsData = [
       "https://www.meucurso.com.br/media/wysiwyg/primeiros_passos_adv_full22.png",
     imgUrlMobile:
       "https://www.meucurso.com.br/media/wysiwyg/primeiros_passos_adv_mob_2.png",
+    URL: "test",
   },
 ];
 

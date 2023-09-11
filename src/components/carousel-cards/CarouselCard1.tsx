@@ -38,6 +38,7 @@ type CarouselCard1Props = {
   title?: string;
   imgUrl?: string;
   imgUrlMobile?: string;
+  alt?: string;
   buttonLik?: string;
   buttonText?: string;
   description?: string;
@@ -49,6 +50,7 @@ const CarouselCard1: FC<CarouselCard1Props> = ({
   title,
   imgUrl,
   imgUrlMobile,
+  alt,
   buttonLik,
   buttonText,
   description,
@@ -68,7 +70,7 @@ const CarouselCard1: FC<CarouselCard1Props> = ({
       />
       <BazaarImage
         src={imgUrl}
-        alt="apple-watch-1"
+        alt={alt}
         sx={{
           mx: "auto",
           maxHeight: "auto",

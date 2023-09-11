@@ -61,13 +61,11 @@ export default AtualizacaoEPratica;
 
 export const getStaticProps: GetStaticProps = async () => {
   const updatePracticceProducts = await api.getProductsById("96");
-  const constestCarousel = await api.getContestCarousel();
   const updatePracticceBanners = await api.getUpdatePracticeBanner();
 
   return {
     props: {
       updatePracticceProducts,
-      constestCarousel,
       updatePracticceBanners,
     },
     revalidate: 25,
