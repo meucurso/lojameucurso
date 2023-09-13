@@ -1,21 +1,18 @@
 import { GetStaticProps, NextPage } from "next";
 import { Box, useTheme } from "@mui/material";
 import SEO from "components/SEO";
-import Newsletter from "components/Newsletter";
 import ShopLayout1 from "components/layouts/ShopLayout1";
 import Section1 from "pages-sections/fashion-shop-2/Section1";
 import Section2 from "pages-sections/fashion-shop-2/Section2";
 import Section3 from "pages-sections/fashion-shop-2/Section3";
 import Section4 from "pages-sections/fashion-shop-2/Section4";
-import Section5 from "pages-sections/fashion-shop-2/Section5";
-import Section6 from "pages-sections/fashion-shop-2/Section6";
+
 import Blog from "models/Blog.model";
 import Brand from "models/Brand.model";
 import Product from "models/Product.model";
 import Service from "models/Service.model";
 import Category from "models/Category.model";
 import api from "utils/__api__/meu-curso";
-import { signOut, useSession } from "next-auth/react";
 
 // =======================================================
 type IndexPageProps = {
@@ -101,7 +98,7 @@ export const getStaticProps: GetStaticProps = async () => {
   const popularProducts = await api.getPopularProducts();
   const featureProducts = await api.getFeatureProducts();
   const bestWeekProducts = await api.getBestWeekProducts();
-  const indexBannersData = await api.getIndexBanners();
+  const indexBannersData = await api.getIndexBanners("1");
 
   return {
     props: {

@@ -61,45 +61,13 @@ type ProductCardProps = { product: Product };
 // ==============================================================
 
 const ProductCard18: FC<ProductCardProps> = ({ product }) => {
-  const { enqueueSnackbar } = useSnackbar();
   const { state, dispatch } = useAppContext();
   const [openDialog, setOpenDialog] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  const cartItem: CartItem | undefined = state.cart.find(
-    (item) => item.URLKey === product.URLKey
-  );
-
-  // handle favourite
-  const handleFavorite = () => setIsFavorite((fav) => !fav);
-
-  // handle add to cart
-  const handleAddToCart = (product: Product) => () => {
-    const payload = {
-      ProductId: product.ProductId,
-      URLKey: product.URLKey,
-      name: product.Name,
-      price: product.SpecialPrice,
-      imgUrl: product.SmallImageUrl,
-      ShortDescription: product.ShortDescription,
-      qty: (cartItem?.qty || 0) + 1,
-    };
-
-    dispatch({ type: "CHANGE_CART_AMOUNT", payload });
-    enqueueSnackbar("Adicionado ao Carrinho", { variant: "success" });
-  };
 
   return (
     <Card>
       <CardMedia>
         <Link href={`/product/${product.URLKey}`}>
-          {/* <LazyImage
-            width={300}
-            height={300}
-            alt="category"
-            className="product-img"
-            src={product.SmallImageUrl}
-          /> */}
           <img
             src={product.SmallImageUrl}
             width={"100%"}
@@ -110,24 +78,6 @@ const ProductCard18: FC<ProductCardProps> = ({ product }) => {
             }}
           />
         </Link>
-
-        <AddToCartButton
-          className="product-actions"
-          onClick={handleAddToCart(product)}
-        >
-          <AddShoppingCart color="disabled" fontSize="small" />
-        </AddToCartButton>
-
-        <FavouriteButton
-          className="product-actions"
-          onClick={handleFavorite}
-        >
-          {isFavorite ? (
-            <Favorite color="primary" fontSize="small" />
-          ) : (
-            <FavoriteBorder color="disabled" fontSize="small" />
-          )}
-        </FavouriteButton>
 
         <QuickViewButton
           fullWidth
@@ -155,26 +105,11 @@ const ProductCard18: FC<ProductCardProps> = ({ product }) => {
       />
 
       <Box p={1} textAlign="center">
-        {/* {product.categories.length > 0 && (
-          <Small color="grey.500">{product.categories[0]}</Small>
-        )} */}
         <Paragraph fontWeight="bold">{product.Name}</Paragraph>
         <s>{currency(product.Price)}</s>
         <H4 fontWeight={700} py={0.5}>
           {currency(product.SpecialPrice)}
         </H4>
-
-        {/* <FlexRowCenter gap={1}>s
-          <Rating
-            name="read-only"
-            value={4}
-            readOnly
-            sx={{ fontSize: 16 }}
-          />
-          <Small fontWeight={600} color="grey.500">
-            ({product.reviews.length} Reviews)
-          </Small>
-        </FlexRowCenter> */}
       </Box>
     </Card>
   );

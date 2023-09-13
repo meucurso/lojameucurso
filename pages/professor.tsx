@@ -12,6 +12,7 @@ import OABExamTeam from "components/oab-examteam/OABExamTeam";
 import Section6 from "pages-sections/fashion-shop-2/Section6";
 import BazaarImage from "components/BazaarImage";
 import ResponsiveBanners from "components/responsive-banners/ResponsiveBanners";
+import Section1 from "pages-sections/fashion-shop-2/Section1";
 
 const CursosOAB1Fase = (props) => {
   const width = useWindowSize();
@@ -34,11 +35,7 @@ const CursosOAB1Fase = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <img
-            style={{ maxWidth: "100%", height: "auto" }}
-            src="https://www.meucurso.com.br/media/wysiwyg/MicrosoftTeams-image_139_.png"
-            alt=""
-          />
+          <Section1 carouselData={props.indexBannersData} />
 
           <Box sx={{ backgroundColor: "#fff" }}>
             <Container>
@@ -143,11 +140,11 @@ export default CursosOAB1Fase;
 
 export const getStaticProps: GetStaticProps = async () => {
   const featureProducts = await api.getFeatureProducts();
-  const bannerOAB1 = await api.getOAB1Banner();
+  const indexBannersData = await api.getIndexBanners("11");
   return {
     props: {
       featureProducts,
-      bannerOAB1,
+      indexBannersData,
     },
     revalidate: 25,
   };

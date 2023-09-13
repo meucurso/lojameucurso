@@ -37,7 +37,7 @@ const PosGraduacao = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <Section1 carouselData={props.postGraduateBanners} />
+          <Section1 carouselData={props.indexBannersData} />
           <Container>
             <Grid container spacing={2} marginTop={5}>
               <Grid item md={6}>
@@ -99,12 +99,12 @@ export default PosGraduacao;
 
 export const getStaticProps: GetStaticProps = async () => {
   const postGraduateProducts = await api.getProductsById("97");
-  const postGraduateBanners = await api.getPostGraduateBanner();
+  const indexBannersData = await api.getIndexBanners("9");
 
   return {
     props: {
       postGraduateProducts,
-      postGraduateBanners,
+      indexBannersData,
     },
     revalidate: 25,
   };

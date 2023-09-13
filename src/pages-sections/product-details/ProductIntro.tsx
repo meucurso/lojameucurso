@@ -76,20 +76,6 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
       <Grid container spacing={3} justifyContent="space-around">
         <Grid item md={6} xs={12} alignItems="center">
           <FlexBox justifyContent="center" mb={6}>
-            {/* <LazyImage
-              alt={title}
-              width={150}
-              height={150}
-              loading="eager"
-              src={product.images[selectedImage]}
-              sx={{ maxWidth: "100%", height: "auto" }}
-            /> */}
-            {/* <img
-              style={{ maxWidth: "100%", height: "auto" }}
-              loading="eager"
-              src={product.images[selectedImage]}
-              alt={title}
-            /> */}
             <img
               style={{
                 width: "100%",
@@ -103,28 +89,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             />
           </FlexBox>
 
-          <FlexBox overflow="auto">
-            {/* {images.map((url, ind) => (
-              <FlexRowCenter
-                key={ind}
-                width={64}
-                height={64}
-                minWidth={64}
-                bgcolor="white"
-                border="1px solid"
-                borderRadius="10px"
-                ml={ind === 0 ? "auto" : 0}
-                style={{ cursor: "pointer" }}
-                onClick={handleImageClick(ind)}
-                mr={ind === images.length - 1 ? "auto" : "10px"}
-                borderColor={
-                  selectedImage === ind ? "primary.main" : "grey.400"
-                }
-              >
-                <Avatar src={url} variant="square" sx={{ height: 40 }} />
-              </FlexRowCenter>
-            ))} */}
-          </FlexBox>
+          <FlexBox overflow="auto"></FlexBox>
         </Grid>
 
         <Grid item md={6} xs={12} alignItems="center">
@@ -143,39 +108,6 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             familyTree={singleProduct}
           />
 
-          {/* <FlexBox alignItems="center" mb={2}>
-            <Box lineHeight="1">Rated:</Box>
-            <Box mx={1} lineHeight="1">
-              <BazaarRating
-                color="warn"
-                fontSize="1.25rem"
-                value={4}
-                readOnly
-              />
-            </Box>
-            <H6 lineHeight="1">(50)</H6>
-          </FlexBox> */}
-
-          {/* {singleProduct.ProductChildren.map((variant) => (
-            <Box key={variant.ProductId} mb={2}>
-              <H6 mb={1}>{variant.Name}</H6>
-
-              {variant.ProductChildren.map((item) => (
-                <Chip
-                  key={item?.ProductId}
-                  label={item?.Name}
-                  onClick={handleChangeVariant(item?.Name, item)}
-                  sx={{ borderRadius: "4px", mr: 1, cursor: "pointer" }}
-                  color={
-                    selectVariants[variant.Name.toLowerCase()] === item
-                      ? "primary"
-                      : "default"
-                  }
-                />
-              ))}
-            </Box>
-          ))} */}
-
           <Box pt={1} mb={3}>
             <H2 color="primary.main" mb={0.5} lineHeight="1">
               12 x de {currency(updatedPrice / 12)} (PayPal)
@@ -193,7 +125,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
               onClick={handleCartAmountChange(1)}
               sx={{ mb: 4.5, px: "1.75rem", height: 40 }}
               disabled={
-                singleProduct.ProductChildren.length < 0 || !productChild
+                singleProduct.ProductChildren.length > 0 && !productChild
               }
             >
               Adicionar ao Carrinho
@@ -225,13 +157,6 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
               </Button>
             </FlexBox>
           )}
-
-          {/* <FlexBox alignItems="center" gap={1} mb={2}>
-            <Box>Sold By:</Box>
-            <Link href="/shops/scarlett-beauty">
-              <H6>Mobile Store</H6>
-            </Link>
-          </FlexBox> */}
         </Grid>
       </Grid>
     </Box>

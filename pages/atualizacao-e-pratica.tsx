@@ -32,7 +32,7 @@ const AtualizacaoEPratica = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <Section1 carouselData={props.updatePracticceBanners} />
+          <Section1 carouselData={props.indexBannersData} />
           <Box
             py={5}
             my={5}
@@ -61,12 +61,12 @@ export default AtualizacaoEPratica;
 
 export const getStaticProps: GetStaticProps = async () => {
   const updatePracticceProducts = await api.getProductsById("96");
-  const updatePracticceBanners = await api.getUpdatePracticeBanner();
+  const indexBannersData = await api.getIndexBanners("8");
 
   return {
     props: {
       updatePracticceProducts,
-      updatePracticceBanners,
+      indexBannersData,
     },
     revalidate: 25,
   };

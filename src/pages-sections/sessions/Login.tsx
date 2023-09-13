@@ -145,7 +145,10 @@ const Login = () => {
 
       <FlexRowCenter mt="1.25rem">
         <Box>Não possui uma conta?</Box>
-        <Link href="/signup">
+        <Link
+          target="_blank"
+          href="https://aluno.meucurso.com.br/Account/Register/"
+        >
           <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
             Cria uma agora!
           </H6>
@@ -160,7 +163,10 @@ const Login = () => {
         mt="1.25rem"
       >
         Esqueceu sua senha?
-        <Link href="/reset-password">
+        <Link
+          target="_blank"
+          href="https://aluno.meucurso.com.br/Account/NewPassword/"
+        >
           <H6 ml={1} borderBottom="1px solid" borderColor="grey.900">
             Faça o reset de senha
           </H6>

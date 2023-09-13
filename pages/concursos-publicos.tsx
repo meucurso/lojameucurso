@@ -32,7 +32,7 @@ const ConcursosPublicos = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <Section1 carouselData={props.constestCarousel} />
+          <Section1 carouselData={props.indexBannersData} />
           <Box
             py={5}
             my={5}
@@ -61,12 +61,12 @@ export default ConcursosPublicos;
 
 export const getStaticProps: GetStaticProps = async () => {
   const contestProducts = await api.getProductsById("94");
-  const constestCarousel = await api.getContestCarousel();
+  const indexBannersData = await api.getIndexBanners("7");
 
   return {
     props: {
       contestProducts,
-      constestCarousel,
+      indexBannersData,
     },
   };
 };

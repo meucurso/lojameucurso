@@ -12,6 +12,7 @@ import OABExamTeam from "components/oab-examteam/OABExamTeam";
 import Section6 from "pages-sections/fashion-shop-2/Section6";
 import { H2 } from "components/Typography";
 import ResponsiveBanners from "components/responsive-banners/ResponsiveBanners";
+import Section1 from "pages-sections/fashion-shop-2/Section1";
 
 const CursosOAB2Fase = (props) => {
   const width = useWindowSize();
@@ -34,7 +35,7 @@ const CursosOAB2Fase = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <ResponsiveBanners bannerData={props.bannerOAB2} />
+          <Section1 carouselData={props.indexBannersData} />
           <Container>
             <Grid container spacing={2} marginTop={5}>
               <Grid item xs={12} md={6}>
@@ -191,11 +192,11 @@ export default CursosOAB2Fase;
 
 export const getStaticProps: GetStaticProps = async () => {
   const oab2Products = await api.getProductsById("95");
-  const bannerOAB2 = await api.getOAB2Banner();
+  const indexBannersData = await api.getIndexBanners("6");
   return {
     props: {
       oab2Products,
-      bannerOAB2,
+      indexBannersData,
     },
     revalidate: 25,
   };

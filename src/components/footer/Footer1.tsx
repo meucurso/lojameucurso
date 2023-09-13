@@ -229,14 +229,13 @@ const customerCareLinks = [
 ];
 
 const iconList = [
-  { icon: Facebook, url: "https://www.facebook.com/UILibOfficial" },
-  { icon: Twitter, url: "https://twitter.com/uilibofficial" },
+  { icon: Facebook, url: "https://www.facebook.com/meucursooficial" },
+  { icon: Twitter, url: "https://twitter.com/meucursooficial" },
   {
     icon: Youtube,
-    url: "https://www.youtube.com/channel/UCsIyD-TSO1wQFz-n2Y4i3Rg",
+    url: "https://www.youtube.com/@MeuCursooficial",
   },
-  { icon: Google, url: "https://www.google.com/search?q=ui-lib.com" },
-  { icon: Instagram, url: "https://www.instagram.com/uilibofficial/" },
+  { icon: Instagram, url: "https://www.instagram.com/meucursooficial/" },
 ];
 
 export default Footer1;

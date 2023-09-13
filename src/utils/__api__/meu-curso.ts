@@ -120,10 +120,10 @@ const getCategories = async (): Promise<Category[]> => {
   return response.data;
 };
 
-const getIndexBanners = async (): Promise<Banner[]> => {
+const getIndexBanners = async (id: string): Promise<Banner[]> => {
   const token = await getToken();
   const response = await axios.get(
-    "https://apiecommerce.meucurso.com.br/Banners/List?bannerCategoryId=1",
+    `https://apiecommerce.meucurso.com.br/Banners/List?bannerCategoryId=${id}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

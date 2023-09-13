@@ -10,8 +10,8 @@ import SEO from "components/SEO";
 import ExclusiveTools from "components/exclusive-tools/ExclusiveTools";
 import OABExamTeam from "components/oab-examteam/OABExamTeam";
 import Section6 from "pages-sections/fashion-shop-2/Section6";
-import BazaarImage from "components/BazaarImage";
-import ResponsiveBanners from "components/responsive-banners/ResponsiveBanners";
+
+import Section1 from "pages-sections/fashion-shop-2/Section1";
 
 const PrimeirosPassosNaAdvocacia = (props) => {
   const width = useWindowSize();
@@ -34,7 +34,7 @@ const PrimeirosPassosNaAdvocacia = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <ResponsiveBanners bannerData={props.firstStepsBanner} />
+          <Section1 carouselData={props.indexBannersData} />
           <Container>
             <Grid container spacing={2} marginTop={5}>
               <Grid item md={6}>
@@ -96,11 +96,11 @@ export default PrimeirosPassosNaAdvocacia;
 
 export const getStaticProps: GetStaticProps = async () => {
   const featureProducts = await api.getFeatureProducts();
-  const firstStepsBanner = await api.getFirstStepsBanner();
+  const indexBannersData = await api.getIndexBanners("10");
   return {
     props: {
       featureProducts,
-      firstStepsBanner,
+      indexBannersData,
     },
     revalidate: 25,
   };

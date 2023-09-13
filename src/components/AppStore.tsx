@@ -11,13 +11,13 @@ const AppStore: FC = () => {
       icon: PlayStore,
       title: "Google Play",
       subtitle: "Disponível no",
-      url: "/",
+      url: "https://play.google.com/store/apps/details?id=com.samba.meucurso&pcampaignid=web_share",
     },
     {
       icon: AppleStore,
       title: "App Store",
       subtitle: "Disponível na",
-      url: "/",
+      url: "https://apps.apple.com/br/app/meu-curso/id1472627975",
     },
   ];
 
@@ -29,7 +29,7 @@ const AppStore: FC = () => {
     >
       {appList.map((item) => (
         <a
-          href="/"
+          href={item.url}
           key={item.title}
           target="_blank"
           rel="noreferrer noopener"
