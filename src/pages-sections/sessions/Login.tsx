@@ -46,7 +46,8 @@ const Login = () => {
     setPasswordVisibility((visible) => !visible);
   }, []);
 
-  const handleFormSubmit = async (values: any) => {
+  const handleFormSubmit = async (e, values: any) => {
+    e.preventDefault();
     const result = await signIn("credentials", {
       ...values,
       redirect: false,

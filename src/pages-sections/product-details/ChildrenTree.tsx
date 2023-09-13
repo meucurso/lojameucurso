@@ -31,7 +31,7 @@ export default function ChildrenTree({
               }
               style={{
                 backgroundColor:
-                  selectedChild === child ? "#E3364E" : "#e1e1e1e1",
+                  selectedChild === child ? "#D23F57" : "#e1e1e1e1",
                 color: selectedChild === child ? "#ffffff" : "",
                 marginBottom: "10px",
               }}

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Add, Remove } from "@mui/icons-material";
 import { Avatar, Box, Button, Chip, Grid } from "@mui/material";
 import LazyImage from "components/LazyImage";
@@ -34,24 +34,21 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
 
   const { state, dispatch } = useAppContext();
   const [productChild, setProductChild] = useState(null);
-  const [productPrice, setProductPrice] = useState(null);
+  const [updatedPrice, setUpdatedPrice] = useState(
+    singleProduct.SpecialPrice
+  );
+  const updatePrice = (specialPrice: number) => {
+    setUpdatedPrice(singleProduct.SpecialPrice + specialPrice);
+  };
 
-  // HANDLE CHAMGE TYPE AND OPTIONS
-  // const handleChangeVariant =
-  //   (variantName: string, value: string) => () => {
-  //     setSelectVariants((state) => ({
-  //       ...state,
-  //       [variantName.toLowerCase()]: value,
-  //     }));
-  //   };
+  useEffect(() => {
+    if (productChild && productChild.SpecialPrice) {
+      updatePrice(productChild.SpecialPrice);
+    }
+  }, [productChild]);
 
   // CHECK PRODUCT EXIST OR NOT IN THE CART
   const cartItem = state.cart.find((item) => item.ProductId === ProductId);
-  let updatedPrice = singleProduct.SpecialPrice;
-
-  if (productChild && productChild.SpecialPrice) {
-    updatedPrice += productChild.SpecialPrice;
-  }
 
   // HANDLE CHANGE CART
   const handleCartAmountChange = (amount: number) => () => {
@@ -61,9 +58,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
       name: singleProduct.Name,
       imgUrl: singleProduct.SmallImageUrl,
       ProductId,
-      ProductChildren: {
-        ...productChild,
-      },
+      ProductChildren,
       SKU: singleProduct.SKU,
       URLKey: singleProduct.URLKey,
       Selected: true,
@@ -134,7 +129,6 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
 
         <Grid item md={6} xs={12} alignItems="center">
           <H1 mb={1}>{singleProduct.Name}</H1>
-          <h4>Selecione a opção: </h4>
           <FlexBox
             flexDirection={"column"}
             justifyContent={"center"}
@@ -142,6 +136,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
           >
             <p>{singleProduct.ShortDescription}</p>
           </FlexBox>
+          <h4>Selecione a opção: </h4>
           <ChildrenTree
             selectedChild={productChild}
             setSelectedChild={setProductChild}
@@ -197,6 +192,9 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
               variant="contained"
               onClick={handleCartAmountChange(1)}
               sx={{ mb: 4.5, px: "1.75rem", height: 40 }}
+              disabled={
+                singleProduct.ProductChildren.length < 0 || !productChild
+              }
             >
               Adicionar ao Carrinho
             </Button>
