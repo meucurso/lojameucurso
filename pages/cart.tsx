@@ -27,7 +27,10 @@ const Cart: NextPage = () => {
         {/* CART PRODUCT LIST */}
         <Grid item md={8} xs={12}>
           {cartList.map((item) => (
-            <ProductCard7 key={item.ProductId} {...item} />
+            <>
+              <p>{item.ProductChildren.Name}</p>
+              <ProductCard7 key={item.ProductId} {...item} />
+            </>
           ))}
         </Grid>
 

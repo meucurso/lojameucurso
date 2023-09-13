@@ -11,17 +11,17 @@ import {
 type InitialState = { cart: CartItem[] };
 
 export type CartItem = {
-  URLKey: string;
+  URLKey?: string;
   ProductChildren?: any;
   ShortDescription?: string;
-  qty: number;
-  name: string;
+  qty?: number;
+  name?: string;
   SKU?: any;
   // slug: string;
   price?: number;
   SpecialPrice?: number;
   imgUrl?: string;
-  ProductId: string | number;
+  ProductId?: string | number;
 };
 
 type CartActionType = { type: "CHANGE_CART_AMOUNT"; payload: CartItem };

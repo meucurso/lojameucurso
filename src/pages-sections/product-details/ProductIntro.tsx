@@ -11,6 +11,7 @@ import Product from "models/Product.model";
 import { currency } from "lib";
 import productVariants from "data/product-variants";
 import ChildrenTree from "./ChildrenTree";
+import ProductSelect from "./ProductSelect";
 
 // ================================================================
 type ProductIntroProps = { singleProduct: Product };
@@ -32,7 +33,8 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
   } = singleProduct;
 
   const { state, dispatch } = useAppContext();
-  const [selectVariants, setSelectVariants] = useState([]);
+  const [productChild, setProductChild] = useState(null);
+  const [productPrice, setProductPrice] = useState(null);
 
   // HANDLE CHAMGE TYPE AND OPTIONS
   // const handleChangeVariant =
@@ -45,19 +47,26 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
 
   // CHECK PRODUCT EXIST OR NOT IN THE CART
   const cartItem = state.cart.find((item) => item.ProductId === ProductId);
+  let updatedPrice = singleProduct.SpecialPrice;
+
+  if (productChild && productChild.SpecialPrice) {
+    updatedPrice += productChild.SpecialPrice;
+  }
 
   // HANDLE CHANGE CART
   const handleCartAmountChange = (amount: number) => () => {
     const cartItem = {
-      price: singleProduct.SpecialPrice,
+      price: updatedPrice,
       qty: amount,
       name: singleProduct.Name,
       imgUrl: singleProduct.SmallImageUrl,
-      ShortDescription: singleProduct.ShortDescription,
       ProductId,
-      ProductChildren,
+      ProductChildren: {
+        ...productChild,
+      },
       SKU: singleProduct.SKU,
       URLKey: singleProduct.URLKey,
+      Selected: true,
     };
 
     console.log("Item enviado para o carrinho:", cartItem);
@@ -125,7 +134,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
 
         <Grid item md={6} xs={12} alignItems="center">
           <H1 mb={1}>{singleProduct.Name}</H1>
-          <ChildrenTree familyTree={singleProduct} />
+          <h4>Selecione a opção: </h4>
           <FlexBox
             flexDirection={"column"}
             justifyContent={"center"}
@@ -133,6 +142,11 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
           >
             <p>{singleProduct.ShortDescription}</p>
           </FlexBox>
+          <ChildrenTree
+            selectedChild={productChild}
+            setSelectedChild={setProductChild}
+            familyTree={singleProduct}
+          />
 
           {/* <FlexBox alignItems="center" mb={2}>
             <Box lineHeight="1">Rated:</Box>
@@ -168,9 +182,12 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
           ))} */}
 
           <Box pt={1} mb={3}>
+            <H2 color="primary.main" mb={0.5} lineHeight="1">
+              12 x de {currency(updatedPrice / 12)} (PayPal)
+            </H2>
             <s>{currency(singleProduct.Price)}</s>
             <H2 color="primary.main" mb={0.5} lineHeight="1">
-              {currency(singleProduct.SpecialPrice)}
+              {currency(updatedPrice)}
             </H2>
           </Box>
 

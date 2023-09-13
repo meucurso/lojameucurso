@@ -96,10 +96,11 @@ export const firstStepsData = [
 export const categories = [
   {
     id: "96c813a8-efff-4a51-8926-fc674757a135",
-    name: "OAB",
+    name: "Exame de Ordem",
+    url: "/search?Name=oab",
     icon: null,
-    image: "/assets/images/logo-oab.png",
-    slug: "men's-fashion",
+    image: "/assets/images/capa_site_oab.jpg",
+    slug: null,
     parent: [],
     description: null,
     for: {
@@ -110,9 +111,10 @@ export const categories = [
   {
     id: "76f4a1dd-fd27-461e-8b59-bfc3c1da6895",
     name: "Pós Graduação",
+    url: "/pos-graduacao",
     icon: null,
-    image: "/assets/images/pos.jpg",
-    slug: "women's-fashion",
+    image: "/assets/images/capa_site_pos.jpg",
+    slug: null,
     parent: [],
     description: null,
     for: {
@@ -123,9 +125,10 @@ export const categories = [
   {
     id: "e6d2c2e3-d973-4367-98d8-0c140fbaf390",
     name: "Atualização e Prática",
+    url: "/atualizacao-e-pratica",
     icon: null,
-    image: "/assets/images/products/smartwatch-2.png",
-    slug: "gadgets",
+    image: "/assets/images/capa_site_atualizacao.jpg",
+    slug: null,
     parent: [],
     description: null,
     for: {
@@ -136,9 +139,10 @@ export const categories = [
   {
     id: "f7b1da64-4d03-4a10-b364-67a2589b9de1",
     name: "Concursos Públicos",
+    url: "/concursos-publicos",
     icon: null,
-    image: "/assets/images/concursos-publicos.jpg",
-    slug: "cosmatics",
+    image: "/assets/images/capa_site_concursos.jpg",
+    slug: null,
     parent: [],
     description: null,
     for: {

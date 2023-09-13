@@ -1,66 +1,55 @@
 import React, { useState, useEffect } from "react";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
-export default function ChildrenTree({ familyTree }) {
-  const [selectedChild, setSelectedChild] = useState(null);
+export default function ChildrenTree({
+  familyTree,
+  selectedChild,
+  setSelectedChild,
+}) {
+  const [isProductGroup1Selected, setIsProductGroup1Selected] =
+    useState(false);
 
   useEffect(() => {
-    // Verifique se o filho tem ProductGroupId === 3
-    const childWithGroup3 = familyTree?.ProductChildren.find(
-      (child) => child.ProductGroupId === 3
-    );
-
-    // Se existir um filho com ProductGroupId === 3 e um filho com ProductGroupId === 1
-    if (childWithGroup3) {
-      const hasChildWithGroup1 = childWithGroup3.ProductChildren.some(
-        (child) => child.ProductGroupId === 1
-      );
-
-      if (hasChildWithGroup1) {
-        // Defina o valor inicial como o ProductId do filho com ProductGroupId === 1
-        setSelectedChild(
-          childWithGroup3.ProductChildren.find(
-            (child) => child.ProductGroupId === 1
-          ).ProductId.toString()
-        );
-      }
+    if (familyTree && familyTree.ProductGroupId === 2) {
+      setIsProductGroup1Selected(true);
     }
   }, [familyTree]);
 
-  const handleRadioChange = (event) => {
-    setSelectedChild(event.target.value);
+  const handleButtonClick = (child) => {
+    setSelectedChild(child);
   };
 
   return (
     <div style={{ paddingLeft: 10 }}>
-      <RadioGroup
-        aria-label="children"
-        name="children"
-        value={selectedChild}
-        onChange={handleRadioChange}
-      >
-        {familyTree?.ProductChildren?.map((child) => (
-          <FormControlLabel
-            key={child.ProductId}
-            value={child.ProductId.toString()}
-            control={<Radio />}
-            label={child.Name}
-          />
-        ))}
-      </RadioGroup>
-
-      <div style={{ paddingLeft: 20 }}>
-        {selectedChild && (
-          <ChildrenTree
-            familyTree={familyTree?.ProductChildren.find(
-              (child) => child.ProductId.toString() === selectedChild
-            )}
-          />
-        )}
-      </div>
+      {familyTree?.ProductChildren?.map((child) => (
+        <div key={child.ProductId}>
+          {!isProductGroup1Selected && child.ProductGroupId !== 3 && (
+            <Button
+              onClick={() => handleButtonClick(child)}
+              disabled={
+                child.ProductGroupId === 1 && isProductGroup1Selected
+              }
+              style={{
+                backgroundColor:
+                  selectedChild === child ? "#E3364E" : "#e1e1e1e1",
+                color: selectedChild === child ? "#ffffff" : "",
+                marginBottom: "10px",
+              }}
+            >
+              {child.Name}
+            </Button>
+          )}
+          {child.ProductChildren && child.ProductChildren.length > 0 && (
+            <div style={{ paddingLeft: 10 }}>
+              <ChildrenTree
+                selectedChild={selectedChild}
+                setSelectedChild={setSelectedChild}
+                familyTree={child}
+              />
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
