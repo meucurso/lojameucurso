@@ -1,5 +1,11 @@
-import { FC } from "react";
-import { Box, Button, Container, styled, SvgIconProps } from "@mui/material";
+import { FC, useState } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  styled,
+  SvgIconProps,
+} from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { NavLink } from "components/nav-link";
 import { FlexBox } from "components/flex-box";
@@ -8,7 +14,10 @@ import Category from "components/icons/Category";
 import { Paragraph } from "components/Typography";
 import CategoryMenu from "components/categories/CategoryMenu";
 import useSettings from "hooks/useSettings";
+import navigations from "data/navigations";
 import Link from "next/dist/client/link";
+import CategoryMenuItem from "components/categories/CategoryMenuItem";
+import CategoryMenuCard from "components/categories/CategoryMenuCard";
 
 // NavList props interface
 type Navs = {
@@ -78,9 +87,9 @@ const InnerContainer = styled(Container)({
 });
 
 const CategoryMenuButton = styled(Button)(({ theme }) => ({
-  width: "136px",
+  width: "190px",
   height: "40px",
-  backgroundColor: theme.palette.grey[100],
+  border: "1px solid #000",
 }));
 
 const ChildNavsWrapper = styled(Box)({
@@ -217,27 +226,39 @@ const Navbar: FC<NavbarProps> = ({
   // };
 
   return (
-    <NavBarWrapper hoverEffect={false} elevation={elevation} border={border}>
+    <NavBarWrapper
+      hoverEffect={true}
+      elevation={elevation}
+      border={border}
+    >
       {!hideCategories ? (
         <InnerContainer>
           {/* Category megamenu */}
-          <CategoryMenu open={navListOpen}>
+          <CategoryMenu>
             <CategoryMenuButton variant="text">
-              <Category fontSize="small" />
+              <Category sx={{ color: "black" }} fontSize="small" />
               <Paragraph
                 fontWeight="600"
                 textAlign="left"
                 flex="1 1 0"
                 ml={1.25}
-                color="grey.600"
+                color="grey"
               >
                 Cursos
               </Paragraph>
 
               {settings.direction === "ltr" ? (
-                <ChevronRight className="dropdown-icon" fontSize="small" />
+                <ChevronRight
+                  sx={{ color: "black" }}
+                  className="dropdown-icon"
+                  fontSize="small"
+                />
               ) : (
-                <ChevronLeft className="dropdown-icon" fontSize="small" />
+                <ChevronLeft
+                  sx={{ color: "black" }}
+                  className="dropdown-icon"
+                  fontSize="small"
+                />
               )}
             </CategoryMenuButton>
           </CategoryMenu>
@@ -246,10 +267,10 @@ const Navbar: FC<NavbarProps> = ({
           <FlexBox gap={4}>
             {/* {renderNestedNav(navbarNavigations, true)} */}
 
-            <StyledNavLink href={"/professor"}>/Professor</StyledNavLink>
-            <StyledNavLink href={"/primeiros-passos-na-advocacia"}>
+            {/* <StyledNavLink href={"/professor"}>/Professor</StyledNavLink> */}
+            {/* <StyledNavLink href={"/primeiros-passos-na-advocacia"}>
               Primeiros Passos
-            </StyledNavLink>
+            </StyledNavLink> */}
             <StyledNavLink href={"/embaixadores"}>
               Embaixadores / Parceiros
             </StyledNavLink>

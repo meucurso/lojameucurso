@@ -239,7 +239,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
                   bgcolor="grey.200"
                 >
                   <p style={{ fontSize: "10px", marginLeft: "5px" }}>
-                    {session.user.Name}
+                    Ola! {session.user.Name}
                   </p>
                   <Box color={"grey"} component={IconButton}>
                     <PersonOutline />

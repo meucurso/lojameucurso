@@ -4,6 +4,7 @@ import Review from "./Review.model";
 interface Product {
   SKU?: any;
   ProductGroupId?: any;
+  Selected?: boolean;
   childrenProducts?: any;
   ProductChildren?: any;
   URLKey?: string;

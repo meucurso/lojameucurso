@@ -9,54 +9,48 @@ import React, {
 import CategoryMenuCard from "./CategoryMenuCard";
 
 // styled component
-const Wrapper = styled(Box)<{ open: boolean }>(
-  ({ open, theme: { direction } }) => ({
-    cursor: "pointer",
-    position: "relative",
-    "& .dropdown-icon": {
+const Wrapper = styled(Box)(({ theme: { direction } }) => ({
+  cursor: "pointer",
+  position: "relative",
+  transition: "all 250ms ease-in-out",
+  "& .dropdown-icon ": {
+    transition: "all 250ms ease-in-out",
+  },
+  "&:hover": {
+    "& .dropdown-icon ": {
       transition: "all 250ms ease-in-out",
-      transform: `rotate(${
-        open ? (direction === "rtl" ? "-90deg" : "90deg") : "0deg"
-      })`,
+      transform: `rotate(${direction === "rtl" ? "-90deg" : "90deg"})`,
     },
-  })
-);
+  },
+}));
 
-// ===========================================================
 type CategoryMenuProps = {
-  open?: boolean;
   children: React.ReactElement;
 };
-// ===========================================================
 
-const CategoryMenu: FC<CategoryMenuProps> = ({
-  open: isOpen = false,
-  children,
-}) => {
-  const [open, setOpen] = useState(isOpen);
-  const popoverRef = useRef(open);
-  popoverRef.current = open;
+const CategoryMenu: FC<CategoryMenuProps> = ({ children }) => {
+  const [open, setOpen] = useState(false);
+  const popoverRef = useRef<boolean>(false);
 
-  const toggleMenu = (e: React.MouseEvent<Document, MouseEvent>) => {
-    e.stopPropagation();
-    if (!isOpen) setOpen((open) => !open);
-  };
+  const handleMouseEnter = useCallback(() => {
+    setOpen(true);
+  }, []);
 
-  const handleDocumentClick = useCallback(() => {
-    if (popoverRef.current && !isOpen) setOpen(false);
-  }, [isOpen]);
+  const handleMouseLeave = useCallback(() => {
+    setOpen(false);
+  }, []);
 
   useEffect(() => {
-    window.addEventListener("click", handleDocumentClick);
-
-    return () => window.removeEventListener("click", handleDocumentClick);
-  }, [handleDocumentClick]);
+    popoverRef.current = open;
+  }, [open]);
 
   return (
-    <Wrapper open={open}>
+    <Wrapper
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {React.cloneElement(children, {
         open,
-        onClick: toggleMenu,
         className: `${children.props.className}`,
       })}
 

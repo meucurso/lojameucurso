@@ -16,6 +16,30 @@ const navigations = [
     href: "/cursos-oab-2fase",
     menuComponent: "MegaMenu1",
   },
+
+  {
+    icon: SchoolOutlinedIcon,
+    title: "Pós Graduação",
+    href: "/pos-graduacao",
+    menuComponent: "MegaMenu2",
+    menuData: [
+      {
+        title: "Cursos",
+        href: "/product/search/fashion",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "Congressos Digitais",
+        href: "/product/search/electronics",
+        megaMenu: 2,
+      },
+      {
+        title: "Eventos Gratuitos",
+        href: "/product/search/home&garden",
+        megaMenu: 3,
+      },
+    ],
+  },
   {
     icon: GavelOutlinedIcon,
     title: "Concursos Públicos",
@@ -68,27 +92,10 @@ const navigations = [
     ],
   },
   {
-    icon: SchoolOutlinedIcon,
-    title: "Pós Graduação",
-    href: "/pos-graduacao",
-    menuComponent: "MegaMenu2",
-    menuData: [
-      {
-        title: "Cursos",
-        href: "/product/search/fashion",
-        megaMenu: "MegaMenu1",
-      },
-      {
-        title: "Congressos Digitais",
-        href: "/product/search/electronics",
-        megaMenu: 2,
-      },
-      {
-        title: "Eventos Gratuitos",
-        href: "/product/search/home&garden",
-        megaMenu: 3,
-      },
-    ],
+    icon: BalanceOutlinedIcon,
+    title: "Primeiros Passos",
+    href: "/primeiros-passos-na-advocacia",
+    menuComponent: "MegaMenu1",
   },
 ];
 

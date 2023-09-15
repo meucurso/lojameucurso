@@ -5,46 +5,67 @@ export default function ChildrenTree({
   familyTree,
   selectedChild,
   setSelectedChild,
+  setUpdatedFamilyTree,
+  updatedFamilyTree,
 }) {
-  const [isProductGroup1Selected, setIsProductGroup1Selected] =
-    useState(false);
-
-  useEffect(() => {
-    if (familyTree && familyTree.ProductGroupId === 2) {
-      setIsProductGroup1Selected(true);
-    }
-  }, [familyTree]);
+  const [selectedButtonId, setSelectedButtonId] = useState(null);
 
   const handleButtonClick = (child) => {
+    setSelectedButtonId(child.ProductId);
     setSelectedChild(child);
+
+    const updatedFamilyTree = cloneFamilyTree(familyTree);
+
+    setUpdatedFamilyTree(updatedFamilyTree);
+
+    const updateSelectedInTree = (node) => {
+      if (node.ProductId === child.ProductId) {
+        node.Selected = true;
+      } else if (node.ProductChildren && node.ProductChildren.length > 0) {
+        node.ProductChildren.forEach(updateSelectedInTree);
+      }
+    };
+
+    updateSelectedInTree(updatedFamilyTree);
+  };
+
+  const cloneFamilyTree = (node) => {
+    return JSON.parse(JSON.stringify(node));
+  };
+
+  const renderChildButton = (child) => {
+    const isSelected = selectedButtonId === child.ProductId;
+
+    if (child.ProductGroupId === 1 && !child.Selected) {
+      return (
+        <Button
+          onClick={() => handleButtonClick(child)}
+          style={{
+            marginBottom: "10px",
+            backgroundColor: isSelected ? "#D23F57" : "transparent",
+            color: isSelected ? "white" : "black",
+          }}
+        >
+          {child.Name}
+        </Button>
+      );
+    }
+    return null;
   };
 
   return (
     <div style={{ paddingLeft: 10 }}>
-      {familyTree?.ProductChildren?.map((child) => (
+      {familyTree.ProductChildren?.map((child) => (
         <div key={child.ProductId}>
-          {!isProductGroup1Selected && child.ProductGroupId !== 3 && (
-            <Button
-              onClick={() => handleButtonClick(child)}
-              disabled={
-                child.ProductGroupId === 1 && isProductGroup1Selected
-              }
-              style={{
-                backgroundColor:
-                  selectedChild === child ? "#D23F57" : "#e1e1e1e1",
-                color: selectedChild === child ? "#ffffff" : "",
-                marginBottom: "10px",
-              }}
-            >
-              {child.Name}
-            </Button>
-          )}
+          {renderChildButton(child)}
           {child.ProductChildren && child.ProductChildren.length > 0 && (
             <div style={{ paddingLeft: 10 }}>
               <ChildrenTree
                 selectedChild={selectedChild}
                 setSelectedChild={setSelectedChild}
                 familyTree={child}
+                setUpdatedFamilyTree={setUpdatedFamilyTree}
+                updatedFamilyTree={updatedFamilyTree}
               />
             </div>
           )}

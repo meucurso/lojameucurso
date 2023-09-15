@@ -9,7 +9,7 @@ import BazaarTextField from "components/BazaarTextField";
 import EyeToggleButton from "./EyeToggleButton";
 import { FlexBox, FlexRowCenter } from "components/flex-box";
 import { useRouter } from "next/router";
-
+import LoadingButton from "@mui/lab/LoadingButton";
 import { signIn } from "next-auth/react";
 import { useSnackbar } from "notistack";
 
@@ -39,7 +39,7 @@ export const Wrapper = styled<FC<WrapperProps & CardProps>>(
 const Login = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const { push } = useRouter();
-
+  const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const togglePasswordVisibility = useCallback(() => {
@@ -47,6 +47,7 @@ const Login = () => {
   }, []);
 
   const handleFormSubmit = async (values: any) => {
+    setLoading(true);
     const result = await signIn("credentials", {
       ...values,
       redirect: false,
@@ -56,10 +57,12 @@ const Login = () => {
     if (result?.status === 200) {
       return push(result?.url);
     } else if (result?.status === 401) {
+      setLoading(false);
       return enqueueSnackbar("Usuário ou senha inválidos!", {
         variant: "error",
       });
     } else {
+      setLoading(false);
       return alert(result?.error);
     }
   };
@@ -129,8 +132,8 @@ const Login = () => {
             ),
           }}
         />
-
-        <Button
+        <LoadingButton
+          loading={loading}
           fullWidth
           type="submit"
           color="primary"
@@ -138,7 +141,7 @@ const Login = () => {
           sx={{ height: 44 }}
         >
           Entrar
-        </Button>
+        </LoadingButton>
       </form>
 
       {/* <SocialButtons /> */}

@@ -30,13 +30,17 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
     SKU,
     thumbnail,
     URLKey,
+    Selected,
   } = singleProduct;
 
   const { state, dispatch } = useAppContext();
   const [productChild, setProductChild] = useState(null);
+  const [updatedFamilyTree, setUpdatedFamilyTree] = useState(null);
+
   const [updatedPrice, setUpdatedPrice] = useState(
     singleProduct.SpecialPrice
   );
+
   const updatePrice = (specialPrice: number) => {
     setUpdatedPrice(singleProduct.SpecialPrice + specialPrice);
   };
@@ -58,18 +62,18 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
       name: singleProduct.Name,
       imgUrl: singleProduct.SmallImageUrl,
       ProductId,
-      ProductChildren,
+      ProductChildren: updatedFamilyTree,
       SKU: singleProduct.SKU,
       URLKey: singleProduct.URLKey,
       Selected: true,
     };
 
-    console.log("Item enviado para o carrinho:", cartItem);
-
     dispatch({
       type: "CHANGE_CART_AMOUNT",
       payload: cartItem,
     });
+
+    console.log(cartItem);
   };
   return (
     <Box width="100%">
@@ -106,6 +110,8 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             selectedChild={productChild}
             setSelectedChild={setProductChild}
             familyTree={singleProduct}
+            setUpdatedFamilyTree={setUpdatedFamilyTree}
+            updatedFamilyTree={updatedFamilyTree}
           />
 
           <Box pt={1} mb={3}>

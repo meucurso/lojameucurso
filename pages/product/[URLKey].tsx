@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Box, Container, styled, Tab, Tabs } from "@mui/material";
@@ -23,36 +23,67 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   },
 }));
 
-// ===============================================================
 type ProductDetailsProps = {
-  product: Product;
-  relatedProducts: Product[];
-  frequentlyBought: Product[];
+  singleProduct: Product;
 };
-// ===============================================================
 
-const ProductDetails = ({ singleProduct }) => {
+// Função para atualizar a propriedade Selected
+const updateChildrenSelected = (item) => {
+  const updatedItem = { ...item };
+
+  const updateChildren = (itemToUpdate) => {
+    if (
+      itemToUpdate.ProductChildren &&
+      itemToUpdate.ProductChildren.length > 0
+    ) {
+      itemToUpdate.ProductChildren.forEach((child) => {
+        if (
+          child.ProductGroupId === 1 &&
+          itemToUpdate.ProductGroupId === 3
+        ) {
+          child.Selected = false;
+          itemToUpdate.Selected = false;
+        } else {
+          child.Selected = true;
+        }
+        updateChildren(child);
+      });
+    }
+  };
+
+  updateChildren(updatedItem);
+
+  return updatedItem;
+};
+
+const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState(0);
 
   const handleOptionClick = (_, value: number) => setSelectedOption(value);
 
-  if (router.isFallback) {
+  const [updatedProduct, setUpdatedProduct] = useState(singleProduct);
+
+  useEffect(() => {
+    if (singleProduct) {
+      const updatedProduct = updateChildrenSelected(singleProduct);
+      setUpdatedProduct(updatedProduct);
+    }
+  }, [singleProduct]);
+
+  if (router.isFallback || !updatedProduct) {
     return <h1>Carregando...</h1>;
   }
+
   return (
     <ShopLayout1>
       <SEO
-        title={singleProduct?.Name}
-        sitename="MeuCurso - Do seu jeito.  No seu tempo."
+        title={updatedProduct.Name}
+        sitename="MeuCurso - Do seu jeito. No seu tempo."
       />
       <Container sx={{ my: 4 }}>
         {/* PRODUCT DETAILS INFO AREA */}
-        {singleProduct ? (
-          <ProductIntro singleProduct={singleProduct} />
-        ) : (
-          <H2>Carregando...</H2>
-        )}
+        <ProductIntro singleProduct={updatedProduct} />
 
         {/* PRODUCT DESCRIPTION AND REVIEW */}
         <StyledTabs
@@ -67,20 +98,10 @@ const ProductDetails = ({ singleProduct }) => {
 
         <Box mb={6}>
           {selectedOption === 0 && (
-            <ProductDescription product={singleProduct} />
+            <ProductDescription product={updatedProduct} />
           )}
           {/* {selectedOption === 1 && <ProductReview />} */}
         </Box>
-
-        {/* {frequentlyBought && (
-          <FrequentlyBought productsData={frequentlyBought} />
-        )} */}
-
-        {/* <AvailableShops /> */}
-
-        {/* {relatedProducts && (
-          <RelatedProducts productsData={relatedProducts} />
-        )} */}
       </Container>
     </ShopLayout1>
   );
@@ -88,9 +109,12 @@ const ProductDetails = ({ singleProduct }) => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const singleProduct = await api.getProductBySlug(params.URLKey);
+
+  const updatedProduct = updateChildrenSelected(singleProduct);
+
   return {
     props: {
-      singleProduct,
+      singleProduct: updatedProduct,
     },
     revalidate: 25,
   };
