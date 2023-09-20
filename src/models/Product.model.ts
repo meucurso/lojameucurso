@@ -6,7 +6,7 @@ interface Product {
   ProductGroupId?: any;
   Selected?: boolean;
   childrenProducts?: any;
-  ProductChildren?: any;
+  Children?: any;
   URLKey?: string;
   ProductId?: number;
   SmallImageUrl?: string;

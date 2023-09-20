@@ -11,9 +11,12 @@ import CheckoutNavLayout from "components/layouts/CheckoutNavLayout";
 import { CartItem, useAppContext } from "contexts/AppContext";
 import countryList from "data/countryList";
 import { currency } from "lib";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 const Cart: NextPage = () => {
   const { state } = useAppContext();
+  const { data: session } = useSession();
   const cartList: any = state.cart;
 
   const getTotalPrice = () =>
@@ -21,54 +24,55 @@ const Cart: NextPage = () => {
 
   return (
     <CheckoutNavLayout>
-      <SEO title="Carrinho" />
+      {session && (
+        <>
+          <SEO title="Carrinho" />
 
-      <Grid container spacing={3}>
-        {/* CART PRODUCT LIST */}
-        <Grid item md={8} xs={12}>
-          {cartList.map((item) => (
-            <>
-              <p>{item.ProductChildren.Name}</p>
-              <ProductCard7 key={item.ProductId} {...item} />
-            </>
-          ))}
-        </Grid>
+          <Grid container spacing={3}>
+            {/* CART PRODUCT LIST */}
+            <Grid item md={8} xs={12}>
+              {cartList.map((item) => (
+                <>
+                  <ProductCard7 key={item.ProductId} {...item} />
+                </>
+              ))}
+            </Grid>
 
-        {/* CHECKOUT FORM */}
-        <Grid item md={4} xs={12}>
-          <Card sx={{ padding: 3 }}>
-            <FlexBetween mb={2}>
-              <Span color="grey.600">Subtotal:</Span>
+            {/* CHECKOUT FORM */}
+            <Grid item md={4} xs={12}>
+              <Card sx={{ padding: 3 }}>
+                <FlexBetween mb={2}>
+                  <Span color="grey.600">Subtotal:</Span>
 
-              <Span fontSize={18} fontWeight={600} lineHeight="1">
-                {currency(getTotalPrice())}
-              </Span>
-            </FlexBetween>
-            <FlexBetween mb={2}>
-              <Span color="grey.600">Cupom:</Span>
+                  <Span fontSize={18} fontWeight={600} lineHeight="1">
+                    {currency(getTotalPrice())}
+                  </Span>
+                </FlexBetween>
+                <FlexBetween mb={2}>
+                  <Span color="grey.600">Cupom:</Span>
 
-              <Span fontSize={18} fontWeight={600} lineHeight="1">
-                {currency(getTotalPrice())}
-              </Span>
-            </FlexBetween>
-            <FlexBetween mb={2}>
-              <Span color="grey.600">Frete:</Span>
+                  <Span fontSize={18} fontWeight={600} lineHeight="1">
+                    {currency(getTotalPrice())}
+                  </Span>
+                </FlexBetween>
+                <FlexBetween mb={2}>
+                  <Span color="grey.600">Frete:</Span>
 
-              <Span fontSize={18} fontWeight={600} lineHeight="1">
-                {currency(getTotalPrice())}
-              </Span>
-            </FlexBetween>
-            <FlexBetween mb={2}>
-              <Span color="grey.600">Total:</Span>
+                  <Span fontSize={18} fontWeight={600} lineHeight="1">
+                    {currency(getTotalPrice())}
+                  </Span>
+                </FlexBetween>
+                <FlexBetween mb={2}>
+                  <Span color="grey.600">Total:</Span>
 
-              <Span fontSize={18} fontWeight={600} lineHeight="1">
-                {currency(getTotalPrice())}
-              </Span>
-            </FlexBetween>
+                  <Span fontSize={18} fontWeight={600} lineHeight="1">
+                    {currency(getTotalPrice())}
+                  </Span>
+                </FlexBetween>
 
-            <Divider sx={{ mb: 2 }} />
+                <Divider sx={{ mb: 2 }} />
 
-            {/* <FlexBox alignItems="center" columnGap={1} mb={2}>
+                {/* <FlexBox alignItems="center" columnGap={1} mb={2}>
               <Span fontWeight="600">Additional Comments</Span>
 
               <Span
@@ -83,7 +87,7 @@ const Cart: NextPage = () => {
               </Span>
             </FlexBox> */}
 
-            {/* <TextField
+                {/* <TextField
               variant="outlined"
               rows={6}
               fullWidth
@@ -91,29 +95,29 @@ const Cart: NextPage = () => {
               sx={{ mb: 2 }}
             /> */}
 
-            <TextField
-              fullWidth
-              size="small"
-              label="Cupom"
-              variant="outlined"
-              placeholder="Cupom"
-            />
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="Cupom"
+                  variant="outlined"
+                  placeholder="Cupom"
+                />
 
-            <Button
-              variant="outlined"
-              color="primary"
-              fullWidth
-              sx={{ mt: 2, mb: 4 }}
-            >
-              Aplicar Cupom
-            </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  sx={{ mt: 2, mb: 4 }}
+                >
+                  Aplicar Cupom
+                </Button>
 
-            <Divider sx={{ mb: 2 }} />
+                <Divider sx={{ mb: 2 }} />
 
-            {/* <Span fontWeight={600} mb={0} display="block">
+                {/* <Span fontWeight={600} mb={0} display="block">
               Frete
             </Span> */}
-            {/* 
+                {/* 
             <Autocomplete
               fullWidth
               sx={{ mb: 2 }}
@@ -146,36 +150,38 @@ const Cart: NextPage = () => {
               ))}
             </TextField> */}
 
-            <TextField
-              fullWidth
-              size="small"
-              label="C.E.P"
-              placeholder="3100"
-              variant="outlined"
-              sx={{ mt: 2 }}
-            />
+                <TextField
+                  fullWidth
+                  size="small"
+                  label="C.E.P"
+                  placeholder="3100"
+                  variant="outlined"
+                  sx={{ mt: 2 }}
+                />
 
-            <Button
-              variant="outlined"
-              color="primary"
-              fullWidth
-              sx={{ my: 2 }}
-            >
-              Calcular frete
-            </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  sx={{ my: 2 }}
+                >
+                  Calcular frete
+                </Button>
 
-            <Button
-              fullWidth
-              color="primary"
-              href="/checkout"
-              variant="contained"
-              LinkComponent={Link}
-            >
-              Realizar Checkout
-            </Button>
-          </Card>
-        </Grid>
-      </Grid>
+                <Button
+                  fullWidth
+                  color="primary"
+                  href="/checkout"
+                  variant="contained"
+                  LinkComponent={Link}
+                >
+                  Realizar Checkout
+                </Button>
+              </Card>
+            </Grid>
+          </Grid>
+        </>
+      )}
     </CheckoutNavLayout>
   );
 };

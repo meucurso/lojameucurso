@@ -5,13 +5,13 @@ export default function ChildrenTree({
   familyTree,
   selectedChild,
   setSelectedChild,
+  selectedButtonId,
+  setSelectedButtonId,
   setUpdatedFamilyTree,
   updatedFamilyTree,
 }) {
-  const [selectedButtonId, setSelectedButtonId] = useState(null);
-
   const handleButtonClick = (child) => {
-    setSelectedButtonId(child.ProductId);
+    setSelectedButtonId(child.SKU);
     setSelectedChild(child);
 
     const updatedFamilyTree = cloneFamilyTree(familyTree);
@@ -21,8 +21,9 @@ export default function ChildrenTree({
     const updateSelectedInTree = (node) => {
       if (node.ProductId === child.ProductId) {
         node.Selected = true;
-      } else if (node.ProductChildren && node.ProductChildren.length > 0) {
-        node.ProductChildren.forEach(updateSelectedInTree);
+        updatedFamilyTree.Selected = true;
+      } else if (node.Children && node.Children.length > 0) {
+        node.Children.forEach(updateSelectedInTree);
       }
     };
 
@@ -34,7 +35,7 @@ export default function ChildrenTree({
   };
 
   const renderChildButton = (child) => {
-    const isSelected = selectedButtonId === child.ProductId;
+    const isSelected = selectedButtonId === child.SKU;
 
     if (child.ProductGroupId === 1 && !child.Selected) {
       return (
@@ -42,7 +43,7 @@ export default function ChildrenTree({
           onClick={() => handleButtonClick(child)}
           style={{
             marginBottom: "10px",
-            backgroundColor: isSelected ? "#D23F57" : "transparent",
+            backgroundColor: isSelected ? "#D23F57" : "#e1e1e1e1",
             color: isSelected ? "white" : "black",
           }}
         >
@@ -55,10 +56,10 @@ export default function ChildrenTree({
 
   return (
     <div style={{ paddingLeft: 10 }}>
-      {familyTree.ProductChildren?.map((child) => (
+      {familyTree.Children?.map((child) => (
         <div key={child.ProductId}>
           {renderChildButton(child)}
-          {child.ProductChildren && child.ProductChildren.length > 0 && (
+          {child.Children && child.Children.length > 0 && (
             <div style={{ paddingLeft: 10 }}>
               <ChildrenTree
                 selectedChild={selectedChild}
@@ -66,6 +67,8 @@ export default function ChildrenTree({
                 familyTree={child}
                 setUpdatedFamilyTree={setUpdatedFamilyTree}
                 updatedFamilyTree={updatedFamilyTree}
+                selectedButtonId={selectedButtonId}
+                setSelectedButtonId={setSelectedButtonId}
               />
             </div>
           )}

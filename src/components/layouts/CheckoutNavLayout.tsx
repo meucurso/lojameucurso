@@ -81,7 +81,6 @@ const stepperList = [
   { title: "Carrinho", disabled: false },
   { title: "Detalhes", disabled: false },
   { title: "Pagamento", disabled: false },
-  { title: "Review", disabled: true },
 ];
 
 export default CheckoutNavLayout;

@@ -14,7 +14,7 @@ function ProductSelect({ product }) {
   // Função para lidar com a seleção de uma opção
   const handleSelectChange = (e) => {
     const selectedSKU = e.target.value;
-    const selectedChild = product.ProductChildren.find(
+    const selectedChild = product.Children.find(
       (child) => child.SKU === selectedSKU
     );
     setSelectedOption(selectedChild);
@@ -23,7 +23,7 @@ function ProductSelect({ product }) {
   if (product?.ProductGroupId === 3) {
     return (
       <select value={selectedOption} onChange={handleSelectChange}>
-        {product?.ProductChildren.map((child) => (
+        {product?.Children.map((child) => (
           <option key={child.SKU} value={child.SKU}>
             {child.SKU}
           </option>

@@ -13,6 +13,7 @@ type InitialState = { cart: CartItem[] };
 export type CartItem = {
   URLKey?: string;
   ProductChildren?: any;
+  Children?: any;
   ShortDescription?: string;
   qty?: number;
   name?: string;

@@ -69,6 +69,19 @@ const getProductsByName = async (name: any) => {
 
   return response.data;
 };
+const getCartItems = async ({ product, token }) => {
+  const response = await axios.post(
+    `https://apiecommerce.meucurso.com.br/BIPEStore/AddToCart`,
+    { product },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
 
 const getFeatureProducts = async (): Promise<Product[]> => {
   const response = await axios.get(
@@ -191,4 +204,5 @@ export default {
   getProductBySlug,
   getProductsById,
   getProductsByName,
+  getCartItems,
 };

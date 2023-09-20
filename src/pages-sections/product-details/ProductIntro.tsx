@@ -9,9 +9,8 @@ import { useAppContext } from "contexts/AppContext";
 import { FlexBox, FlexRowCenter } from "../../components/flex-box";
 import Product from "models/Product.model";
 import { currency } from "lib";
-import productVariants from "data/product-variants";
 import ChildrenTree from "./ChildrenTree";
-import ProductSelect from "./ProductSelect";
+import { useSession } from "next-auth/react";
 
 // ================================================================
 type ProductIntroProps = { singleProduct: Product };
@@ -20,7 +19,7 @@ type ProductIntroProps = { singleProduct: Product };
 const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
   const {
     Name,
-    ProductChildren,
+    Children,
     price,
     shortDescription,
     title,
@@ -30,12 +29,13 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
     SKU,
     thumbnail,
     URLKey,
-    Selected,
   } = singleProduct;
 
   const { state, dispatch } = useAppContext();
   const [productChild, setProductChild] = useState(null);
   const [updatedFamilyTree, setUpdatedFamilyTree] = useState(null);
+  const [selectedButtonId, setSelectedButtonId] = useState(null);
+  const { data: session } = useSession();
 
   const [updatedPrice, setUpdatedPrice] = useState(
     singleProduct.SpecialPrice
@@ -51,27 +51,82 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
     }
   }, [productChild]);
 
-  // CHECK PRODUCT EXIST OR NOT IN THE CART
+  function updateNestedObject(arr, targetID, updates) {
+    return arr.map((item) => {
+      if (item?.ProductId === targetID) {
+        return { ...item, ...updates };
+      } else if (item?.Children && item?.Children?.length > 0) {
+        const updatedChildren = updateNestedObject(
+          item?.Children,
+          targetID,
+          updates
+        );
+        return {
+          ...item,
+          Children: updatedChildren,
+        };
+      }
+      return item;
+    });
+  }
+
+  const updatedSingleProduct = updateNestedObject(
+    singleProduct?.Children,
+    updatedFamilyTree?.ProductId,
+    updatedFamilyTree
+  );
+
   const cartItem = state.cart.find((item) => item.ProductId === ProductId);
 
-  // HANDLE CHANGE CART
   const handleCartAmountChange = (amount: number) => () => {
-    const cartItem = {
-      price: updatedPrice,
-      qty: amount,
-      name: singleProduct.Name,
-      imgUrl: singleProduct.SmallImageUrl,
-      ProductId,
-      ProductChildren: updatedFamilyTree,
-      SKU: singleProduct.SKU,
-      URLKey: singleProduct.URLKey,
-      Selected: true,
-    };
+    let cartItem;
+    if (singleProduct.ProductId === updatedFamilyTree.ProductId) {
+      cartItem = {
+        CustomerId: session.user.CustomerId,
+        StoreId: 5,
+        Children: [
+          {
+            price: updatedPrice,
+            qty: amount,
+            name: updatedFamilyTree.Name,
+            imgUrl: updatedFamilyTree.SmallImageUrl,
+            ProductId,
+            Children: updatedFamilyTree.Children,
+            SKU: updatedFamilyTree.SKU,
+            URLKey: updatedFamilyTree.URLKey,
+            Selected: true,
+          },
+        ],
+      };
 
-    dispatch({
-      type: "CHANGE_CART_AMOUNT",
-      payload: cartItem,
-    });
+      dispatch({
+        type: "CHANGE_CART_AMOUNT",
+        payload: cartItem,
+      });
+    } else {
+      cartItem = {
+        CustomerId: session.user.CustomerId,
+        StoreId: 5,
+        Children: [
+          {
+            price: updatedPrice,
+            qty: amount,
+            name: singleProduct.Name,
+            imgUrl: singleProduct.SmallImageUrl,
+            ProductId,
+            Children: updatedSingleProduct,
+            SKU: singleProduct.SKU,
+            URLKey: singleProduct.URLKey,
+            Selected: true,
+          },
+        ],
+      };
+
+      dispatch({
+        type: "CHANGE_CART_AMOUNT",
+        payload: cartItem,
+      });
+    }
 
     console.log(cartItem);
   };
@@ -112,6 +167,8 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             familyTree={singleProduct}
             setUpdatedFamilyTree={setUpdatedFamilyTree}
             updatedFamilyTree={updatedFamilyTree}
+            selectedButtonId={selectedButtonId}
+            setSelectedButtonId={setSelectedButtonId}
           />
 
           <Box pt={1} mb={3}>
@@ -131,7 +188,8 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
               onClick={handleCartAmountChange(1)}
               sx={{ mb: 4.5, px: "1.75rem", height: 40 }}
               disabled={
-                singleProduct.ProductChildren.length > 0 && !productChild
+                singleProduct.Children.length > 0 &&
+                singleProduct.Selected === true
               }
             >
               Adicionar ao Carrinho

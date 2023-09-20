@@ -9,6 +9,7 @@ import {
   Clear,
   KeyboardArrowDown,
   PersonOutline,
+  School,
 } from "@mui/icons-material";
 import clsx from "clsx";
 import Icon from "components/icons";
@@ -246,7 +247,17 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
                   </Box>
                 </Box>
               </Tooltip>
-
+              <Tooltip title="Área do Aluno">
+                <Box
+                  href="https://aluno.meucurso.com.br/Account/Login?returnUrl=/BIPEStore/Index/"
+                  p={1.25}
+                  bgcolor="grey.200"
+                  color={"grey"}
+                  component={Button}
+                >
+                  <School />
+                </Box>
+              </Tooltip>
               <Menu
                 anchorEl={anchorEl}
                 id="account-menu"

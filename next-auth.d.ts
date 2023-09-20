@@ -7,6 +7,9 @@ declare module "next-auth" {
   interface Session {
     user: {
       Name?: string | null;
+      Token?: string | null;
+      CustomerId?: string | null;
+      StudentAddress?: any;
     };
   }
 }
