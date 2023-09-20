@@ -80,7 +80,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
 
   const handleCartAmountChange = (amount: number) => () => {
     let cartItem;
-    if (singleProduct.ProductId === updatedFamilyTree.ProductId) {
+    if (singleProduct.ProductId === updatedFamilyTree?.ProductId) {
       cartItem = {
         CustomerId: session.user.CustomerId,
         StoreId: 5,
@@ -187,10 +187,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
               variant="contained"
               onClick={handleCartAmountChange(1)}
               sx={{ mb: 4.5, px: "1.75rem", height: 40 }}
-              disabled={
-                singleProduct.Children.length > 0 &&
-                singleProduct.Selected === true
-              }
+              disabled={singleProduct.Children.length > 0 && !productChild}
             >
               Adicionar ao Carrinho
             </Button>

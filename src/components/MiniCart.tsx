@@ -144,8 +144,8 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
 
             <Link href={`/product/${item.ProductId}`}>
               <Avatar
-                alt={item.name}
-                src={item.imgUrl}
+                alt={item.Children.name}
+                src={item.Children.imgUrl}
                 sx={{ mx: 2, width: 76, height: 76 }}
               />
             </Link>

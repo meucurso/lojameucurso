@@ -18,6 +18,9 @@ const Cart: NextPage = () => {
   const { state } = useAppContext();
   const { data: session } = useSession();
   const cartList: any = state.cart;
+  const cartProducts = cartList.map((item) =>
+    item.Children.map((item) => item)
+  );
 
   const getTotalPrice = () =>
     cartList.reduce((accum, item) => accum + item.price * item.qty, 0);
@@ -33,7 +36,7 @@ const Cart: NextPage = () => {
             <Grid item md={8} xs={12}>
               {cartList.map((item) => (
                 <>
-                  <ProductCard7 key={item.ProductId} {...item} />
+                  <ProductCard7 key={item.ProductId} {...item.Children} />
                 </>
               ))}
             </Grid>
