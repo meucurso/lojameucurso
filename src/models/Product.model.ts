@@ -2,6 +2,7 @@ import Shop from "./Shop.model";
 import Review from "./Review.model";
 
 interface Product {
+  DescriptionFileUrl?: any;
   SKU?: any;
   ProductGroupId?: any;
   Selected?: boolean;
@@ -13,7 +14,7 @@ interface Product {
   Name?: string;
   SpecialPrice?: number;
   Price?: number;
-  ShortDescription?: string;
+  ShortDescription?: string | null;
   description?: string;
   shortDescription?: string;
   slug?: string;

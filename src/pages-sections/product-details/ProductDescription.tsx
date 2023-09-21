@@ -8,20 +8,22 @@ type ProductDescriptionProps = { product: Product | null };
 // ======================================================
 
 const ProductDescription: FC<ProductDescriptionProps> = ({ product }) => {
-  if (!product) {
-    return <Box>No product data available.</Box>;
+  const { DescriptionFileUrl, ShortDescription } = product;
+  if (DescriptionFileUrl === null) {
+    return <>{ShortDescription}</>;
+  } else {
+    return (
+      <>
+        <div style={{ height: "130vh", width: "100%" }}>
+          <iframe
+            src={DescriptionFileUrl}
+            width="100%"
+            height="100%"
+          ></iframe>
+        </div>
+      </>
+    );
   }
-
-  const { ShortDescription } = product;
-  return (
-    <div style={{ height: "130vh", width: "100%" }}>
-      <iframe
-        src="https://docs.google.com/viewer?srcid=151h2GBBUftSDTiaL0oCQR6ARetu6VH2Q&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
-        width="100%"
-        height="100%"
-      ></iframe>
-    </div>
-  );
 };
 
 export default ProductDescription;

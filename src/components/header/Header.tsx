@@ -140,11 +140,18 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
                 <Icon.Search sx={ICON_STYLE} />
               </Box>
 
-              <Box component={IconButton} onClick={toggleDialog}>
-                <Icon.User sx={ICON_STYLE} />
+              <Box pt={2} color={"grey"} component={Button}>
+                <Link
+                  href={
+                    "https://aluno.meucurso.com.br/Account/Login?returnUrl=/BIPEStore/Index/"
+                  }
+                  target="_blank"
+                >
+                  <School />
+                </Link>
               </Box>
 
-              <Box component={IconButton} onClick={toggleSidenav}>
+              <Box component={Button} onClick={toggleSidenav}>
                 <Badge badgeContent={state.cart.length} color="primary">
                   <Icon.CartBag sx={ICON_STYLE} />
                 </Badge>
@@ -161,7 +168,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
           >
             <Box sx={{ width: "auto", padding: 2, height: "100vh" }}>
               <FlexBetween mb={1}>
-                <Paragraph>Search to Bazaar</Paragraph>
+                <Paragraph>Pesquisar no MeuCurso</Paragraph>
 
                 <IconButton onClick={toggleSearchBar}>
                   <Clear />
@@ -249,13 +256,19 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
               </Tooltip>
               <Tooltip title="Área do Aluno">
                 <Box
-                  href="https://aluno.meucurso.com.br/Account/Login?returnUrl=/BIPEStore/Index/"
                   p={1.25}
                   bgcolor="grey.200"
                   color={"grey"}
                   component={Button}
                 >
-                  <School />
+                  <Link
+                    href={
+                      "https://aluno.meucurso.com.br/Account/Login?returnUrl=/BIPEStore/Index/"
+                    }
+                    target="_blank"
+                  >
+                    <School />
+                  </Link>
                 </Box>
               </Tooltip>
               <Menu

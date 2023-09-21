@@ -32,7 +32,7 @@ const updateChildrenSelected = (item) => {
   const updatedItem = { ...item };
 
   const updateChildren = (itemToUpdate) => {
-    if (itemToUpdate.Children && itemToUpdate.Children.length > 0) {
+    if (itemToUpdate.Children && itemToUpdate?.Children?.length > 0) {
       itemToUpdate.Children.forEach((child) => {
         if (
           child.ProductGroupId === 1 &&

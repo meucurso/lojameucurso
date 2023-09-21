@@ -10,18 +10,22 @@ import {
   useTheme,
 } from "@mui/material";
 import { Add, Clear, Close, Remove } from "@mui/icons-material";
-import LazyImage from "components/LazyImage";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import { H5, Paragraph, Tiny } from "components/Typography";
 import CartBag from "components/icons/CartBag";
 import { CartItem, useAppContext } from "contexts/AppContext";
 import { currency } from "lib";
+import { useSnackbar } from "notistack";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 // =========================================================
 type MiniCartProps = { toggleSidenav: () => void };
 // =========================================================
 
 const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
+  const [address, setAddress] = useState();
+
   const { push } = useRouter();
   const { palette } = useTheme();
   const { state, dispatch } = useAppContext();
@@ -110,7 +114,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
             borderBottom={`1px solid ${palette.divider}`}
           >
             <FlexBox alignItems="center" flexDirection="column">
-              <Button
+              {/* <Button
                 color="primary"
                 variant="outlined"
                 onClick={handleCartAmountChange(item.qty + 1, item)}
@@ -139,13 +143,13 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
                 }}
               >
                 <Remove fontSize="small" />
-              </Button>
+              </Button> */}
             </FlexBox>
 
             <Link href={`/product/${item.ProductId}`}>
               <Avatar
-                alt={item.Children.name}
-                src={item.Children.imgUrl}
+                alt={item.name}
+                src={item.imgUrl}
                 sx={{ mx: 2, width: 76, height: 76 }}
               />
             </Link>

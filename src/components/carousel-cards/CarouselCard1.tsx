@@ -60,7 +60,7 @@ const CarouselCard1: FC<CarouselCard1Props> = ({
     <StyledBox>
       <BazaarImage
         src={imgUrlMobile}
-        alt="apple-watch-1"
+        alt={alt}
         sx={{
           mx: "auto",
           maxHeight: "auto",

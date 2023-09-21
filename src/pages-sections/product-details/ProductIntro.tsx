@@ -11,6 +11,9 @@ import Product from "models/Product.model";
 import { currency } from "lib";
 import ChildrenTree from "./ChildrenTree";
 import { useSession } from "next-auth/react";
+import axios from "axios";
+import { LoadingButton } from "@mui/lab";
+import { useSnackbar } from "notistack";
 
 // ================================================================
 type ProductIntroProps = { singleProduct: Product };
@@ -35,6 +38,8 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
   const [productChild, setProductChild] = useState(null);
   const [updatedFamilyTree, setUpdatedFamilyTree] = useState(null);
   const [selectedButtonId, setSelectedButtonId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
   const { data: session } = useSession();
 
   const [updatedPrice, setUpdatedPrice] = useState(
@@ -79,24 +84,19 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
   const cartItem = state.cart.find((item) => item.ProductId === ProductId);
 
   const handleCartAmountChange = (amount: number) => () => {
+    setLoading(true);
     let cartItem;
     if (singleProduct.ProductId === updatedFamilyTree?.ProductId) {
       cartItem = {
-        CustomerId: session.user.CustomerId,
-        StoreId: 5,
-        Children: [
-          {
-            price: updatedPrice,
-            qty: amount,
-            name: updatedFamilyTree.Name,
-            imgUrl: updatedFamilyTree.SmallImageUrl,
-            ProductId,
-            Children: updatedFamilyTree.Children,
-            SKU: updatedFamilyTree.SKU,
-            URLKey: updatedFamilyTree.URLKey,
-            Selected: true,
-          },
-        ],
+        price: updatedPrice,
+        qty: amount,
+        name: updatedFamilyTree.Name,
+        imgUrl: updatedFamilyTree.SmallImageUrl,
+        ProductId,
+        Children: updatedFamilyTree.Children,
+        SKU: updatedFamilyTree.SKU,
+        URLKey: updatedFamilyTree.URLKey,
+        Selected: true,
       };
 
       dispatch({
@@ -105,21 +105,15 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
       });
     } else {
       cartItem = {
-        CustomerId: session.user.CustomerId,
-        StoreId: 5,
-        Children: [
-          {
-            price: updatedPrice,
-            qty: amount,
-            name: singleProduct.Name,
-            imgUrl: singleProduct.SmallImageUrl,
-            ProductId,
-            Children: updatedSingleProduct,
-            SKU: singleProduct.SKU,
-            URLKey: singleProduct.URLKey,
-            Selected: true,
-          },
-        ],
+        price: updatedPrice,
+        qty: amount,
+        name: singleProduct.Name,
+        imgUrl: singleProduct.SmallImageUrl,
+        ProductId,
+        Children: updatedSingleProduct,
+        SKU: singleProduct.SKU,
+        URLKey: singleProduct.URLKey,
+        Selected: true,
       };
 
       dispatch({
@@ -127,7 +121,32 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
         payload: cartItem,
       });
     }
-
+    axios
+      .post(
+        "https://apiecommerce.meucurso.com.br/BIPEStore/AddToCart",
+        {
+          CustomerId: session.user.CustomerId,
+          StoreId: 5,
+          Children: [cartItem],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${session.user.Token}`,
+          },
+        }
+      )
+      .then((response) => {
+        setLoading(false);
+        response.data;
+        console.log(response.data);
+      })
+      .catch((err) => {
+        setLoading(false);
+        enqueueSnackbar(err, {
+          variant: "error",
+        });
+        console.log(err);
+      });
     console.log(cartItem);
   };
   return (
@@ -182,18 +201,22 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
           </Box>
 
           {!cartItem?.qty ? (
-            <Button
+            <LoadingButton
+              loading={loading}
               color="primary"
+              type="submit"
               variant="contained"
               onClick={handleCartAmountChange(1)}
               sx={{ mb: 4.5, px: "1.75rem", height: 40 }}
               disabled={singleProduct.Children.length > 0 && !productChild}
             >
               Adicionar ao Carrinho
-            </Button>
+            </LoadingButton>
           ) : (
             <FlexBox alignItems="center" mb={4.5}>
-              <Button
+              <LoadingButton
+                loading={loading}
+                type="submit"
                 size="small"
                 sx={{ p: 1 }}
                 color="primary"
@@ -201,13 +224,15 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
                 onClick={handleCartAmountChange(cartItem?.qty - 1)}
               >
                 <Remove fontSize="small" />
-              </Button>
+              </LoadingButton>
 
               <H3 fontWeight="bolder" mx={2.5}>
                 {cartItem?.qty.toString().padStart(2, "0")}
               </H3>
 
-              <Button
+              <LoadingButton
+                loading={loading}
+                type="submit"
                 size="small"
                 sx={{ p: 1 }}
                 color="primary"
@@ -215,7 +240,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
                 onClick={handleCartAmountChange(cartItem?.qty + 1)}
               >
                 <Add fontSize="small" />
-              </Button>
+              </LoadingButton>
             </FlexBox>
           )}
         </Grid>

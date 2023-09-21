@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   createContext,
   FC,
@@ -100,4 +101,4 @@ export const AppProvider: FC<AppProviderProps> = ({ children }) => {
 
 export const useAppContext = () => useContext<ContextProps>(AppContext);
 
-export default AppContext;
+export default AppProvider;
