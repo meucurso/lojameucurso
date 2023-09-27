@@ -81,6 +81,7 @@ const ProductCard7: FC<ProductCardProps> = ({
         display="block"
         sx={{ objectFit: "cover" }}
         src={SmallImageUrl}
+        loading="lazy"
       />
 
       <IconButton

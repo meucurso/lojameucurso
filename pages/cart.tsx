@@ -219,7 +219,7 @@ const Cart: NextPage = () => {
                   )}
                   {!loading && (
                     <Grid item md={8} xs={12}>
-                      {cartProducts.map((item, index) => (
+                      {cartProducts.map((item) => (
                         <>
                           <ProductCard7
                             onClickFunction={() =>
@@ -229,7 +229,7 @@ const Cart: NextPage = () => {
                                 item.SKU
                               )
                             }
-                            key={index}
+                            key={item.OrderItemId}
                             {...item}
                           />
                         </>
@@ -363,10 +363,10 @@ const Cart: NextPage = () => {
                                 onChange={handleAddressChange}
                               >
                                 {session.user.StudentAddress.map(
-                                  (item) => (
+                                  (item, index) => (
                                     <MenuItem
                                       value={item.StudentAddressId}
-                                      key={item.StudentAddressId}
+                                      key={index}
                                     >
                                       {item.AddressLine1} - {item.Number} -{" "}
                                       {item.CityName}- {item.StateName}

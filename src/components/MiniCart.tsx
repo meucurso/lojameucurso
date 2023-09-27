@@ -133,6 +133,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
                   height="calc(100% - 74px)"
                 >
                   <img
+                    loading="lazy"
                     style={{ maxWidth: "100%", height: "auto" }}
                     src="/assets/images/Bipe/_2.png"
                     alt="banner"
