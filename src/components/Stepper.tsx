@@ -40,7 +40,8 @@ const Stepper: FC<StepperProps> = ({
             sx={{
               backgroundColor:
                 ind <= selected ? "primary.main" : "primary.light",
-              color: ind <= selected ? "primary.contrastText" : "primary.main",
+              color:
+                ind <= selected ? "primary.contrastText" : "primary.main",
               p: "0.5rem 1rem",
               fontSize: "14px",
               fontWeight: "600",

@@ -17,7 +17,9 @@ import { CartItem, useAppContext } from "contexts/AppContext";
 import { currency } from "lib";
 import { useSnackbar } from "notistack";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Skeleton from "@mui/material/Skeleton";
+import axios from "axios";
 
 // =========================================================
 type MiniCartProps = { toggleSidenav: () => void };
@@ -29,18 +31,15 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
   const { push } = useRouter();
   const { palette } = useTheme();
   const { state, dispatch } = useAppContext();
+  const { data: session } = useSession();
+  const [cartProducts, setCartProducts] = useState<any>([]);
+  const [localProducts, setLocalProducts] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
   const cartList = state.cart;
 
-  const handleCartAmountChange = (amount: number, product) => () => {
-    dispatch({
-      type: "CHANGE_CART_AMOUNT",
-      payload: { ...product, qty: amount },
-    });
-  };
-
   const getTotalPrice = () => {
-    return cartList.reduce(
-      (accum, item) => accum + item.price * item.qty,
+    return cartProducts.reduce(
+      (accum, item) => accum + item.Price * item.Qty,
       0
     );
   };
@@ -50,71 +49,117 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
     push(path);
   };
 
+  const fetchLocalItems = async () => {
+    const response = JSON.parse(localStorage.getItem("apiResponseData"));
+    setLocalProducts(response);
+  };
+
+  const fetchCartItems = async () => {
+    if (session) {
+      setLoading(true);
+      const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
+      await axios
+        .get(
+          `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}&StoreId=${cartData.StoreId}`,
+          { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
+        )
+        .then((response) => {
+          setLoading(false);
+          setCartProducts(
+            response.data.Items.filter(
+              (item) => item.OrderItemProductLevelId === 1
+            )
+          );
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  const handleDeleteCartItems = (OrderId, StoreId, SKU) => {
+    axios
+      .delete(
+        `https://apiecommerce.meucurso.com.br/BIPEStore/DeleteFromCart?OrderId=${OrderId}&StoreId=${StoreId}&SKU=${SKU}`,
+        { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
+      )
+      .then(() => {
+        setCartProducts((prev) =>
+          prev.filter((product) => product.SKU !== SKU)
+        );
+      });
+  };
+
+  useEffect(() => {
+    fetchCartItems();
+    fetchLocalItems();
+  }, []);
+
   return (
-    <Box width="100%" maxWidth={380}>
-      <Box
-        overflow="auto"
-        height={`calc(100vh - ${
-          !!cartList.length ? "80px - 3.25rem" : "0px"
-        })`}
-      >
-        <FlexBetween mx={3} height={74}>
-          <FlexBox gap={1} alignItems="center" color="black">
-            <CartBag color="error" />
-
-            <Paragraph lineHeight={0} fontWeight={600}>
-              {cartList.length} item
-            </Paragraph>
-          </FlexBox>
-
-          <IconButton onClick={toggleSidenav}>
-            <Clear />
-          </IconButton>
-        </FlexBetween>
-
-        <Divider />
-
-        {cartList.length <= 0 && (
-          <FlexBox
-            alignItems="center"
-            flexDirection="column"
-            justifyContent="center"
-            height="calc(100% - 74px)"
-          >
-            {/* <LazyImage
-              width={90}
-              height={90}
-              alt="banner"
-             
-            /> */}
-            <img
-              style={{ maxWidth: "100%", height: "auto" }}
-              src="/assets/images/Bipe/_2.png"
-              alt="banner"
-            />
+    <>
+      {loading && (
+        <Skeleton variant="rectangular" width={380} height={"100%"} />
+      )}
+      {!loading && (
+        <>
+          <Box width="100%" maxWidth={380}>
             <Box
-              component="p"
-              mt={2}
-              mx={5}
-              color="grey.600"
-              textAlign="center"
-              maxWidth="200px"
+              overflow="auto"
+              height={`calc(100vh - ${
+                !!cartProducts.length ? "80px - 3.25rem" : "0px"
+              })`}
             >
-              Seu carrinho está vazio!
-            </Box>
-          </FlexBox>
-        )}
+              <FlexBetween mx={3} height={74}>
+                <FlexBox gap={1} alignItems="center" color="black">
+                  <CartBag color="error" />
 
-        {cartList.map((item: CartItem) => (
-          <FlexBox
-            py={2}
-            px={2.5}
-            key={item.ProductId}
-            alignItems="center"
-            borderBottom={`1px solid ${palette.divider}`}
-          >
-            <FlexBox alignItems="center" flexDirection="column">
-              {/* <Button
+                  <Paragraph lineHeight={0} fontWeight={600}>
+                    {cartProducts.length} item
+                  </Paragraph>
+                </FlexBox>
+
+                <IconButton onClick={toggleSidenav}>
+                  <Clear />
+                </IconButton>
+              </FlexBetween>
+
+              <Divider />
+              {loading && (
+                <Skeleton variant="rectangular" width={210} height={118} />
+              )}
+              {cartProducts.length <= 0 && (
+                <FlexBox
+                  alignItems="center"
+                  flexDirection="column"
+                  justifyContent="center"
+                  height="calc(100% - 74px)"
+                >
+                  <img
+                    style={{ maxWidth: "100%", height: "auto" }}
+                    src="/assets/images/Bipe/_2.png"
+                    alt="banner"
+                  />
+                  <Box
+                    component="p"
+                    mt={2}
+                    mx={5}
+                    color="grey.600"
+                    textAlign="center"
+                    maxWidth="200px"
+                  >
+                    Seu carrinho está vazio!
+                  </Box>
+                </FlexBox>
+              )}
+
+              {cartProducts.map((item: CartItem) => (
+                <FlexBox
+                  py={2}
+                  px={2.5}
+                  key={item.ProductId}
+                  alignItems="center"
+                  borderBottom={`1px solid ${palette.divider}`}
+                >
+                  <FlexBox alignItems="center" flexDirection="column">
+                    {/* <Button
                 color="primary"
                 variant="outlined"
                 onClick={handleCartAmountChange(item.qty + 1, item)}
@@ -144,68 +189,77 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
               >
                 <Remove fontSize="small" />
               </Button> */}
-            </FlexBox>
+                  </FlexBox>
 
-            <Link href={`/product/${item.ProductId}`}>
-              <Avatar
-                alt={item.name}
-                src={item.imgUrl}
-                sx={{ mx: 2, width: 76, height: 76 }}
-              />
-            </Link>
-            <Box
-              flex="1"
-              sx={{
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
-              <Link href={`/product/${item.URLKey}`}>
-                <H5 ellipsis fontSize="14px" className="title">
-                  {item.name}
-                </H5>
-              </Link>
+                  <Link href={`/product/${item.ProductId}`}>
+                    <Avatar
+                      alt={item.ProductName}
+                      src={item.SmallImageUrl}
+                      sx={{ mx: 2, width: 76, height: 76 }}
+                    />
+                  </Link>
+                  <Box
+                    flex="1"
+                    sx={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <Link href={`/product/${item.URLKey}`}>
+                      <H5 ellipsis fontSize="14px" className="title">
+                        {item.ProductName}
+                      </H5>
+                    </Link>
 
-              <Tiny color="grey.600">
-                {currency(item.price)} x {item.qty}
-              </Tiny>
+                    <Tiny color="grey.600">
+                      {currency(item.Price)} x {item.Qty}
+                    </Tiny>
 
-              <Box
-                fontWeight={600}
-                fontSize="14px"
-                color="primary.main"
-                mt={0.5}
-              >
-                {currency(item.qty * item.price)}
-              </Box>
+                    <Box
+                      fontWeight={600}
+                      fontSize="14px"
+                      color="primary.main"
+                      mt={0.5}
+                    >
+                      {currency(item.Qty * item.Price)}
+                    </Box>
+                  </Box>
+
+                  <IconButton
+                    size="small"
+                    onClick={() =>
+                      handleDeleteCartItems(
+                        localProducts?.OrderId,
+                        localProducts?.StoreId,
+                        item.SKU
+                      )
+                    }
+                    sx={{ marginLeft: 2.5 }}
+                  >
+                    <Close fontSize="small" />
+                  </IconButton>
+                </FlexBox>
+              ))}
             </Box>
 
-            <IconButton
-              size="small"
-              onClick={handleCartAmountChange(0, item)}
-              sx={{ marginLeft: 2.5 }}
-            >
-              <Close fontSize="small" />
-            </IconButton>
-          </FlexBox>
-        ))}
-      </Box>
-
-      {cartList.length > 0 && (
-        <Box p={2.5}>
-          <Button
-            fullWidth
-            color="primary"
-            variant="contained"
-            sx={{ mb: "0.75rem", height: "40px" }}
-            onClick={handleNavigate("/cart")}
-          >
-            Checkout ({currency(getTotalPrice())})
-          </Button>
-        </Box>
+            {cartProducts.length > 0 && (
+              <Box p={2.5}>
+                <Button
+                  fullWidth
+                  color="primary"
+                  variant="contained"
+                  sx={{ mb: "0.75rem", height: "40px" }}
+                  onClick={handleNavigate("/cart")}
+                >
+                  Checkout ({currency(getTotalPrice())})
+                </Button>
+              </Box>
+            )}
+          </Box>
+        </>
       )}
-    </Box>
+    </>
   );
 };
 

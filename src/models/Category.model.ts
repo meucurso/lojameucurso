@@ -1,7 +1,7 @@
 interface Category {
   id: string;
   name: string;
-  url?: string;
+  url?: any;
   slug: string;
   icon?: string;
   image?: string;

@@ -25,17 +25,17 @@ const navigations = [
     menuData: [
       {
         title: "Cursos",
-        href: "/product/search/fashion",
+        href: "/searchCategory?CategoryId=98",
         megaMenu: "MegaMenu1",
       },
       {
         title: "Congressos Digitais",
-        href: "/product/search/electronics",
+        href: "/searchCategory?CategoryId=100",
         megaMenu: 2,
       },
       {
         title: "Eventos Gratuitos",
-        href: "/product/search/home&garden",
+        href: "/searchCategory?CategoryId=99",
         megaMenu: 3,
       },
     ],
@@ -48,12 +48,17 @@ const navigations = [
     menuData: [
       {
         title: "Tribunais",
-        href: "/product/search/fashion",
+        href: "/searchCategory?CategoryId=101",
         megaMenu: "MegaMenu1",
       },
       {
         title: "Procuradorias",
-        href: "/product/search/electronics",
+        href: "/searchCategory?CategoryId=74",
+        megaMenu: 2,
+      },
+      {
+        title: "Assinaturas",
+        href: "/searchCategory?CategoryId=75",
         megaMenu: 2,
       },
     ],
@@ -66,28 +71,52 @@ const navigations = [
     menuData: [
       {
         title: "Cursos",
-        href: "/product/search/fashion",
+        href: "/searchCategory?CategoryId=76",
         megaMenu: "MegaMenu3",
         menuData: {
           categories: [
-            { title: "Administrativo", href: "/" },
-            { title: "Ambiental", href: "/" },
-            { title: "Civil", href: "/" },
-            { title: "Competências Emocionais", href: "/" },
-            { title: "Compilance e Digital", href: "/" },
-            { title: "Direito Médio", href: "/" },
-            { title: "Direito Público", href: "/" },
-            { title: "Diversos", href: "/" },
-            { title: "Empresarial", href: "/" },
+            {
+              title: "Administrativo",
+              href: "/searchCategory?CategoryId=77",
+            },
+            { title: "Ambiental", href: "/searchCategory?CategoryId=78" },
+            { title: "Civil", href: "/searchCategory?CategoryId=79" },
+            {
+              title: "Competências Emocionais",
+              href: "/searchCategory?CategoryId=81",
+            },
+            {
+              title: "Compilance e Digital",
+              href: "/searchCategory?CategoryId=82",
+            },
+            {
+              title: "Direito Médio",
+              href: "/searchCategory?CategoryId=83",
+            },
+            {
+              title: "Direito Público",
+              href: "/searchCategory?CategoryId=84",
+            },
+            { title: "Diversos", href: "/searchCategory?CategoryId=85" },
+            {
+              title: "Empresarial",
+              href: "/searchCategory?CategoryId=86",
+            },
             { title: "Penal", href: "/" },
-            { title: "Primeiros Passos", href: "/" },
-            { title: "Trabalhista e Previdenciário", href: "/" },
+            {
+              title: "Primeiros Passos",
+              href: "/searchCategory?CategoryId=87",
+            },
+            {
+              title: "Trabalhista e Previdenciário",
+              href: "/searchCategory?CategoryId=88",
+            },
           ],
         },
       },
       {
         title: "Eventos Gratuitos",
-        href: "/product/search/electronics",
+        href: "/searchCategory?CategoryId=89",
       },
     ],
   },

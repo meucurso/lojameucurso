@@ -84,7 +84,7 @@ const MobileNavigationBar: FC = () => {
             p={0.5}
           >
             <User2 fontSize="small" />
-            {session.user.Name}
+            {session?.user?.Name}
           </Box>
 
           <Menu

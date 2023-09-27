@@ -140,9 +140,7 @@ const PaymentForm: FC = () => {
           name="paypal"
           sx={{ mb: 3 }}
           onChange={handlePaymentMethodChange}
-          label={
-            <Paragraph fontWeight={600}>Pagamento com PayPal</Paragraph>
-          }
+          label={<Paragraph fontWeight={600}>Pagamento via PIX</Paragraph>}
           control={
             <Radio
               checked={paymentMethod === "paypal"}
@@ -169,11 +167,11 @@ const PaymentForm: FC = () => {
               </Button>
             </FlexBox>
 
-            <Divider sx={{ mb: 3, mx: -4 }} />
+            {/* <Divider sx={{ mb: 3, mx: -4 }} /> */}
           </Fragment>
         )}
 
-        <FormControlLabel
+        {/* <FormControlLabel
           name="cod"
           onChange={handlePaymentMethodChange}
           label={<Paragraph fontWeight={600}>Cash On Delivery</Paragraph>}
@@ -184,20 +182,20 @@ const PaymentForm: FC = () => {
               size="small"
             />
           }
-        />
+        /> */}
       </Card1>
 
       <Grid container spacing={7}>
         <Grid item sm={6} xs={12}>
           <Button
             LinkComponent={Link}
-            href="/checkout"
+            href="/cart"
             variant="outlined"
             color="primary"
             type="button"
             fullWidth
           >
-            Voltar para Detalhes
+            Voltar para o Carrinho
           </Button>
         </Grid>
 
@@ -210,7 +208,7 @@ const PaymentForm: FC = () => {
             type="submit"
             fullWidth
           >
-            Review
+            Finalizar Compra
           </Button>
         </Grid>
       </Grid>

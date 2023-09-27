@@ -121,7 +121,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const products = await api.getProducts();
 
   const paths = products.map((product: any) => ({
-    params: { URLKey: product.URLKey },
+    params: { URLKey: String(product.URLKey) }, // Certifique-se de que URLKey seja uma string
   }));
 
   return {
@@ -129,5 +129,4 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: false,
   };
 };
-
 export default ProductDetails;

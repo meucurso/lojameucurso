@@ -81,8 +81,6 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
     updatedFamilyTree
   );
 
-  const cartItem = state.cart.find((item) => item.ProductId === ProductId);
-
   const handleCartAmountChange = (amount: number) => () => {
     setLoading(true);
     let cartItem;
@@ -137,8 +135,13 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
       )
       .then((response) => {
         setLoading(false);
-        response.data;
-        console.log(response.data);
+        const responseData = response.data;
+
+        localStorage.setItem(
+          "apiResponseData",
+          JSON.stringify(responseData)
+        );
+        console.log(responseData);
       })
       .catch((err) => {
         setLoading(false);
@@ -147,8 +150,8 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
         });
         console.log(err);
       });
-    console.log(cartItem);
   };
+
   return (
     <Box width="100%">
       <Grid container spacing={3} justifyContent="space-around">
@@ -200,49 +203,17 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             </H2>
           </Box>
 
-          {!cartItem?.qty ? (
-            <LoadingButton
-              loading={loading}
-              color="primary"
-              type="submit"
-              variant="contained"
-              onClick={handleCartAmountChange(1)}
-              sx={{ mb: 4.5, px: "1.75rem", height: 40 }}
-              disabled={singleProduct.Children.length > 0 && !productChild}
-            >
-              Adicionar ao Carrinho
-            </LoadingButton>
-          ) : (
-            <FlexBox alignItems="center" mb={4.5}>
-              <LoadingButton
-                loading={loading}
-                type="submit"
-                size="small"
-                sx={{ p: 1 }}
-                color="primary"
-                variant="outlined"
-                onClick={handleCartAmountChange(cartItem?.qty - 1)}
-              >
-                <Remove fontSize="small" />
-              </LoadingButton>
-
-              <H3 fontWeight="bolder" mx={2.5}>
-                {cartItem?.qty.toString().padStart(2, "0")}
-              </H3>
-
-              <LoadingButton
-                loading={loading}
-                type="submit"
-                size="small"
-                sx={{ p: 1 }}
-                color="primary"
-                variant="outlined"
-                onClick={handleCartAmountChange(cartItem?.qty + 1)}
-              >
-                <Add fontSize="small" />
-              </LoadingButton>
-            </FlexBox>
-          )}
+          <LoadingButton
+            loading={loading}
+            color="primary"
+            type="submit"
+            variant="contained"
+            onClick={handleCartAmountChange(1)}
+            sx={{ mb: 4.5, px: "1.75rem", height: 40 }}
+            disabled={singleProduct.Children.length > 0 && !productChild}
+          >
+            Adicionar ao Carrinho
+          </LoadingButton>
         </Grid>
       </Grid>
     </Box>

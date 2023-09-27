@@ -104,8 +104,8 @@ export const categories = [
     parent: [],
     description: null,
     for: {
-      demo: "fashion-2",
-      type: "top-categories",
+      // demo: "fashion-2",
+      // type: "top-categories",
     },
   },
   {
@@ -118,8 +118,8 @@ export const categories = [
     parent: [],
     description: null,
     for: {
-      demo: "fashion-2",
-      type: "top-categories",
+      // demo: "fashion-2",
+      // type: "top-categories",
     },
   },
   {
@@ -132,8 +132,8 @@ export const categories = [
     parent: [],
     description: null,
     for: {
-      demo: "fashion-2",
-      type: "top-categories",
+      // demo: "fashion-2",
+      // type: "top-categories",
     },
   },
   {
@@ -146,8 +146,8 @@ export const categories = [
     parent: [],
     description: null,
     for: {
-      demo: "fashion-2",
-      type: "top-categories",
+      // demo: "fashion-2",
+      // type: "top-categories",
     },
   },
 ];
