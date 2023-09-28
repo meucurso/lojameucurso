@@ -27,7 +27,6 @@ type ProductDetailsProps = {
   singleProduct: Product;
 };
 
-// Função para atualizar a propriedade Selected
 const updateChildrenSelected = (item) => {
   const updatedItem = { ...item };
 
@@ -121,7 +120,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const products = await api.getProducts();
 
   const paths = products.map((product: any) => ({
-    params: { URLKey: String(product.URLKey) }, // Certifique-se de que URLKey seja uma string
+    params: { URLKey: String(product.URLKey) },
   }));
 
   return {

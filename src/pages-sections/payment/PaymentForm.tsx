@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { FC, Fragment, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import * as yup from "yup";
-import { Formik } from "formik";
+import { Formik, useFormik } from "formik";
 import Card1 from "components/Card1";
 import { FlexBox } from "components/flex-box";
 import { Paragraph } from "components/Typography";
@@ -19,16 +19,52 @@ import useWindowSize from "hooks/useWindowSize";
 
 const PaymentForm: FC = () => {
   const [paymentMethod, setPaymentMethod] = useState("credit-card");
+  const [localProducts, setLocalProducts] = useState<any>([]);
 
   const width = useWindowSize();
   const router = useRouter();
   const isMobile = width < 769;
 
-  const handleFormSubmit = async (values: any) => router.push("/payment");
+  const fetchLocalItems = async () => {
+    const response = JSON.parse(localStorage.getItem("apiResponseData"));
+    setLocalProducts(response);
+  };
+
+  const handleFormSubmit = async (values: any) => {
+    const Card = {
+      Number: values.card_no,
+      HolderName: values.name,
+      CPF: values.cpf,
+      Brand: values.brand,
+      ExpMonth: values.month_exp_date,
+      ExpYear: values.year_exp_date,
+      qtyInstallment: values.installment,
+      StudendId: localProducts.StudentId,
+      PaymentMethodId: 2,
+    };
+    console.log(Card);
+  };
 
   const handlePaymentMethodChange = ({ target: { name } }: any) => {
     setPaymentMethod(name);
   };
+
+  const {
+    values,
+    errors,
+    touched,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    onSubmit: handleFormSubmit,
+    initialValues,
+    validationSchema: checkoutSchema,
+  });
+
+  useEffect(() => {
+    fetchLocalItems();
+  }, []);
 
   return (
     <Fragment>
@@ -54,86 +90,141 @@ const PaymentForm: FC = () => {
         <Divider sx={{ mb: 3, mx: -4 }} />
 
         {paymentMethod === "credit-card" && (
-          <Formik
-            onSubmit={handleFormSubmit}
-            initialValues={initialValues}
-            validationSchema={checkoutSchema}
-          >
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-            }) => (
-              <form onSubmit={handleSubmit}>
-                <Box mb={3}>
-                  <Grid container spacing={3}>
-                    <Grid item sm={6} xs={12}>
-                      <TextField
-                        fullWidth
-                        name="card_no"
-                        label="Número do cartão"
-                        onBlur={handleBlur}
-                        value={values.card_no}
-                        onChange={handleChange}
-                        helperText={
-                          (touched.card_no && errors.card_no) as string
-                        }
-                      />
-                    </Grid>
-                    <Grid item sm={6} xs={12}>
-                      <TextField
-                        fullWidth
-                        name="exp_date"
-                        label="Data de expiração"
-                        placeholder="MM/YY"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.exp_date}
-                        helperText={
-                          (touched.exp_date && errors.exp_date) as string
-                        }
-                      />
-                    </Grid>
-                    <Grid item sm={6} xs={12}>
-                      <TextField
-                        fullWidth
-                        name="name"
-                        onBlur={handleBlur}
-                        value={values.name}
-                        label="Nome no cartão"
-                        onChange={handleChange}
-                        helperText={
-                          (touched.name && errors.name) as string
-                        }
-                      />
-                    </Grid>
-                    <Grid item sm={6} xs={12}>
-                      <TextField
-                        fullWidth
-                        name="name"
-                        onBlur={handleBlur}
-                        value={values.name}
-                        label="CVC"
-                        onChange={handleChange}
-                        helperText={
-                          (touched.name && errors.name) as string
-                        }
-                      />
-                    </Grid>
-                  </Grid>
-                </Box>
+          <form onSubmit={handleSubmit}>
+            <Box mb={3}>
+              <Grid container spacing={3}>
+                <Grid item sm={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    name="card_no"
+                    label="Número do cartão"
+                    onBlur={handleBlur}
+                    value={values.card_no}
+                    onChange={handleChange}
+                    helperText={
+                      (touched.card_no && errors.card_no) as string
+                    }
+                  />
+                </Grid>
+                <Grid item sm={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    name="month_exp_date"
+                    label="Mês de expiração"
+                    placeholder="MM/YY"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.month_exp_date}
+                    helperText={
+                      (touched.month_exp_date &&
+                        errors.month_exp_date) as string
+                    }
+                  />
+                </Grid>
+                <Grid item sm={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    name="year_exp_date"
+                    label="Ano de expiração"
+                    placeholder="MM/YY"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.year_exp_date}
+                    helperText={
+                      (touched.year_exp_date &&
+                        errors.year_exp_date) as string
+                    }
+                  />
+                </Grid>
+                <Grid item sm={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    name="name"
+                    onBlur={handleBlur}
+                    value={values.name}
+                    label="Nome no cartão"
+                    onChange={handleChange}
+                    helperText={(touched.name && errors.name) as string}
+                  />
+                </Grid>
+                <Grid item sm={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    name="cpf"
+                    onBlur={handleBlur}
+                    value={values.cpf}
+                    label="CPF"
+                    onChange={handleChange}
+                    helperText={(touched.cpf && errors.cpf) as string}
+                  />
+                </Grid>
+                <Grid item sm={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    name="cvc"
+                    onBlur={handleBlur}
+                    value={values.cvc}
+                    label="CVC"
+                    onChange={handleChange}
+                    helperText={(touched.cvc && errors.cvc) as string}
+                  />
+                </Grid>
+                <Grid item sm={6} xs={12}>
+                  <TextField
+                    disabled
+                    sx={{
+                      color: "#2b3445",
+                      "& .MuiInputBase-input.Mui-disabled": {
+                        WebkitTextFillColor: "#2b3445",
+                      },
+                      "& .MuiFormLabel-root.Mui-disabled": {
+                        color: "#2b3445",
+                      },
+                    }}
+                    fullWidth
+                    name="brand"
+                    onBlur={handleBlur}
+                    value={
+                      values.card_no.startsWith("4")
+                        ? "VISA"
+                        : values.card_no.startsWith("5")
+                        ? "MasterCard"
+                        : values.card_no.startsWith("3")
+                        ? "American Express"
+                        : "Outro"
+                    }
+                    label="Bandeira"
+                    onChange={handleChange}
+                    helperText={(touched.brand && errors.brand) as string}
+                  />
+                </Grid>
+                <Grid item sm={6} xs={12}>
+                  <TextField
+                    fullWidth
+                    name="installment"
+                    onBlur={handleBlur}
+                    value={values.installment}
+                    label="Parcelas"
+                    onChange={handleChange}
+                    helperText={
+                      (touched.installment && errors.installment) as string
+                    }
+                  />
+                </Grid>
+              </Grid>
+            </Box>
 
-                <Button variant="outlined" color="primary" sx={{ mb: 4 }}>
-                  Enviar
-                </Button>
+            <Button
+              type="submit"
+              variant="outlined"
+              color="primary"
+              sx={{ mb: 4 }}
+            >
+              Enviar
+            </Button>
 
-                <Divider sx={{ mb: 3, mx: -4 }} />
-              </form>
-            )}
-          </Formik>
+            <Divider sx={{ mb: 3, mx: -4 }} />
+          </form>
         )}
 
         <FormControlLabel
@@ -166,23 +257,8 @@ const PaymentForm: FC = () => {
                 Submit
               </Button>
             </FlexBox>
-
-            {/* <Divider sx={{ mb: 3, mx: -4 }} /> */}
           </Fragment>
         )}
-
-        {/* <FormControlLabel
-          name="cod"
-          onChange={handlePaymentMethodChange}
-          label={<Paragraph fontWeight={600}>Cash On Delivery</Paragraph>}
-          control={
-            <Radio
-              checked={paymentMethod === "cod"}
-              color="primary"
-              size="small"
-            />
-          }
-        /> */}
       </Card1>
 
       <Grid container spacing={7}>
@@ -219,37 +295,21 @@ const PaymentForm: FC = () => {
 const initialValues = {
   card_no: "",
   name: "",
-  exp_date: "",
+  month_exp_date: "",
+  year_exp_date: "",
   cvc: "",
-  shipping_zip: "",
-  shipping_country: "",
-  shipping_address1: "",
-  shipping_address2: "",
-
-  billing_name: "",
-  billing_email: "",
-  billing_contact: "",
-  billing_company: "",
-  billing_zip: "",
-  billing_country: "",
-  billing_address1: "",
-  billing_address2: "",
+  cpf: "",
+  brand: "",
 };
 
 const checkoutSchema = yup.object().shape({
   card_no: yup.string().required("required"),
   name: yup.string().required("required"),
-  exp_date: yup.string().required("required"),
+  month_exp_date: yup.string().required("required"),
+  year_exp_date: yup.string().required("required"),
   cvc: yup.string().required("required"),
-  // shipping_zip: yup.string().required("required"),
-  // shipping_country: yup.object().required("required"),
-  // shipping_address1: yup.string().required("required"),
-  // billing_name: yup.string().required("required"),
-  // billing_email: yup.string().required("required"),
-  // billing_contact: yup.string().required("required"),
-  // billing_zip: yup.string().required("required"),
-  // billing_country: yup.string().required("required"),
-  // billing_address1: yup.string().required("required"),
+  cpf: yup.string().required("required"),
+  brand: yup.string().required("required"),
 });
 
 export default PaymentForm;

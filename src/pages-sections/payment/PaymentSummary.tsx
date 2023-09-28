@@ -4,7 +4,7 @@ import Card1 from "components/Card1";
 import { FlexBetween } from "components/flex-box";
 import { Paragraph } from "components/Typography";
 import { currency } from "lib";
-import { CartItem, useAppContext } from "contexts/AppContext";
+import { useAppContext } from "contexts/AppContext";
 
 const PaymentSummary: FC = () => {
   const { state, dispatch } = useAppContext();

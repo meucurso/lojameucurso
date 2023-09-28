@@ -177,7 +177,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
               </Box>
 
               <Box component={Button} onClick={toggleSidenav}>
-                <Badge badgeContent={cartProducts.length} color="primary">
+                <Badge color="primary">
                   <Icon.CartBag sx={ICON_STYLE} />
                 </Badge>
               </Box>
@@ -353,7 +353,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
               </Box>
             </Link>
           </Tooltip>
-          <Badge badgeContent={cartProducts.length} color="primary">
+          <Badge color="primary">
             <Tooltip title="Carrinho">
               <Box
                 color={"grey"}

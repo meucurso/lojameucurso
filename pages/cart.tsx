@@ -24,6 +24,7 @@ import ShopLayout1 from "components/layouts/ShopLayout1";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { LoadingButton } from "@mui/lab";
+import { Router, useRouter } from "next/router";
 
 const LinkHelper = styled(Link)({
   transition: "0.2s",
@@ -34,6 +35,8 @@ const LinkHelper = styled(Link)({
 
 const Cart: NextPage = () => {
   const { data: session } = useSession();
+  const router = useRouter();
+
   const [address, setAddress] = useState("");
   const [cep, setCep] = useState("");
   const [cepValue, setCepValue] = useState<any>();
@@ -52,7 +55,7 @@ const Cart: NextPage = () => {
 
   const getTotalPrice = () => {
     const subTotal = getSubTotalPrice();
-    const discountAmount = coupoms?.DiscountAmount || 0; // Defina como 0 se for indefinido
+    const discountAmount = coupoms?.DiscountAmount || 0;
 
     return subTotal + shippingPrice - discountAmount;
   };
@@ -104,7 +107,7 @@ const Cart: NextPage = () => {
 
     axios
       .get(
-        `https://apiecommerce.meucurso.com.br/Coupons/ValidCoupon?OrderId=${cartData.OrderId}&CouponName=${coupomName}`,
+        `https://apiecommerce.meucurso.com.br/Coupons/ValidCoupon?OrderId=${cartData.OrderId}&CouponName=${coupomName}&StoreId=${cartData.StoreId}`,
         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
       )
       .then((response) => {
@@ -121,6 +124,18 @@ const Cart: NextPage = () => {
         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
       )
       .then(() => {
+        const apiResponseData = JSON.parse(
+          localStorage.getItem("apiResponseData")
+        );
+        if (apiResponseData && apiResponseData.Items) {
+          apiResponseData.Items = apiResponseData.Items.filter(
+            (item) => item.SKU !== SKU
+          );
+          localStorage.setItem(
+            "apiResponseData",
+            JSON.stringify(apiResponseData)
+          );
+        }
         setCartProducts((prev) =>
           prev.filter((product) => product.SKU !== SKU)
         );
@@ -178,6 +193,18 @@ const Cart: NextPage = () => {
     (product) => product.ProductTypeId === 4 || product.ProductTypeId === 2
   );
 
+  const handleCheckout = () => {
+    const apiResponseData = JSON.parse(
+      localStorage.getItem("apiResponseData")
+    );
+    apiResponseData.Coupon = coupomValue;
+
+    localStorage.setItem(
+      "apiResponseData",
+      JSON.stringify(apiResponseData)
+    );
+    router.push("/payment");
+  };
   return (
     <>
       {loading && (
@@ -220,19 +247,17 @@ const Cart: NextPage = () => {
                   {!loading && (
                     <Grid item md={8} xs={12}>
                       {cartProducts.map((item) => (
-                        <>
-                          <ProductCard7
-                            onClickFunction={() =>
-                              handleDeleteCartItems(
-                                localProducts?.OrderId,
-                                localProducts?.StoreId,
-                                item.SKU
-                              )
-                            }
-                            key={item.OrderItemId}
-                            {...item}
-                          />
-                        </>
+                        <ProductCard7
+                          onClickFunction={() =>
+                            handleDeleteCartItems(
+                              localProducts?.OrderId,
+                              localProducts?.StoreId,
+                              item.SKU
+                            )
+                          }
+                          key={item.OrderItemId}
+                          {...item}
+                        />
                       ))}
                     </Grid>
                   )}
@@ -414,6 +439,7 @@ const Cart: NextPage = () => {
                       )}
 
                       <Button
+                        onClick={handleCheckout}
                         disabled={
                           address.length === 0 &&
                           cep.length === 0 &&
@@ -421,7 +447,7 @@ const Cart: NextPage = () => {
                         }
                         fullWidth
                         color="primary"
-                        href="/checkout"
+                        // href="/payment"
                         variant="contained"
                         LinkComponent={Link}
                       >

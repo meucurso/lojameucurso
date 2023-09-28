@@ -34,7 +34,6 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
     URLKey,
   } = singleProduct;
 
-  const { state, dispatch } = useAppContext();
   const [productChild, setProductChild] = useState(null);
   const [updatedFamilyTree, setUpdatedFamilyTree] = useState(null);
   const [selectedButtonId, setSelectedButtonId] = useState(null);
@@ -96,11 +95,6 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
         URLKey: updatedFamilyTree.URLKey,
         Selected: true,
       };
-
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: cartItem,
-      });
     } else {
       cartItem = {
         price: updatedPrice,
@@ -113,11 +107,6 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
         URLKey: singleProduct.URLKey,
         Selected: true,
       };
-
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: cartItem,
-      });
     }
     axios
       .post(
@@ -136,7 +125,9 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
       .then((response) => {
         setLoading(false);
         const responseData = response.data;
-
+        enqueueSnackbar("Produto adicionado no carrinho!", {
+          variant: "success",
+        });
         localStorage.setItem(
           "apiResponseData",
           JSON.stringify(responseData)

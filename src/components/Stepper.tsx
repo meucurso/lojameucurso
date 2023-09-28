@@ -5,9 +5,9 @@ import { FlexRowCenter } from "components/flex-box";
 // ========================================================
 type Step = { title: string; disabled: boolean };
 type StepperProps = {
-  stepperList: Step[];
-  selectedStep: number;
-  onChange: (step: number) => void;
+  stepperList?: Step[];
+  selectedStep?: number;
+  onChange?: (step: number) => void;
 };
 // ========================================================
 
@@ -36,7 +36,7 @@ const Stepper: FC<StepperProps> = ({
           <Chip
             disabled={step.disabled}
             label={`${ind + 1}. ${step.title}`}
-            onClick={handleStepClick(step, ind)}
+            // onClick={handleStepClick(step, ind)}
             sx={{
               backgroundColor:
                 ind <= selected ? "primary.main" : "primary.light",
