@@ -4,59 +4,60 @@ import Card1 from "components/Card1";
 import { FlexBetween } from "components/flex-box";
 import { Paragraph } from "components/Typography";
 import { currency } from "lib";
-import { useAppContext } from "contexts/AppContext";
+import { useState, useCallback, useEffect } from "react";
 
 const PaymentSummary: FC = () => {
-  const { state, dispatch } = useAppContext();
-  const cartList = state.cart;
+  const [localProducts, setLocalProducts] = useState<any>([]);
 
-  const getTotalPrice = () => {
-    return cartList.reduce(
-      (accum, item) => accum + item.price * item.qty,
-      0
-    );
-  };
+  const fetchLocalItems = useCallback(() => {
+    const response = JSON.parse(localStorage.getItem("apiResponseData"));
+    setLocalProducts(response);
+  }, []);
+
+  useEffect(() => {
+    fetchLocalItems();
+  }, [fetchLocalItems]);
 
   return (
     <Card1>
       <FlexBetween mb={1}>
         <Paragraph color="grey.600">Subtotal:</Paragraph>
         <Paragraph fontSize={18} fontWeight={600} lineHeight={1}>
-          {currency(getTotalPrice())}
+          {currency(localProducts.SubTotalPrice)}
         </Paragraph>
       </FlexBetween>
 
       <FlexBetween mb={1}>
-        <Paragraph color="grey.600">Shipping:</Paragraph>
-        <Paragraph fontSize={18} fontWeight={600} lineHeight={1}>
-          {/* - */}
+        <Paragraph color="grey.600">Frete:</Paragraph>
+        <Paragraph
+          color={"#D23F57"}
+          fontSize={18}
+          fontWeight={600}
+          lineHeight={1}
+        >
+          {currency(localProducts.Frete)}
         </Paragraph>
       </FlexBetween>
 
       <FlexBetween mb={1}>
-        <Paragraph color="grey.600">Tax:</Paragraph>
-        <Paragraph fontSize={18} fontWeight={600} lineHeight={1}>
-          {/* {currency(40)} */}
-        </Paragraph>
-      </FlexBetween>
-
-      <FlexBetween mb={2}>
-        <Paragraph color="grey.600">Discount:</Paragraph>
-        <Paragraph fontSize={18} fontWeight={600} lineHeight={1}>
-          {/* - */}
+        <Paragraph color="grey.600">Cupom:</Paragraph>
+        <Paragraph
+          color={"green"}
+          fontSize={18}
+          fontWeight={600}
+          lineHeight={1}
+        >
+          - {currency(localProducts.Cupom)}
         </Paragraph>
       </FlexBetween>
 
       <Divider sx={{ mb: 2 }} />
-
-      <Paragraph
-        fontSize={25}
-        fontWeight={600}
-        lineHeight={1}
-        textAlign="right"
-      >
-        {currency(getTotalPrice())}
-      </Paragraph>
+      <FlexBetween mb={1}>
+        <Paragraph color="grey.600">Total:</Paragraph>
+        <Paragraph fontSize={18} fontWeight={600} lineHeight={1}>
+          {currency(localProducts.Price)}
+        </Paragraph>
+      </FlexBetween>
     </Card1>
   );
 };

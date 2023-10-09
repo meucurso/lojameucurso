@@ -71,6 +71,8 @@ const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
     return <h1>Carregando...</h1>;
   }
 
+  console.log(singleProduct);
+
   return (
     <ShopLayout1>
       <SEO
@@ -96,7 +98,6 @@ const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
           {selectedOption === 0 && (
             <ProductDescription product={updatedProduct} />
           )}
-          {/* {selectedOption === 1 && <ProductReview />} */}
         </Box>
       </Container>
     </ShopLayout1>

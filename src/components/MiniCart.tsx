@@ -56,15 +56,13 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
 
   const fetchCartItems = async () => {
     if (session) {
-      setLoading(true);
       const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
       await axios
         .get(
-          `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}&StoreId=${cartData.StoreId}`,
+          `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}`,
           { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
         )
         .then((response) => {
-          setLoading(false);
           setCartProducts(
             response.data.Items.filter(
               (item) => item.OrderItemProductLevelId === 1
@@ -82,6 +80,25 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
       )
       .then(() => {
+        const apiResponseData = JSON.parse(
+          localStorage.getItem("apiResponseData")
+        );
+
+        if (apiResponseData && apiResponseData.Items) {
+          apiResponseData.Items = apiResponseData.Items.filter(
+            (item) => item.SKU !== SKU
+          );
+
+          if (apiResponseData.Items.length > 1) {
+            localStorage.setItem(
+              "apiResponseData",
+              JSON.stringify(apiResponseData)
+            );
+          } else {
+            localStorage.removeItem("apiResponseData");
+          }
+        }
+
         setCartProducts((prev) =>
           prev.filter((product) => product.SKU !== SKU)
         );
@@ -125,7 +142,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
               {loading && (
                 <Skeleton variant="rectangular" width={210} height={118} />
               )}
-              {cartProducts.length <= 0 && (
+              {!cartProducts.length && (
                 <FlexBox
                   alignItems="center"
                   flexDirection="column"
@@ -253,7 +270,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
                   sx={{ mb: "0.75rem", height: "40px" }}
                   onClick={handleNavigate("/cart")}
                 >
-                  Checkout ({currency(getTotalPrice())})
+                  Carrinho ({currency(getTotalPrice())})
                 </Button>
               </Box>
             )}

@@ -44,7 +44,7 @@ const CategoryMenuCard: FC<CategoryMenuCardProps> = (props) => {
           <CategoryMenuItem
             key={item.title}
             href={item?.href}
-            icon={item.icon}
+            // icon={item.icon}
             title={item.title}
             caret={!!item.menuData}
           >

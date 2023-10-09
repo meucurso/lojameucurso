@@ -48,17 +48,17 @@ const navigations = [
     menuData: [
       {
         title: "Tribunais",
-        href: "/searchCategory?CategoryId=101",
+        href: "/searchCategory?CategoryId=139",
         megaMenu: "MegaMenu1",
       },
       {
         title: "Procuradorias",
-        href: "/searchCategory?CategoryId=74",
+        href: "/searchCategory?CategoryId=140",
         megaMenu: 2,
       },
       {
         title: "Assinaturas",
-        href: "/searchCategory?CategoryId=75",
+        href: "/searchCategory?CategoryId=141",
         megaMenu: 2,
       },
     ],

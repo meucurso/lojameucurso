@@ -10,7 +10,7 @@ import CheckoutNavLayout from "components/layouts/CheckoutNavLayout";
 
 import { currency } from "lib";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Skeleton from "@mui/material/Skeleton";
 
 import Radio from "@mui/material/Radio";
@@ -42,11 +42,14 @@ const Cart: NextPage = () => {
   const [cepValue, setCepValue] = useState<any>();
   const [cartProducts, setCartProducts] = useState<any>([]);
   const [localProducts, setLocalProducts] = useState<any>([]);
+  const [studentAddress, setStudentAddress] = useState<any>([]);
   const [coupoms, setCoupoms] = useState<any>();
   const [coupomValue, setCoupomValue] = useState<any>("");
+  const [cupomText, setCoupomText] = useState("");
   const [sedex, setSedex] = useState<any>(false);
   const [radioValue, setRadioValue] = useState("retirarnaloja");
   const [loading, setLoading] = useState(false);
+  const [loadingAddress, setLoadingAddress] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [pickupInStore, setPickupInStore] = useState(false);
 
@@ -60,43 +63,77 @@ const Cart: NextPage = () => {
     return subTotal + shippingPrice - discountAmount;
   };
 
-  const fetchLocalItems = async () => {
+  const fetchAddress = useCallback(async () => {
+    setLoadingAddress(true);
+    try {
+      const response = await axios.get(
+        `http://apiecommerce.meucurso.com.br/Student/Address?CustomerId=${session?.user?.CustomerId}`,
+        { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
+      );
+      setLoadingAddress(false);
+      console.log(response.data);
+      setStudentAddress(response.data);
+    } catch (err) {
+      setLoadingAddress(false);
+      console.log(err);
+    }
+  }, [session]);
+
+  const fetchLocalItems = useCallback(() => {
     const response = JSON.parse(localStorage.getItem("apiResponseData"));
     setLocalProducts(response);
-  };
+  }, []);
 
-  const fetchCartItems = async () => {
+  const fetchCartItems = useCallback(async () => {
     if (session) {
       setLoading(true);
       const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
-      await axios
-        .get(
+      try {
+        const response = await axios.get(
           `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}&StoreId=${cartData.StoreId}`,
           { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
-        )
-        .then((response) => {
-          setLoading(false);
-          console.log(response.data);
-          setCartProducts(
-            response.data.Items.filter(
-              (item) => item.OrderItemProductLevelId === 1
-            )
-          );
-        })
-        .catch((err) => console.log(err));
+        );
+        setLoading(false);
+
+        const processedData = response.data.Items.map((item) => {
+          if (item.OrderItemProductLevelId === 1) {
+            const matchingItem = response.data.Items.find(
+              (otherItem) =>
+                otherItem.ParentOrderItemId === item.OrderItemId
+            );
+            if (matchingItem) {
+              if (matchingItem.ProductGroupId === 3) {
+                item.Price = matchingItem.Price;
+              } else if (matchingItem.ProductGroupId === 2) {
+                item.Price += matchingItem.Price;
+              }
+            }
+          }
+          return item;
+        });
+
+        setCartProducts(
+          processedData.filter(
+            (item) => item.OrderItemProductLevelId === 1
+          )
+        );
+      } catch (err) {
+        console.log(err);
+      }
     }
-  };
+  }, [session]);
 
   const handleShippingDetails = async (cepValue) => {
     setLoadingButton(true);
     const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
     axios
       .get(
-        `https://apiecommerce.meucurso.com.br/BIPEStore/GetShippingDetails?OrderId=${cartData.OrderId}&StoreId=${cartData.StoreId}&Cep=${cepValue}`,
+        `https://apiecommerce.meucurso.com.br/Shipping/GetShippingDetails?OrderId=${cartData.OrderId}&StoreId=${cartData.StoreId}&Cep=${cepValue}`,
         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
       )
       .then((response) => {
         setLoadingButton(false);
+        console.log(response.data);
         setCepValue(response.data);
       })
       .catch((err) => console.log(err));
@@ -112,9 +149,17 @@ const Cart: NextPage = () => {
       )
       .then((response) => {
         setCoupoms(response.data);
+        setCoupomText("Cupom aplicado!");
         console.log(response.data);
+
+        if (response.data === null) {
+          setCoupomText("Cupom Inválido");
+        }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setCoupomText("Cupom Iinválido");
+        console.log(err);
+      });
   };
 
   const handleDeleteCartItems = (OrderId, StoreId, SKU) => {
@@ -127,31 +172,33 @@ const Cart: NextPage = () => {
         const apiResponseData = JSON.parse(
           localStorage.getItem("apiResponseData")
         );
+
         if (apiResponseData && apiResponseData.Items) {
           apiResponseData.Items = apiResponseData.Items.filter(
             (item) => item.SKU !== SKU
           );
-          localStorage.setItem(
-            "apiResponseData",
-            JSON.stringify(apiResponseData)
-          );
+
+          if (apiResponseData.Items.length > 1) {
+            localStorage.setItem(
+              "apiResponseData",
+              JSON.stringify(apiResponseData)
+            );
+          } else {
+            localStorage.removeItem("apiResponseData");
+          }
         }
+
         setCartProducts((prev) =>
           prev.filter((product) => product.SKU !== SKU)
         );
       });
   };
 
-  useEffect(() => {
-    fetchCartItems();
-    fetchLocalItems();
-  }, []);
-
   const handleAddressChange = (event) => {
     const selectedAddressId = event.target.value;
     setAddress(selectedAddressId);
 
-    const selectedAddress = session.user.StudentAddress.find(
+    const selectedAddress = studentAddress.find(
       (item) => item.StudentAddressId === selectedAddressId
     );
 
@@ -189,22 +236,74 @@ const Cart: NextPage = () => {
         )
         .shift() || 0;
 
+  const shippingSEDEXInformations = cepValue?.flatMap((value) =>
+    value.ShippingInformations.filter(
+      (item) => item.ServiceDescription === "SEDEX"
+    ).map((value) => ({
+      ...value,
+      StorageId: cepValue[0].StorageId,
+    }))
+  );
+
   const shippingProduct = localProducts?.Items?.some(
-    (product) => product.ProductTypeId === 4 || product.ProductTypeId === 2
+    (product) =>
+      product.Product?.ProductTypeId === 4 ||
+      product.Product?.ProductTypeId === 2
   );
 
   const handleCheckout = () => {
     const apiResponseData = JSON.parse(
       localStorage.getItem("apiResponseData")
     );
-    apiResponseData.Coupon = coupomValue;
+    if (sedex) {
+      apiResponseData.Coupon = coupomValue;
+      apiResponseData.OrderShippingPackages = shippingSEDEXInformations;
+      apiResponseData.BillingAddressId = address;
+      apiResponseData.ShippingAddressId = address;
+      apiResponseData.Price = getTotalPrice();
+      apiResponseData.SubTotalPrice = getSubTotalPrice();
+      apiResponseData.Frete = shippingPrice;
+      apiResponseData.Cupom = coupoms?.DiscountAmount;
 
-    localStorage.setItem(
-      "apiResponseData",
-      JSON.stringify(apiResponseData)
-    );
+      localStorage.setItem(
+        "apiResponseData",
+        JSON.stringify(apiResponseData)
+      );
+    } else {
+      const pickStore = {
+        ServiceCode: 0,
+        ServiceDescription: "Retirar na loja",
+        DeliveryTime: 0,
+        ShippingPrice: 0,
+      };
+
+      apiResponseData.Coupon = coupomValue;
+      apiResponseData.OrderShippingPackages = [pickStore];
+      apiResponseData.BillingAddressId = address;
+      apiResponseData.ShippingAddressId = address;
+      apiResponseData.Price = getTotalPrice();
+      apiResponseData.SubTotalPrice = getSubTotalPrice();
+      apiResponseData.Frete = shippingPrice;
+      apiResponseData.Cupom = coupoms?.DiscountAmount;
+
+      localStorage.setItem(
+        "apiResponseData",
+        JSON.stringify(apiResponseData)
+      );
+    }
     router.push("/payment");
+
+    console.log(apiResponseData);
   };
+
+  useEffect(() => {
+    fetchCartItems();
+    fetchLocalItems();
+    if (shippingProduct) {
+      fetchAddress();
+    }
+  }, [fetchCartItems, fetchLocalItems, fetchAddress]);
+
   return (
     <>
       {loading && (
@@ -225,7 +324,10 @@ const Cart: NextPage = () => {
         <>
           {!cartProducts.length && (
             <ShopLayout1>
-              <SEO title="Carrinho" />
+              <SEO
+                title="Carrinho"
+                sitename="MeuCurso - Do seu jeito. No seu tempo."
+              />
 
               <Grid container>
                 <Grid item md={12} textAlign={"center"}>
@@ -234,10 +336,13 @@ const Cart: NextPage = () => {
               </Grid>
             </ShopLayout1>
           )}
-          {session && (
+          {session && cartProducts.length > 0 && (
             <>
               <CheckoutNavLayout>
-                <SEO title="Carrinho" />
+                <SEO
+                  title="Carrinho"
+                  sitename="MeuCurso - Do seu jeito. No seu tempo."
+                />
 
                 <Grid container spacing={3}>
                   {/* CART PRODUCT LIST */}
@@ -326,9 +431,11 @@ const Cart: NextPage = () => {
                         label="Cupom"
                         variant="outlined"
                         placeholder="Cupom"
+                        helperText={cupomText}
                       />
 
                       <Button
+                        disabled={coupomValue.length <= 0}
                         onClick={() => handleCoupom(coupomValue)}
                         variant="outlined"
                         color="primary"
@@ -387,17 +494,15 @@ const Cart: NextPage = () => {
                                 placeholder="Selecione seu endereço"
                                 onChange={handleAddressChange}
                               >
-                                {session.user.StudentAddress.map(
-                                  (item, index) => (
-                                    <MenuItem
-                                      value={item.StudentAddressId}
-                                      key={index}
-                                    >
-                                      {item.AddressLine1} - {item.Number} -{" "}
-                                      {item.CityName}- {item.StateName}
-                                    </MenuItem>
-                                  )
-                                )}
+                                {studentAddress.map((item, index) => (
+                                  <MenuItem
+                                    value={item.StudentAddressId}
+                                    key={index}
+                                  >
+                                    {item.AddressLine1} - {item.Number} -{" "}
+                                    {item.CityName}- {item.StateName}
+                                  </MenuItem>
+                                ))}
                               </TextField>
 
                               <TextField
@@ -440,11 +545,7 @@ const Cart: NextPage = () => {
 
                       <Button
                         onClick={handleCheckout}
-                        disabled={
-                          address.length === 0 &&
-                          cep.length === 0 &&
-                          sedex === true
-                        }
+                        disabled={sedex === true && !cepValue}
                         fullWidth
                         color="primary"
                         // href="/payment"

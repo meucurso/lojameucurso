@@ -83,6 +83,12 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const handleSignOut = () => {
+    signOut();
+    localStorage.removeItem("apiResponseData");
+  };
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -95,7 +101,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
       const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
       try {
         const response = await axios.get(
-          `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}&StoreId=${cartData.StoreId}`,
+          `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}`,
           { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
         );
         setCartProducts(response.data.Items);
@@ -327,7 +333,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
                   </ListItemIcon>
                   Configurações
                 </MenuItem>
-                <MenuItem onClick={() => signOut()}>
+                <MenuItem onClick={handleSignOut}>
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>
