@@ -302,7 +302,7 @@ const Cart: NextPage = () => {
     if (shippingProduct) {
       fetchAddress();
     }
-  }, [fetchCartItems, fetchLocalItems, fetchAddress]);
+  }, [fetchCartItems, fetchLocalItems, fetchAddress, shippingProduct]);
 
   return (
     <>
