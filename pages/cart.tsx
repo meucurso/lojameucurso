@@ -53,8 +53,6 @@ const Cart: NextPage = () => {
     }
   };
 
-  console.log(cartList);
-
   return (
     <>
       {!cartList.length && (
