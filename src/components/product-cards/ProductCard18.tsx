@@ -69,6 +69,7 @@ const ProductCard18: FC<ProductCardProps> = ({ product }) => {
       <CardMedia>
         <Link href={`/product/${product.URLKey}`}>
           <img
+            alt={product.Name}
             loading="lazy"
             src={product.SmallImageUrl}
             width={"100%"}

@@ -96,28 +96,27 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
     setAnchorEl(null);
   };
 
-  const fetchCartItems = async () => {
-    if (session) {
-      const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
-      try {
-        const response = await axios.get(
-          `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}`,
-          { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      if (session) {
+        const cartData = JSON.parse(
+          localStorage.getItem("apiResponseData")
         );
-        setCartProducts(response.data.Items);
-      } catch (err) {
-        console.log(err);
+        try {
+          const response = await axios.get(
+            `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}`,
+            {
+              headers: { Authorization: `Bearer ${session?.user?.Token}` },
+            }
+          );
+          setCartProducts(response.data.Items);
+        } catch (err) {
+          console.log(err);
+        }
       }
-    }
-  };
-
-  useEffect(() => {
+    };
     fetchCartItems();
-  }, []);
-
-  useEffect(() => {
-    fetchCartItems();
-  }, []);
+  }, [session]);
 
   // LOGIN AND MINICART DRAWER
   const DIALOG_DRAWER = (

@@ -49,30 +49,6 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
     push(path);
   };
 
-  const fetchLocalItems = async () => {
-    const response = JSON.parse(localStorage.getItem("apiResponseData"));
-    setLocalProducts(response);
-  };
-
-  const fetchCartItems = async () => {
-    if (session) {
-      const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
-      await axios
-        .get(
-          `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}`,
-          { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
-        )
-        .then((response) => {
-          setCartProducts(
-            response.data.Items.filter(
-              (item) => item.OrderItemProductLevelId === 1
-            )
-          );
-        })
-        .catch((err) => console.log(err));
-    }
-  };
-
   const handleDeleteCartItems = (OrderId, StoreId, SKU) => {
     axios
       .delete(
@@ -106,9 +82,36 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
   };
 
   useEffect(() => {
+    const fetchCartItems = async () => {
+      if (session) {
+        const cartData = JSON.parse(
+          localStorage.getItem("apiResponseData")
+        );
+        await axios
+          .get(
+            `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}`,
+            {
+              headers: { Authorization: `Bearer ${session?.user?.Token}` },
+            }
+          )
+          .then((response) => {
+            setCartProducts(
+              response.data.Items.filter(
+                (item) => item.OrderItemProductLevelId === 1
+              )
+            );
+          })
+          .catch((err) => console.log(err));
+      }
+    };
+    const fetchLocalItems = async () => {
+      const response = JSON.parse(localStorage.getItem("apiResponseData"));
+      setLocalProducts(response);
+    };
+
     fetchCartItems();
     fetchLocalItems();
-  }, []);
+  }, [session]);
 
   return (
     <>

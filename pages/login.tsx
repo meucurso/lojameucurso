@@ -6,7 +6,10 @@ import { FlexRowCenter } from "components/flex-box";
 const LoginPage: NextPage = () => {
   return (
     <FlexRowCenter flexDirection="column" minHeight="100vh">
-      <SEO title="Login" />
+      <SEO
+        title="Login"
+        sitename="MeuCurso - Do seu jeito.  No seu tempo."
+      />
       <Login />
     </FlexRowCenter>
   );

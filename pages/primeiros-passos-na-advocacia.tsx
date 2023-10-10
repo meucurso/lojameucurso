@@ -85,7 +85,7 @@ const PrimeirosPassosNaAdvocacia = (props) => {
             <Grid container>
               <Grid item md={12} textAlign={"center"}></Grid>
             </Grid>
-            <Section6 products={props.featureProducts} />
+            <Section6 products={props.firstStepsProducts} />
           </Container>
         </Container>
       </ShopLayout1>
@@ -95,11 +95,11 @@ const PrimeirosPassosNaAdvocacia = (props) => {
 export default PrimeirosPassosNaAdvocacia;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const featureProducts = await api.getFeatureProducts();
+  const firstStepsProducts = await api.getProductsById("28");
   const indexBannersData = await api.getIndexBanners("28");
   return {
     props: {
-      featureProducts,
+      firstStepsProducts,
       indexBannersData,
     },
     revalidate: 25,

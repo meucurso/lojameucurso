@@ -68,7 +68,7 @@ const PaymentForm: FC = () => {
     } catch (err) {
       console.log(err);
     }
-  }, [localProducts, session, setPaymentInstallments]);
+  }, [session, setPaymentInstallments]);
 
   const handleFormSubmit = async (values: any) => {
     setLoadingPayment(true);
@@ -141,7 +141,7 @@ const PaymentForm: FC = () => {
     if (session) {
       fetchInstallments();
     }
-  }, [fetchLocalItems]);
+  }, [fetchInstallments, fetchLocalItems, session]);
 
   const formatCardNumber = (inputValue) => {
     const formattedValue = inputValue.replace(/\D/g, "").slice(0, 16);
@@ -221,7 +221,7 @@ const PaymentForm: FC = () => {
               component="h2"
               sx={{ mt: 3 }}
             >
-              "Ordem:#{paymentSucceeded?.OrderId}"
+              Ordem:#{paymentSucceeded?.OrderId}
             </Typography>
 
             <Typography
