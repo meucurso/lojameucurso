@@ -202,7 +202,7 @@ const CursosOAB1Fase = (props) => {
 export default CursosOAB1Fase;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const oabProducts = await api.getProductsById("93");
+  const oabProducts = await api.getProductsById("129");
   const indexBannersData = await api.getIndexBanners("5");
   return {
     props: {

@@ -34,7 +34,6 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
     URLKey,
   } = singleProduct;
 
-  const { state, dispatch } = useAppContext();
   const [productChild, setProductChild] = useState(null);
   const [updatedFamilyTree, setUpdatedFamilyTree] = useState(null);
   const [selectedButtonId, setSelectedButtonId] = useState(null);
@@ -47,7 +46,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
   );
 
   const updatePrice = (specialPrice: number) => {
-    setUpdatedPrice(singleProduct.SpecialPrice + specialPrice);
+    setUpdatedPrice(specialPrice);
   };
 
   useEffect(() => {
@@ -55,6 +54,24 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
       updatePrice(productChild.SpecialPrice);
     }
   }, [productChild]);
+
+  function hasUnselectedChildren(product) {
+    if (product.Children) {
+      for (const child of product.Children) {
+        if (!child.Selected) {
+          return true;
+        }
+
+        if (child.Children) {
+          if (hasUnselectedChildren(child)) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  }
 
   function updateNestedObject(arr, targetID, updates) {
     return arr.map((item) => {
@@ -81,74 +98,74 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
     updatedFamilyTree
   );
 
-  const cartItem = state.cart.find((item) => item.ProductId === ProductId);
-
   const handleCartAmountChange = (amount: number) => () => {
-    setLoading(true);
-    let cartItem;
-    if (singleProduct.ProductId === updatedFamilyTree?.ProductId) {
-      cartItem = {
-        price: updatedPrice,
-        qty: amount,
-        name: updatedFamilyTree.Name,
-        imgUrl: updatedFamilyTree.SmallImageUrl,
-        ProductId,
-        Children: updatedFamilyTree.Children,
-        SKU: updatedFamilyTree.SKU,
-        URLKey: updatedFamilyTree.URLKey,
-        Selected: true,
-      };
-
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: cartItem,
+    if (!session) {
+      enqueueSnackbar("Faça o login para adicionar itens ao carrinho!", {
+        variant: "warning",
       });
     } else {
-      cartItem = {
-        price: updatedPrice,
-        qty: amount,
-        name: singleProduct.Name,
-        imgUrl: singleProduct.SmallImageUrl,
-        ProductId,
-        Children: updatedSingleProduct,
-        SKU: singleProduct.SKU,
-        URLKey: singleProduct.URLKey,
-        Selected: true,
-      };
-
-      dispatch({
-        type: "CHANGE_CART_AMOUNT",
-        payload: cartItem,
-      });
-    }
-    axios
-      .post(
-        "https://apiecommerce.meucurso.com.br/BIPEStore/AddToCart",
-        {
-          CustomerId: session.user.CustomerId,
-          StoreId: 5,
-          Children: [cartItem],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${session.user.Token}`,
+      setLoading(true);
+      let cartItem;
+      if (singleProduct.ProductId === updatedFamilyTree?.ProductId) {
+        cartItem = {
+          price: updatedPrice,
+          qty: amount,
+          name: updatedFamilyTree.Name,
+          imgUrl: updatedFamilyTree.SmallImageUrl,
+          ProductId,
+          Children: updatedFamilyTree.Children,
+          SKU: updatedFamilyTree.SKU,
+          URLKey: updatedFamilyTree.URLKey,
+          Selected: true,
+        };
+      } else {
+        cartItem = {
+          price: updatedPrice,
+          qty: amount,
+          name: singleProduct.Name,
+          imgUrl: singleProduct.SmallImageUrl,
+          ProductId,
+          Children: updatedSingleProduct,
+          SKU: singleProduct.SKU,
+          URLKey: singleProduct.URLKey,
+          Selected: true,
+        };
+      }
+      axios
+        .post(
+          "https://apiecommerce.meucurso.com.br/BIPEStore/AddToCart",
+          {
+            CustomerId: session.user.CustomerId,
+            StoreId: 3,
+            Children: [cartItem],
           },
-        }
-      )
-      .then((response) => {
-        setLoading(false);
-        response.data;
-        console.log(response.data);
-      })
-      .catch((err) => {
-        setLoading(false);
-        enqueueSnackbar(err, {
-          variant: "error",
+          {
+            headers: {
+              Authorization: `Bearer ${session.user.Token}`,
+            },
+          }
+        )
+        .then((response) => {
+          setLoading(false);
+          console.log(response.data);
+          const responseData = response.data;
+          enqueueSnackbar("Produto adicionado no carrinho!", {
+            variant: "success",
+          });
+          localStorage.setItem(
+            "apiResponseData",
+            JSON.stringify(responseData)
+          );
+        })
+        .catch((err) => {
+          setLoading(false);
+          enqueueSnackbar(err.response.data, {
+            variant: "error",
+          });
         });
-        console.log(err);
-      });
-    console.log(cartItem);
+    }
   };
+
   return (
     <Box width="100%">
       <Grid container spacing={3} justifyContent="space-around">
@@ -177,18 +194,25 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             justifyContent={"center"}
             mb={1}
           >
-            <p>{singleProduct.ShortDescription}</p>
+            {/* <div
+              dangerouslySetInnerHTML={{
+                __html: singleProduct.ShortDescription,
+              }}
+            /> */}
           </FlexBox>
-          <h4>Selecione a opção: </h4>
-          <ChildrenTree
-            selectedChild={productChild}
-            setSelectedChild={setProductChild}
-            familyTree={singleProduct}
-            setUpdatedFamilyTree={setUpdatedFamilyTree}
-            updatedFamilyTree={updatedFamilyTree}
-            selectedButtonId={selectedButtonId}
-            setSelectedButtonId={setSelectedButtonId}
-          />
+
+          <>
+            <h4>Selecione a opção: </h4>
+            <ChildrenTree
+              selectedChild={productChild}
+              setSelectedChild={setProductChild}
+              familyTree={singleProduct}
+              setUpdatedFamilyTree={setUpdatedFamilyTree}
+              updatedFamilyTree={updatedFamilyTree}
+              selectedButtonId={selectedButtonId}
+              setSelectedButtonId={setSelectedButtonId}
+            />
+          </>
 
           <Box pt={1} mb={3}>
             <H2 color="primary.main" mb={0.5} lineHeight="1">
@@ -200,49 +224,19 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             </H2>
           </Box>
 
-          {!cartItem?.qty ? (
-            <LoadingButton
-              loading={loading}
-              color="primary"
-              type="submit"
-              variant="contained"
-              onClick={handleCartAmountChange(1)}
-              sx={{ mb: 4.5, px: "1.75rem", height: 40 }}
-              disabled={singleProduct.Children.length > 0 && !productChild}
-            >
-              Adicionar ao Carrinho
-            </LoadingButton>
-          ) : (
-            <FlexBox alignItems="center" mb={4.5}>
-              <LoadingButton
-                loading={loading}
-                type="submit"
-                size="small"
-                sx={{ p: 1 }}
-                color="primary"
-                variant="outlined"
-                onClick={handleCartAmountChange(cartItem?.qty - 1)}
-              >
-                <Remove fontSize="small" />
-              </LoadingButton>
-
-              <H3 fontWeight="bolder" mx={2.5}>
-                {cartItem?.qty.toString().padStart(2, "0")}
-              </H3>
-
-              <LoadingButton
-                loading={loading}
-                type="submit"
-                size="small"
-                sx={{ p: 1 }}
-                color="primary"
-                variant="outlined"
-                onClick={handleCartAmountChange(cartItem?.qty + 1)}
-              >
-                <Add fontSize="small" />
-              </LoadingButton>
-            </FlexBox>
-          )}
+          <LoadingButton
+            loading={loading}
+            color="primary"
+            type="submit"
+            variant="contained"
+            onClick={handleCartAmountChange(1)}
+            sx={{ mb: 4.5, px: "1.75rem", height: 40 }}
+            disabled={
+              hasUnselectedChildren(singleProduct) && !productChild
+            }
+          >
+            Adicionar ao Carrinho
+          </LoadingButton>
         </Grid>
       </Grid>
     </Box>

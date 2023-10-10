@@ -20,6 +20,7 @@ import { SessionProvider } from "next-auth/react";
 import "nprogress/nprogress.css";
 import "simplebar-react/dist/simplebar.min.css";
 import "../src/__server__";
+import CartProvider from "contexts/CartContext";
 
 //Binding events.
 Router.events.on("routeChangeStart", () => nProgress.start());

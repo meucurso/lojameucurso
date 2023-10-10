@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FC, Fragment, ReactElement, useState } from "react";
+import { FC, Fragment, ReactElement, useEffect, useState } from "react";
 import { Badge, Box, Button, Dialog, Drawer, styled } from "@mui/material";
 import Container from "@mui/material/Container";
 import { useTheme } from "@mui/material/styles";
@@ -35,6 +35,7 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { useSession, signOut } from "next-auth/react";
+import axios from "axios";
 
 // styled component
 export const HeaderWrapper = styled(Box)(({ theme }) => ({
@@ -70,6 +71,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sidenavOpen, setSidenavOpen] = useState(false);
   const [searchBarOpen, setSearchBarOpen] = useState(false);
+  const [cartProducts, setCartProducts] = useState<any>([]);
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
   const downMd = useMediaQuery(theme.breakpoints.down(1150));
 
@@ -81,12 +83,41 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const handleSignOut = () => {
+    signOut();
+    localStorage.removeItem("apiResponseData");
+  };
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const fetchCartItems = async () => {
+    if (session) {
+      const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
+      try {
+        const response = await axios.get(
+          `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}`,
+          { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
+        );
+        setCartProducts(response.data.Items);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
+
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
 
   // LOGIN AND MINICART DRAWER
   const DIALOG_DRAWER = (
@@ -152,7 +183,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
               </Box>
 
               <Box component={Button} onClick={toggleSidenav}>
-                <Badge badgeContent={state.cart.length} color="primary">
+                <Badge color="primary">
                   <Icon.CartBag sx={ICON_STYLE} />
                 </Badge>
               </Box>
@@ -247,28 +278,11 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
                   bgcolor="grey.200"
                 >
                   <p style={{ fontSize: "10px", marginLeft: "5px" }}>
-                    Ola! {session.user.Name}
+                    Ola! {session?.user?.Name}
                   </p>
-                  <Box color={"grey"} component={IconButton}>
-                    <PersonOutline />
-                  </Box>
-                </Box>
-              </Tooltip>
-              <Tooltip title="Área do Aluno">
-                <Box
-                  p={1.25}
-                  bgcolor="grey.200"
-                  color={"grey"}
-                  component={Button}
-                >
-                  <Link
-                    href={
-                      "https://aluno.meucurso.com.br/Account/Login?returnUrl=/BIPEStore/Index/"
-                    }
-                    target="_blank"
-                  >
-                    <School />
-                  </Link>
+                  {/* <Box color={"grey"} component={IconButton}> */}
+                  <PersonOutline sx={{ color: "grey", margin: 1 }} />
+                  {/* </Box> */}
                 </Box>
               </Tooltip>
               <Menu
@@ -319,7 +333,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
                   </ListItemIcon>
                   Configurações
                 </MenuItem>
-                <MenuItem onClick={() => signOut()}>
+                <MenuItem onClick={handleSignOut}>
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>
@@ -328,7 +342,24 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
               </Menu>
             </>
           )}
-          <Badge badgeContent={state.cart.length} color="primary">
+          <Tooltip title="Área do Aluno">
+            <Link
+              href={
+                "https://aluno.meucurso.com.br/Account/Login?returnUrl=/BIPEStore/Index/"
+              }
+              target="_blank"
+            >
+              <Box
+                p={1.25}
+                bgcolor="grey.200"
+                color={"grey"}
+                component={Button}
+              >
+                <School />
+              </Box>
+            </Link>
+          </Tooltip>
+          <Badge color="primary">
             <Tooltip title="Carrinho">
               <Box
                 color={"grey"}

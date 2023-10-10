@@ -27,10 +27,10 @@ const CheckoutNavLayout: FC<CheckoutNavLayoutProps> = ({ children }) => {
         router.push("/cart");
         break;
       case 1:
-        router.push("/checkout");
+        router.push("/payment");
         break;
       case 2:
-        router.push("/payment");
+        router.push("/checkout");
         break;
       case 3:
         router.push("/orders");
@@ -45,10 +45,10 @@ const CheckoutNavLayout: FC<CheckoutNavLayoutProps> = ({ children }) => {
       case "/cart":
         setSelectedStep(1);
         break;
-      case "/checkout":
+      case "/payment":
         setSelectedStep(2);
         break;
-      case "/payment":
+      case "/checkout":
         setSelectedStep(3);
         break;
       default:
@@ -79,7 +79,6 @@ const CheckoutNavLayout: FC<CheckoutNavLayoutProps> = ({ children }) => {
 
 const stepperList = [
   { title: "Carrinho", disabled: false },
-  { title: "Detalhes", disabled: false },
   { title: "Pagamento", disabled: false },
 ];
 

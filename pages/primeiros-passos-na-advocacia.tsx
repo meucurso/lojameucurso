@@ -96,7 +96,7 @@ export default PrimeirosPassosNaAdvocacia;
 
 export const getStaticProps: GetStaticProps = async () => {
   const featureProducts = await api.getFeatureProducts();
-  const indexBannersData = await api.getIndexBanners("10");
+  const indexBannersData = await api.getIndexBanners("28");
   return {
     props: {
       featureProducts,

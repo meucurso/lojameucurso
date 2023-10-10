@@ -43,7 +43,7 @@ const getProductBySlug = async (URLKey: any) => {
 
   return response.data;
 };
-const getProductsById = async (categoryId: string) => {
+const getProductsById = async (categoryId: any) => {
   const token = await getToken();
   const response = await axios.get(
     `https://apiecommerce.meucurso.com.br/Products/List?CategoryId=${categoryId}`,
@@ -133,6 +133,15 @@ const getCategories = async (): Promise<Category[]> => {
   return response.data;
 };
 
+const getProductsCategories = async (): Promise<Category[]> => {
+  const token = await getToken();
+  const response = await axios.get(
+    "https://apiecommerce.meucurso.com.br/ProductCategories/List",
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  return response.data;
+};
+
 const getIndexBanners = async (id: string): Promise<Banner[]> => {
   const token = await getToken();
   const response = await axios.get(
@@ -205,4 +214,5 @@ export default {
   getProductsById,
   getProductsByName,
   getCartItems,
+  getProductsCategories,
 };

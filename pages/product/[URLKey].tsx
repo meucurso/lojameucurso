@@ -27,7 +27,6 @@ type ProductDetailsProps = {
   singleProduct: Product;
 };
 
-// Função para atualizar a propriedade Selected
 const updateChildrenSelected = (item) => {
   const updatedItem = { ...item };
 
@@ -72,6 +71,8 @@ const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
     return <h1>Carregando...</h1>;
   }
 
+  console.log(singleProduct);
+
   return (
     <ShopLayout1>
       <SEO
@@ -97,7 +98,6 @@ const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
           {selectedOption === 0 && (
             <ProductDescription product={updatedProduct} />
           )}
-          {/* {selectedOption === 1 && <ProductReview />} */}
         </Box>
       </Container>
     </ShopLayout1>
@@ -121,7 +121,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const products = await api.getProducts();
 
   const paths = products.map((product: any) => ({
-    params: { URLKey: product.URLKey },
+    params: { URLKey: String(product.URLKey) },
   }));
 
   return {
@@ -129,5 +129,4 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: false,
   };
 };
-
 export default ProductDetails;
