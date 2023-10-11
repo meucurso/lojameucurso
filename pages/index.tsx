@@ -45,11 +45,11 @@ const IndexPage: NextPage<IndexPageProps> = (props) => {
 
         <Section1 carouselData={props.indexBannersData} />
 
-        {/* SERVICE CARDS */}
-        <Section2 serviceList={props.serviceList} />
-
         {/* BEST SELLING CATEGORIES */}
         <Section3 categories={props.categories} />
+
+        {/* SERVICE CARDS */}
+        <Section2 serviceList={props.serviceList} />
 
         {/* BEST SELLING PRODUCTS */}
         <Section4 products={props.products} />
@@ -90,7 +90,7 @@ const IndexPage: NextPage<IndexPageProps> = (props) => {
 export const getStaticProps: GetStaticProps = async () => {
   const blogs = await api.getBlogs();
   const brands = await api.getBrands();
-  const products = await api.getProducts();
+  const products = await api.getProductsById("145");
   const serviceList = await api.getServices();
   const categories = await api.getCategories();
   const saleProducts = await api.getSaleProducts();

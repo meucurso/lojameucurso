@@ -14,7 +14,44 @@ const navigations = [
     icon: BalanceOutlinedIcon,
     title: "OAB 2ª Fase",
     href: "/cursos-oab-2fase",
-    menuComponent: "MegaMenu1",
+    menuComponent: "MegaMenu2",
+    menuData: [
+      {
+        title: "Administrativo",
+        href: "/searchCategory?CategoryId=5",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "Civil",
+        href: "/searchCategory?CategoryId=6",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "Constitucional",
+        href: "/searchCategory?CategoryId=7",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "Empresarial",
+        href: "/searchCategory?CategoryId=8",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "Penal",
+        href: "/searchCategory?CategoryId=9",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "Trabalho",
+        href: "/searchCategory?CategoryId=10",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "Tributário",
+        href: "/searchCategory?CategoryId=11",
+        megaMenu: "MegaMenu1",
+      },
+    ],
   },
 
   {
@@ -25,7 +62,7 @@ const navigations = [
     menuData: [
       {
         title: "Cursos",
-        href: "/searchCategory?CategoryId=98",
+        href: "/searchCategory?CategoryId=3",
         megaMenu: "MegaMenu1",
       },
       {
@@ -46,6 +83,11 @@ const navigations = [
     href: "/concursos-publicos",
     menuComponent: "MegaMenu2",
     menuData: [
+      {
+        title: "Carreiras Policiais",
+        href: "/searchCategory?CategoryId=137",
+        megaMenu: "MegaMenu1",
+      },
       {
         title: "Tribunais",
         href: "/searchCategory?CategoryId=139",

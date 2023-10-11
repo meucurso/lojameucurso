@@ -313,7 +313,7 @@ const PaymentForm: FC = () => {
                     fullWidth
                     name="month_exp_date"
                     label="Mês de expiração"
-                    placeholder="MM/YY"
+                    placeholder="MM"
                     onBlur={handleBlur}
                     onChange={(e) => formatMonthExpiration(e.target.value)}
                     value={values.month_exp_date}
@@ -328,7 +328,7 @@ const PaymentForm: FC = () => {
                     fullWidth
                     name="year_exp_date"
                     label="Ano de expiração"
-                    placeholder="MM/YY"
+                    placeholder="AAAA"
                     onBlur={handleBlur}
                     onChange={(e) => formatYearExpiration(e.target.value)}
                     value={values.year_exp_date}
@@ -366,7 +366,7 @@ const PaymentForm: FC = () => {
                     name="cvc"
                     onBlur={handleBlur}
                     value={values.cvc}
-                    label="CVC"
+                    label="CVV"
                     onChange={(e) => formatCVC(e.target.value)}
                     helperText={(touched.cvc && errors.cvc) as string}
                   />

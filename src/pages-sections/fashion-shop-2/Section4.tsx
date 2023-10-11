@@ -25,7 +25,7 @@ const Section4: FC<Section4Props> = ({ products }) => {
   return (
     <Container sx={{ mt: 8 }}>
       <H2 textAlign="center" mb={4}>
-        Cursos Mais Vendidos
+        Cursos Em Destaque
       </H2>
 
       <Carousel

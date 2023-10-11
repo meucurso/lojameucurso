@@ -12,6 +12,7 @@ import {
 type InitialState = { cart: CartItem[] };
 
 export type CartItem = {
+  Selected?: any;
   OriginalPrice?: number;
   SmallImageUrl?: string;
   ProductName?: string;

@@ -35,7 +35,9 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { useSession, signOut } from "next-auth/react";
+import HelpIcon from "@mui/icons-material/Help";
 import axios from "axios";
+import BipeIcon from "components/icons/BipeIcon";
 
 // styled component
 export const HeaderWrapper = styled(Box)(({ theme }) => ({
@@ -182,7 +184,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
               </Box>
 
               <Box component={Button} onClick={toggleSidenav}>
-                <Badge color="primary">
+                <Badge badgeContent={state.cart.length} color="primary">
                   <Icon.CartBag sx={ICON_STYLE} />
                 </Badge>
               </Box>
@@ -354,9 +356,24 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
                 color={"grey"}
                 component={Button}
               >
-                <School />
+                {/* <img
+                  src="assets/iconStudent1.png"
+                  alt="botão área do aluno"
+                /> */}
+                <BipeIcon />
               </Box>
             </Link>
+          </Tooltip>
+          <Tooltip title="Central de Ajuda">
+            <Box
+              color={"grey"}
+              p={1.25}
+              bgcolor="grey.200"
+              component={Button}
+              href="/central-de-ajuda"
+            >
+              <HelpIcon />
+            </Box>
           </Tooltip>
           <Badge color="primary">
             <Tooltip title="Carrinho">

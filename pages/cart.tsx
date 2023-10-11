@@ -552,7 +552,7 @@ const Cart: NextPage = () => {
                         variant="contained"
                         LinkComponent={Link}
                       >
-                        Realizar Checkout
+                        Finalizar Compra
                       </Button>
                     </Card>
                   </Grid>

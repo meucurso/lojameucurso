@@ -98,7 +98,7 @@ const PosGraduacao = (props) => {
 export default PosGraduacao;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const postGraduateProducts = await api.getProductsById("97");
+  const postGraduateProducts = await api.getProductsById("3");
   const indexBannersData = await api.getIndexBanners("9");
 
   return {
