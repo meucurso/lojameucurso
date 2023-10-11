@@ -271,15 +271,19 @@ const Navbar: FC<NavbarProps> = ({
             {/* <StyledNavLink href={"/primeiros-passos-na-advocacia"}>
               Primeiros Passos
             </StyledNavLink> */}
+            <StyledNavLink href={"/searchCategory?CategoryId=133"}>
+              Planos de assinatura
+            </StyledNavLink>
+            <StyledNavLink href={""}>Livraria</StyledNavLink>
             <StyledNavLink href={"/embaixadores"}>
               Embaixadores / Parceiros
             </StyledNavLink>
             <StyledNavLink href={"https://blog.meucurso.com.br"}>
               Blog MeuCurso
             </StyledNavLink>
-            <StyledNavLink href={"/central-de-ajuda"}>
+            {/* <StyledNavLink href={"/central-de-ajuda"}>
               Central de Ajuda
-            </StyledNavLink>
+            </StyledNavLink> */}
           </FlexBox>
         </InnerContainer>
       ) : (

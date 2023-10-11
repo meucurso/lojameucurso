@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FC, useState } from "react";
 import { useSnackbar } from "notistack";
-import { Box, Button, IconButton, Rating, styled } from "@mui/material";
+import { Box, Button, IconButton, Chip, styled } from "@mui/material";
 import {
   AddShoppingCart,
   Favorite,
@@ -24,8 +24,21 @@ const Card = styled(Box)({
   },
 });
 
+const StyledChip = styled(Chip)({
+  zIndex: 1,
+  top: "10px",
+  left: "10px",
+  paddingLeft: 3,
+  paddingRight: 3,
+  fontWeight: 600,
+  fontSize: "10px",
+  position: "absolute",
+});
+
 const CardMedia = styled(Box)(({ theme }) => ({
   maxHeight: 300,
+  aspectRatio: "3/2",
+  objectFit: "cover",
   cursor: "pointer",
   overflow: "hidden",
   position: "relative",
@@ -61,23 +74,19 @@ type ProductCardProps = { product: Product };
 // ==============================================================
 
 const ProductCard18: FC<ProductCardProps> = ({ product }) => {
-  const { state, dispatch } = useAppContext();
   const [openDialog, setOpenDialog] = useState(false);
 
   return (
     <Card>
       <CardMedia>
+        <StyledChip color="primary" size="small" label={`25% off`} />
         <Link href={`/product/${product.URLKey}`}>
           <img
             alt={product.Name}
             loading="lazy"
             src={product.SmallImageUrl}
             width={"100%"}
-            height={220}
-            style={{
-              objectFit: "contain",
-              aspectRatio: "16/9",
-            }}
+            height={"100%"}
           />
         </Link>
 

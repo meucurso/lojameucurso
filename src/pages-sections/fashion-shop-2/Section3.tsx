@@ -12,15 +12,14 @@ type Section3Props = { categories: Category[] };
 const Section3: FC<Section3Props> = ({ categories }) => {
   return (
     <Container sx={{ mt: 8 }}>
-      <H2 textAlign="center" mb={4}>
-        Categorias Mais Vendidas
-      </H2>
-
       <Grid container spacing={3}>
         {categories.map((item) => (
           <Grid item md={3} sm={6} xs={12} key={item.id}>
             <a href={item?.url}>
-              <CategoryCard1 image={item.image} title={item.name} />
+              <CategoryCard1
+                image={item.image}
+                title={"Conheça os cursos"}
+              />
             </a>
           </Grid>
         ))}

@@ -95,7 +95,10 @@ const CursosOAB1Fase = (props) => {
               </Grid>
             </Grid>
           </Container>
-          <Section6 products={props.oabProducts} />
+          <h1 style={{ textAlign: "center" }}>Cursos 39º Exame</h1>
+          <Section6 products={props.oab39Products} />
+          <h1 style={{ textAlign: "center" }}>Cursos 40º Exame</h1>
+          <Section6 products={props.oab40Products} />
           <Box sx={{ backgroundColor: "#fff" }}>
             <Container>
               <Grid container spacing={2} justifyContent={"center"}>
@@ -202,11 +205,13 @@ const CursosOAB1Fase = (props) => {
 export default CursosOAB1Fase;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const oabProducts = await api.getProductsById("129");
+  const oab39Products = await api.getProductsById("128");
+  const oab40Products = await api.getProductsById("129");
   const indexBannersData = await api.getIndexBanners("5");
   return {
     props: {
-      oabProducts,
+      oab39Products,
+      oab40Products,
       indexBannersData,
     },
     revalidate: 25,

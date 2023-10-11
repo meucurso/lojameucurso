@@ -28,7 +28,8 @@ const CategoryTitle = styled(Box)({
   borderRadius: "2px",
   position: "absolute",
   transition: "all 0.3s",
-  backgroundColor: "rgba(255,255,255, .67)",
+  color: "transparent",
+  // backgroundColor: "rgba(255,255,255, .67)",
 });
 
 // ============================================================
