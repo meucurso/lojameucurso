@@ -1,5 +1,5 @@
 import { GetStaticProps, NextPage } from "next";
-import { Box, useTheme } from "@mui/material";
+import { Box, useTheme, styled } from "@mui/material";
 import SEO from "components/SEO";
 import ShopLayout1 from "components/layouts/ShopLayout1";
 import Section1 from "pages-sections/fashion-shop-2/Section1";
@@ -13,6 +13,11 @@ import Product from "models/Product.model";
 import Service from "models/Service.model";
 import Category from "models/Category.model";
 import api from "utils/__api__/meu-curso";
+
+import { hasCookie, setCookie } from "cookies-next";
+
+import { useState, useEffect } from "react";
+import { Iron } from "@mui/icons-material";
 
 // =======================================================
 type IndexPageProps = {
@@ -29,9 +34,50 @@ type IndexPageProps = {
   indexBannersData: any;
 };
 // =======================================================
+const Cookie = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  position: "fixed",
+  width: "100%",
+  padding: 1,
+  backgroundColor: " rgba(17, 25, 40, 0.75)",
+  bottom: 0,
+  backdropFilter: "blur(5px) saturate(180%)",
+  "& button": {
+    backgroundColor: "transparent",
+    color: "white",
+    cursor: "pointer",
+    padding: "5px",
+    height: "30px",
+    borderRadius: "3px",
+    marginLeft: "15px",
+    border: "none",
+    transition: "0.3s",
+    ":hover": {
+      color: "black",
+      backgroundColor: "white",
+    },
+  },
+});
+
+// =======================================================
 
 const IndexPage: NextPage<IndexPageProps> = (props) => {
   const theme = useTheme();
+
+  const [showConsent, setShowConsent] = useState(false);
+  const [consentModal, setConsentModal] = useState(false);
+
+  useEffect(() => {
+    setShowConsent(hasCookie("localConsent"));
+  }, []);
+
+  const acceptCookie = () => {
+    setShowConsent(true);
+    setConsentModal(true);
+    setCookie("localConsent", "true", {});
+  };
 
   return (
     <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
@@ -83,6 +129,18 @@ const IndexPage: NextPage<IndexPageProps> = (props) => {
 
       {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
       {/* <Setting /> */}
+      {!consentModal && (
+        <>
+          <Cookie>
+            <p style={{ color: "white" }}>
+              Utilizamos os cookies para melhorar a sua experiência. Para
+              cumprir com a nova diretiva de privacidade, nós precisamos
+              pedir seu consentimento para definir os cookies.
+            </p>
+            <button onClick={() => acceptCookie()}>Aceitar cookies</button>
+          </Cookie>
+        </>
+      )}
     </ShopLayout1>
   );
 };
