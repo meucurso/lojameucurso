@@ -27,25 +27,32 @@ export function Section11({}: Section11Props) {
           <H2>Aplicativos MeuCurso</H2>
         </Grid>
         <Grid item sm={12} md={6} justifyContent={"center"}>
-          <Images
-            width={300}
-            height={"auto"}
-            src="icone_nomenalista.png"
-            alt="icone aplicativo nomenalista"
-          />
+          <a
+            target="_blank"
+            href="https://campanhas.meucurso.com.br/nomenalista.html"
+          >
+            <Images
+              width={300}
+              height={"auto"}
+              src="icone_nomenalista.png"
+              alt="icone aplicativo nomenalista"
+            />
+          </a>
         </Grid>
         <Grid item md={6} justifyContent={"center"}>
-          <Images
-            style={{
-              objectFit: "cover",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-            width={300}
-            height={240}
-            src="icone_verticalizado.png"
-            alt="icone aplicativo nomenalista"
-          />
+          <a target="_blank" href="">
+            <Images
+              style={{
+                objectFit: "cover",
+                borderRadius: "5px",
+                cursor: "pointer",
+              }}
+              width={300}
+              height={240}
+              src="icone_verticalizado.png"
+              alt="icone aplicativo nomenalista"
+            />
+          </a>
         </Grid>
       </Grid>
     </Container>

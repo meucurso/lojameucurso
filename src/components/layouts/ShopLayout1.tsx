@@ -6,6 +6,7 @@ import Header from "components/header/Header";
 import Navbar from "components/navbar/Navbar";
 import { MobileNavigationBar } from "components/mobile-navigation";
 import SearchInputWithCategory from "components/search-box/SearchInputWithCategory";
+import styled from "@emotion/styled";
 
 /**
  *  Used in:
@@ -25,6 +26,13 @@ type ShopLayout1Props = {
   showNavbar?: boolean;
   topbarBgColor?: string;
 };
+// ===================================================
+const WhatsApp = styled("img")({
+  position: "fixed",
+  bottom: "10px",
+  right: "10px",
+});
+
 // ===================================================
 
 const ShopLayout1: FC<ShopLayout1Props> = ({
@@ -62,7 +70,13 @@ const ShopLayout1: FC<ShopLayout1Props> = ({
 
       {/* SMALL DEVICE BOTTOM NAVIGATION */}
       <MobileNavigationBar />
-
+      {/* WHATSAPP ICON */}
+      <a
+        target="_blank"
+        href="https://web.whatsapp.com/send?l=&phone=5511913494089&text=Oi! Gostaria de saber mais sobre alguns cursos, pode me ajudar?"
+      >
+        <WhatsApp src="icone_whatsapp.png" width={60} height={60} />
+      </a>
       {/* FOOTER */}
       <Footer1 />
     </Fragment>
