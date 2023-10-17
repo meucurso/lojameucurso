@@ -30,6 +30,7 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
@@ -38,6 +39,7 @@ import { useSession, signOut } from "next-auth/react";
 import HelpIcon from "@mui/icons-material/Help";
 import axios from "axios";
 import BipeIcon from "components/icons/BipeIcon";
+import { useCart } from "contexts/CartContext";
 
 // styled component
 export const HeaderWrapper = styled(Box)(({ theme }) => ({
@@ -50,6 +52,19 @@ export const HeaderWrapper = styled(Box)(({ theme }) => ({
     height: layoutConstant.mobileHeaderHeight,
   },
 }));
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "none",
+  borderRadius: "10px",
+  boxShadow: 24,
+  p: 4,
+};
 
 const StyledContainer = styled(Container)({
   gap: 2,
@@ -69,11 +84,11 @@ type HeaderProps = {
 
 const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
   const theme = useTheme();
-  const { state } = useAppContext();
+  const [userConfigs, setUserConfigs] = useState<any>();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sidenavOpen, setSidenavOpen] = useState(false);
   const [searchBarOpen, setSearchBarOpen] = useState(false);
-  const [cartProducts, setCartProducts] = useState<any>([]);
+  // const [cartProducts, setCartProducts] = useState<any>([]);
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
   const downMd = useMediaQuery(theme.breakpoints.down(1150));
 
@@ -82,9 +97,32 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
   const toggleSearchBar = () => setSearchBarOpen(!searchBarOpen);
 
   const { data: session } = useSession();
+  const { cartProducts, setCartProducts, fetchCartItems } = useCart();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const fetchUserConfigs = async () => {
+      await axios
+        .get(
+          `https://apiecommerce.meucurso.com.br/Student/%7BcustomerId%7D?customerId=${session?.user?.CustomerId}`,
+          { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
+        )
+        .then((response) => setUserConfigs(response.data))
+        .catch((err) => console.log(err));
+    };
+    fetchUserConfigs();
+    fetchCartItems();
+  }, [
+    fetchCartItems,
+    session?.user?.CustomerId,
+    session?.user?.Token,
+    setUserConfigs,
+  ]);
 
   const handleSignOut = () => {
     signOut();
@@ -97,28 +135,6 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  useEffect(() => {
-    const fetchCartItems = async () => {
-      if (session) {
-        const cartData = JSON.parse(
-          localStorage.getItem("apiResponseData")
-        );
-        try {
-          const response = await axios.get(
-            `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}`,
-            {
-              headers: { Authorization: `Bearer ${session?.user?.Token}` },
-            }
-          );
-          setCartProducts(response.data.Items);
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    };
-    fetchCartItems();
-  }, [session]);
 
   // LOGIN AND MINICART DRAWER
   const DIALOG_DRAWER = (
@@ -174,9 +190,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
 
               <Box pt={2} color={"grey"} component={Button}>
                 <Link
-                  href={
-                    "https://aluno.meucurso.com.br/Account/Login?returnUrl=/BIPEStore/Index/"
-                  }
+                  href={"https://aluno.meucurso.com.br/"}
                   target="_blank"
                 >
                   <School />
@@ -184,7 +198,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
               </Box>
 
               <Box component={Button} onClick={toggleSidenav}>
-                <Badge badgeContent={state.cart.length} color="primary">
+                <Badge badgeContent={cartProducts.length} color="primary">
                   <Icon.CartBag sx={ICON_STYLE} />
                 </Badge>
               </Box>
@@ -222,6 +236,57 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
   return (
     <HeaderWrapper className={clsx(className)}>
       <StyledContainer>
+        <Modal
+          open={openModal}
+          onClose={handleCloseModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              textAlign={"center"}
+            >
+              Configurações
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <p>
+                {" "}
+                <strong>Nome:</strong> {userConfigs?.FirstName}
+              </p>
+              <p>
+                {" "}
+                <strong>Sobrenome:</strong> {userConfigs?.LastName}
+              </p>
+              <p>
+                <strong>Email:</strong> {userConfigs?.Email}
+              </p>
+              <p>
+                {" "}
+                <strong>CPF:</strong> {userConfigs?.CPF}
+              </p>
+              <p>
+                <strong>Telefone Principal:</strong>{" "}
+                {userConfigs?.MainPhone}
+              </p>
+            </Typography>
+            <Button
+              style={{ display: "block", margin: "0 auto " }}
+              variant="outlined"
+              color="success"
+            >
+              <a
+                target="_blank"
+                href="https://aluno.meucurso.com.br/Account/MyAccount"
+              >
+                {" "}
+                Editar
+              </a>
+            </Button>
+          </Box>
+        </Modal>
         {/* LEFT CONTENT - LOGO AND CATEGORY */}
         <FlexBox mr={2} minWidth="170px" alignItems="center">
           <Link href="/">
@@ -328,7 +393,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
               <Avatar /> My account
             </MenuItem> */}
 
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleOpenModal}>
                   <ListItemIcon>
                     <Settings fontSize="small" />
                   </ListItemIcon>
@@ -344,12 +409,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
             </>
           )}
           <Tooltip title="Área do Aluno">
-            <Link
-              href={
-                "https://aluno.meucurso.com.br/Account/Login?returnUrl=/BIPEStore/Index/"
-              }
-              target="_blank"
-            >
+            <Link href={"https://aluno.meucurso.com.br/"} target="_blank">
               <Box
                 p={1.25}
                 bgcolor="grey.200"
@@ -375,7 +435,8 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
               <HelpIcon />
             </Box>
           </Tooltip>
-          <Badge color="primary">
+
+          <Badge badgeContent={cartProducts?.length} color="primary">
             <Tooltip title="Carrinho">
               <Box
                 color={"grey"}

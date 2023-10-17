@@ -2,6 +2,15 @@
 
 module.exports = {
   // i18n,
+  async redirects() {
+    return [
+      {
+        source: "/sobre",
+        destination: "/parceiros",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
