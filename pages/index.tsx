@@ -1,5 +1,5 @@
 import { GetStaticProps, NextPage } from "next";
-import { Box, useTheme } from "@mui/material";
+import { Box, useTheme, styled } from "@mui/material";
 import SEO from "components/SEO";
 import ShopLayout1 from "components/layouts/ShopLayout1";
 import Section1 from "pages-sections/fashion-shop-2/Section1";
@@ -13,6 +13,11 @@ import Product from "models/Product.model";
 import Service from "models/Service.model";
 import Category from "models/Category.model";
 import api from "utils/__api__/meu-curso";
+
+import { useState, useEffect } from "react";
+import { Iron } from "@mui/icons-material";
+import { CookieConsent } from "components/CookieConsent";
+import { Section11 } from "pages-sections/fashion-shop-2/Section11";
 
 // =======================================================
 type IndexPageProps = {
@@ -28,6 +33,8 @@ type IndexPageProps = {
   bestWeekProducts: Product[];
   indexBannersData: any;
 };
+// =======================================================
+
 // =======================================================
 
 const IndexPage: NextPage<IndexPageProps> = (props) => {
@@ -53,6 +60,8 @@ const IndexPage: NextPage<IndexPageProps> = (props) => {
 
         {/* BEST SELLING PRODUCTS */}
         <Section4 products={props.products} />
+
+        <Section11 />
 
         {/* OFFER BANNERS */}
         {/* <Section5 /> */}
@@ -83,6 +92,7 @@ const IndexPage: NextPage<IndexPageProps> = (props) => {
 
       {/* SETTINGS IS USED ONLY FOR DEMO, YOU CAN REMOVE THIS */}
       {/* <Setting /> */}
+      <CookieConsent />
     </ShopLayout1>
   );
 };

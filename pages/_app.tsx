@@ -20,6 +20,8 @@ import { SessionProvider } from "next-auth/react";
 import "nprogress/nprogress.css";
 import "simplebar-react/dist/simplebar.min.css";
 import "../src/__server__";
+import { CartProvider } from "contexts/CartContext";
+import { StrictMode } from "react";
 
 //Binding events.
 Router.events.on("routeChangeStart", () => nProgress.start());
@@ -66,11 +68,13 @@ const App = (props: MyAppProps) => {
       <SessionProvider session={session}>
         <SettingsProvider>
           <AppProvider>
-            <MuiTheme>
-              <SnackbarProvider>
-                <RTL>{getLayout(<Component {...pageProps} />)}</RTL>
-              </SnackbarProvider>
-            </MuiTheme>
+            <CartProvider>
+              <MuiTheme>
+                <SnackbarProvider>
+                  <RTL>{getLayout(<Component {...pageProps} />)}</RTL>
+                </SnackbarProvider>
+              </MuiTheme>
+            </CartProvider>
           </AppProvider>
         </SettingsProvider>
       </SessionProvider>

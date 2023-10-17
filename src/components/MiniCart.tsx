@@ -20,6 +20,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Skeleton from "@mui/material/Skeleton";
 import axios from "axios";
+import { useCart } from "contexts/CartContext";
 
 // =========================================================
 type MiniCartProps = { toggleSidenav: () => void };
@@ -32,10 +33,12 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
   const { palette } = useTheme();
   const { state, dispatch } = useAppContext();
   const { data: session } = useSession();
-  const [cartProducts, setCartProducts] = useState<any>([]);
+  // const [cartProducts, setCartProducts] = useState<any>([]);
   const [localProducts, setLocalProducts] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const cartList = state.cart;
+
+  const { cartProducts, setCartProducts } = useCart();
 
   const getTotalPrice = () => {
     return cartProducts.reduce(
@@ -111,7 +114,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
 
     fetchCartItems();
     fetchLocalItems();
-  }, [session]);
+  }, [session, setCartProducts]);
 
   return (
     <>

@@ -26,7 +26,7 @@ const Section1: FC<Props> = ({ carouselData }) => {
           {carouselData
             ?.sort((a, b) => (a.Order > b.Order ? 1 : -1))
             .map((item, ind) => (
-              <Link key={ind} href={item?.URL}>
+              <a key={ind} href={item?.URL}>
                 <CarouselCard1
                   buttonColor="dark"
                   title={item.title}
@@ -37,7 +37,7 @@ const Section1: FC<Props> = ({ carouselData }) => {
                   description={item.description}
                   alt={item.title}
                 />
-              </Link>
+              </a>
             ))}
         </Carousel>
       </Container>

@@ -75,11 +75,21 @@ type ProductCardProps = { product: Product };
 
 const ProductCard18: FC<ProductCardProps> = ({ product }) => {
   const [openDialog, setOpenDialog] = useState(false);
+  const discount = product.Price - product.SpecialPrice;
+  const dicountPercent = discount / product.Price;
+  const totalPercentDiscount = dicountPercent * 100;
 
   return (
     <Card>
       <CardMedia>
-        <StyledChip color="primary" size="small" label={`25% off`} />
+        {product.Price !== product.SpecialPrice && (
+          <StyledChip
+            color="primary"
+            size="small"
+            label={`${totalPercentDiscount.toFixed()}% OFF`}
+          />
+        )}
+
         <Link href={`/product/${product.URLKey}`}>
           <img
             alt={product.Name}

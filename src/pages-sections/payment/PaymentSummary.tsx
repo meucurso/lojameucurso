@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Divider } from "@mui/material";
 import Card1 from "components/Card1";
 import { FlexBetween } from "components/flex-box";
-import { Paragraph } from "components/Typography";
+import { Paragraph, Span } from "components/Typography";
 import { currency } from "lib";
 import { useState, useCallback, useEffect } from "react";
 
@@ -53,10 +53,23 @@ const PaymentSummary: FC = () => {
 
       <Divider sx={{ mb: 2 }} />
       <FlexBetween mb={1}>
-        <Paragraph color="grey.600">Total:</Paragraph>
-        <Paragraph fontSize={18} fontWeight={600} lineHeight={1}>
-          {currency(localProducts.Price)}
-        </Paragraph>
+        <Span color="grey.600">Total:</Span>
+
+        <Span fontSize={18} fontWeight={600} lineHeight="1">
+          <div>
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "end",
+              }}
+            >
+              {currency(localProducts.Price)}
+            </p>
+            <p style={{ fontSize: "13px" }}>
+              ou em até 12x de {currency(localProducts.Price / 12)}
+            </p>
+          </div>
+        </Span>
       </FlexBetween>
     </Card1>
   );

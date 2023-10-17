@@ -25,6 +25,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { LoadingButton } from "@mui/lab";
 import { Router, useRouter } from "next/router";
+import { useCart } from "contexts/CartContext";
 
 const LinkHelper = styled(Link)({
   transition: "0.2s",
@@ -40,7 +41,7 @@ const Cart: NextPage = () => {
   const [address, setAddress] = useState("");
   const [cep, setCep] = useState("");
   const [cepValue, setCepValue] = useState<any>();
-  const [cartProducts, setCartProducts] = useState<any>([]);
+  // const [cartProducts, setCartProducts] = useState<any>([]);
   const [localProducts, setLocalProducts] = useState<any>([]);
   const [studentAddress, setStudentAddress] = useState<any>([]);
   const [coupoms, setCoupoms] = useState<any>();
@@ -52,6 +53,8 @@ const Cart: NextPage = () => {
   const [loadingAddress, setLoadingAddress] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [pickupInStore, setPickupInStore] = useState(false);
+
+  const { cartProducts, setCartProducts, fetchCartItems } = useCart();
 
   const getSubTotalPrice = () =>
     cartProducts.reduce((accum, item) => accum + item.Price * item.Qty, 0);
@@ -84,44 +87,44 @@ const Cart: NextPage = () => {
     setLocalProducts(response);
   }, []);
 
-  const fetchCartItems = useCallback(async () => {
-    if (session) {
-      setLoading(true);
-      const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
-      try {
-        const response = await axios.get(
-          `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}&StoreId=${cartData.StoreId}`,
-          { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
-        );
-        setLoading(false);
+  // const fetchCartItems = useCallback(async () => {
+  //   if (session) {
+  //     setLoading(true);
+  //     const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
+  //     try {
+  //       const response = await axios.get(
+  //         `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}`,
+  //         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
+  //       );
+  //       setLoading(false);
 
-        const processedData = response.data.Items.map((item) => {
-          if (item.OrderItemProductLevelId === 1) {
-            const matchingItem = response.data.Items.find(
-              (otherItem) =>
-                otherItem.ParentOrderItemId === item.OrderItemId
-            );
-            if (matchingItem) {
-              if (matchingItem.ProductGroupId === 3) {
-                item.Price = matchingItem.Price;
-              } else if (matchingItem.ProductGroupId === 2) {
-                item.Price += matchingItem.Price;
-              }
-            }
-          }
-          return item;
-        });
+  //       const processedData = response.data.Items.map((item) => {
+  //         if (item.OrderItemProductLevelId === 1) {
+  //           const matchingItem = response.data.Items.find(
+  //             (otherItem) =>
+  //               otherItem.ParentOrderItemId === item.OrderItemId
+  //           );
+  //           if (matchingItem) {
+  //             if (matchingItem.ProductGroupId === 3) {
+  //               item.Price = matchingItem.Price;
+  //             } else if (matchingItem.ProductGroupId === 2) {
+  //               item.Price += matchingItem.Price;
+  //             }
+  //           }
+  //         }
+  //         return item;
+  //       });
 
-        setCartProducts(
-          processedData.filter(
-            (item) => item.OrderItemProductLevelId === 1
-          )
-        );
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }, [session]);
+  //       setCartProducts(
+  //         processedData.filter(
+  //           (item) => item.OrderItemProductLevelId === 1
+  //         )
+  //       );
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+  // }, [session, setCartProducts]);
 
   const handleShippingDetails = async (cepValue) => {
     setLoadingButton(true);
@@ -414,9 +417,35 @@ const Cart: NextPage = () => {
                           lineHeight="1"
                         >
                           {shippingPrice === undefined ? (
-                            <>{currency(getSubTotalPrice())}</>
+                            <div>
+                              <p
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "end",
+                                }}
+                              >
+                                {currency(getSubTotalPrice())}
+                              </p>
+                              <p style={{ fontSize: "13px" }}>
+                                ou em até 12x de{" "}
+                                {currency(getSubTotalPrice() / 12)}
+                              </p>
+                            </div>
                           ) : (
-                            <>{currency(getTotalPrice())}</>
+                            <div>
+                              <p
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "end",
+                                }}
+                              >
+                                {currency(getTotalPrice())}
+                              </p>
+                              <p style={{ fontSize: "13px" }}>
+                                ou em até 12x de{" "}
+                                {currency(getTotalPrice() / 12)}
+                              </p>
+                            </div>
                           )}
                         </Span>
                       </FlexBetween>

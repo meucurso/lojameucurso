@@ -14,6 +14,7 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import { LoadingButton } from "@mui/lab";
 import { useSnackbar } from "notistack";
+import { useCart } from "contexts/CartContext";
 
 // ================================================================
 type ProductIntroProps = { singleProduct: Product };
@@ -37,9 +38,16 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
   const [productChild, setProductChild] = useState(null);
   const [updatedFamilyTree, setUpdatedFamilyTree] = useState(null);
   const [selectedButtonId, setSelectedButtonId] = useState(null);
+  const { state, dispatch } = useAppContext();
+
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const { data: session } = useSession();
+
+  const { localProducts, setLocalProducts } = useCart();
+
+  // CHECK PRODUCT EXIST OR NOT IN THE CART
+  const cartItem = state.cart.find((item) => item.ProductId === ProductId);
 
   const [updatedPrice, setUpdatedPrice] = useState(
     singleProduct.SpecialPrice
@@ -149,6 +157,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
           setLoading(false);
           console.log(response.data);
           const responseData = response.data;
+          setLocalProducts(response.data);
           enqueueSnackbar("Produto adicionado no carrinho!", {
             variant: "success",
           });
@@ -215,6 +224,8 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
           </>
 
           <Box pt={1} mb={3}>
+            {(singleProduct.ProductGroupId === 3 ||
+              singleProduct.ProductGroupId === 2) && <p>A partir de </p>}
             <H2 color="primary.main" mb={0.5} lineHeight="1">
               12 x de {currency(updatedPrice / 12)} (PayPal)
             </H2>
@@ -223,20 +234,26 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
               {currency(updatedPrice)}
             </H2>
           </Box>
-
-          <LoadingButton
-            loading={loading}
-            color="primary"
-            type="submit"
-            variant="contained"
-            onClick={handleCartAmountChange(1)}
-            sx={{ mb: 4.5, px: "1.75rem", height: 40 }}
-            disabled={
-              hasUnselectedChildren(singleProduct) && !productChild
-            }
-          >
-            Adicionar ao Carrinho
-          </LoadingButton>
+          {!singleProduct.InStock && (
+            <Button variant="contained" disabled>
+              Fora de estoque
+            </Button>
+          )}
+          {singleProduct.InStock && (
+            <LoadingButton
+              loading={loading}
+              color="primary"
+              type="submit"
+              variant="contained"
+              onClick={handleCartAmountChange(1)}
+              sx={{ mb: 4.5, px: "1.75rem", height: 40 }}
+              disabled={
+                hasUnselectedChildren(singleProduct) && !productChild
+              }
+            >
+              Adicionar ao Carrinho
+            </LoadingButton>
+          )}
         </Grid>
       </Grid>
     </Box>
