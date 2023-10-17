@@ -2,7 +2,7 @@ import Shop from "./Shop.model";
 import Review from "./Review.model";
 
 interface Product {
-  InStock: boolean;
+  InStock?: boolean;
   DescriptionFileUrl?: any;
   SKU?: any;
   ProductGroupId?: any;
