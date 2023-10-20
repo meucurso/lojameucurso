@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import { Button, Card, Divider, Grid, TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import SEO from "components/SEO";
-import { Span } from "components/Typography";
+import { Paragraph, Span } from "components/Typography";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import ProductCard7 from "components/product-cards/ProductCard7";
 import CheckoutNavLayout from "components/layouts/CheckoutNavLayout";
@@ -34,14 +34,13 @@ const LinkHelper = styled(Link)({
   },
 });
 
-const Cart: NextPage = () => {
+const Carrinho: NextPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
 
   const [address, setAddress] = useState("");
   const [cep, setCep] = useState("");
   const [cepValue, setCepValue] = useState<any>();
-  // const [cartProducts, setCartProducts] = useState<any>([]);
   const [localProducts, setLocalProducts] = useState<any>([]);
   const [studentAddress, setStudentAddress] = useState<any>([]);
   const [coupoms, setCoupoms] = useState<any>();
@@ -68,17 +67,18 @@ const Cart: NextPage = () => {
 
   const fetchAddress = useCallback(async () => {
     setLoadingAddress(true);
-    try {
-      const response = await axios.get(
-        `http://apiecommerce.meucurso.com.br/Student/Address?CustomerId=${session?.user?.CustomerId}`,
-        { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
-      );
-      setLoadingAddress(false);
-      console.log(response.data);
-      setStudentAddress(response.data);
-    } catch (err) {
-      setLoadingAddress(false);
-      console.log(err);
+    if (session) {
+      try {
+        const response = await axios.get(
+          `http://apiecommerce.meucurso.com.br/Student/Address?CustomerId=${session?.user?.CustomerId}`,
+          { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
+        );
+        setLoadingAddress(false);
+        setStudentAddress(response.data);
+      } catch (err) {
+        setLoadingAddress(false);
+        console.log(err);
+      }
     }
   }, [session]);
 
@@ -86,45 +86,6 @@ const Cart: NextPage = () => {
     const response = JSON.parse(localStorage.getItem("apiResponseData"));
     setLocalProducts(response);
   }, []);
-
-  // const fetchCartItems = useCallback(async () => {
-  //   if (session) {
-  //     setLoading(true);
-  //     const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
-  //     try {
-  //       const response = await axios.get(
-  //         `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}`,
-  //         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
-  //       );
-  //       setLoading(false);
-
-  //       const processedData = response.data.Items.map((item) => {
-  //         if (item.OrderItemProductLevelId === 1) {
-  //           const matchingItem = response.data.Items.find(
-  //             (otherItem) =>
-  //               otherItem.ParentOrderItemId === item.OrderItemId
-  //           );
-  //           if (matchingItem) {
-  //             if (matchingItem.ProductGroupId === 3) {
-  //               item.Price = matchingItem.Price;
-  //             } else if (matchingItem.ProductGroupId === 2) {
-  //               item.Price += matchingItem.Price;
-  //             }
-  //           }
-  //         }
-  //         return item;
-  //       });
-
-  //       setCartProducts(
-  //         processedData.filter(
-  //           (item) => item.OrderItemProductLevelId === 1
-  //         )
-  //       );
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-  // }, [session, setCartProducts]);
 
   const handleShippingDetails = async (cepValue) => {
     setLoadingButton(true);
@@ -136,7 +97,6 @@ const Cart: NextPage = () => {
       )
       .then((response) => {
         setLoadingButton(false);
-        console.log(response.data);
         setCepValue(response.data);
       })
       .catch((err) => console.log(err));
@@ -153,8 +113,6 @@ const Cart: NextPage = () => {
       .then((response) => {
         setCoupoms(response.data);
         setCoupomText("Cupom aplicado!");
-        console.log(response.data);
-
         if (response.data === null) {
           setCoupomText("Cupom Inválido");
         }
@@ -254,6 +212,10 @@ const Cart: NextPage = () => {
       product.Product?.ProductTypeId === 2
   );
 
+  const billingAndShippingId = studentAddress.map(
+    (address) => address.StudentAddressId
+  );
+
   const handleCheckout = () => {
     const apiResponseData = JSON.parse(
       localStorage.getItem("apiResponseData")
@@ -262,6 +224,7 @@ const Cart: NextPage = () => {
       apiResponseData.Coupon = coupomValue;
       apiResponseData.OrderShippingPackages = shippingSEDEXInformations;
       apiResponseData.BillingAddressId = address;
+      apiResponseData.DigitalAdressId = billingAndShippingId[0];
       apiResponseData.ShippingAddressId = address;
       apiResponseData.Price = getTotalPrice();
       apiResponseData.SubTotalPrice = getSubTotalPrice();
@@ -283,6 +246,7 @@ const Cart: NextPage = () => {
       apiResponseData.Coupon = coupomValue;
       apiResponseData.OrderShippingPackages = [pickStore];
       apiResponseData.BillingAddressId = address;
+      apiResponseData.DigitalAdressId = billingAndShippingId[0];
       apiResponseData.ShippingAddressId = address;
       apiResponseData.Price = getTotalPrice();
       apiResponseData.SubTotalPrice = getSubTotalPrice();
@@ -294,17 +258,13 @@ const Cart: NextPage = () => {
         JSON.stringify(apiResponseData)
       );
     }
-    router.push("/payment");
-
-    console.log(apiResponseData);
+    router.push("/pagamento");
   };
 
   useEffect(() => {
     fetchCartItems();
     fetchLocalItems();
-    if (shippingProduct) {
-      fetchAddress();
-    }
+    fetchAddress();
   }, [fetchCartItems, fetchLocalItems, fetchAddress, shippingProduct]);
 
   return (
@@ -408,7 +368,7 @@ const Cart: NextPage = () => {
                           +{currency(shippingPrice)}
                         </Span>
                       </FlexBetween>
-                      <FlexBetween mb={2}>
+                      <FlexBetween>
                         <Span color="grey.600">Total:</Span>
 
                         <Span
@@ -441,14 +401,44 @@ const Cart: NextPage = () => {
                               >
                                 {currency(getTotalPrice())}
                               </p>
-                              <p style={{ fontSize: "13px" }}>
-                                ou em até 12x de{" "}
-                                {currency(getTotalPrice() / 12)}
-                              </p>
                             </div>
                           )}
                         </Span>
                       </FlexBetween>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "end",
+                        }}
+                      >
+                        <Paragraph
+                          fontSize={13}
+                          fontWeight={600}
+                          lineHeight="1"
+                          textAlign={"end"}
+                          sx={{ width: "150px" }}
+                        >
+                          ou em até{" "}
+                          <span
+                            style={{
+                              color: "red",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            12x{" "}
+                          </span>{" "}
+                          de{" "}
+                          <span
+                            style={{
+                              color: "red",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {currency(localProducts.Price / 12)}
+                          </span>{" "}
+                          no cartão de crédito
+                        </Paragraph>
+                      </div>
 
                       <Divider sx={{ mb: 2 }} />
 
@@ -595,4 +585,4 @@ const Cart: NextPage = () => {
   );
 };
 
-export default Cart;
+export default Carrinho;

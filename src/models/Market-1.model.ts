@@ -4,6 +4,7 @@ interface MainCarouselItem {
   Order: number;
   title?: string;
   imgUrl?: string;
+  BannerFileUrl?: string;
   BannerLargeURL?: string;
   BannerSmallURL?: string;
   imgUrlMobile?: string;

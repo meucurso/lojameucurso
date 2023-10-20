@@ -8,25 +8,13 @@ type ProductDescriptionProps = { product: Product | null };
 // ======================================================
 
 const ProductDescription: FC<ProductDescriptionProps> = ({ product }) => {
-  const { DescriptionFileUrl, ShortDescription } = product;
+  const { ShortDescription } = product;
 
-  if (DescriptionFileUrl === null || DescriptionFileUrl === "") {
-    return (
-      <>
-        <div dangerouslySetInnerHTML={{ __html: ShortDescription }} />
-      </>
-    );
-  } else {
-    return (
-      <div style={{ height: "130vh", width: "100%" }}>
-        <iframe
-          src={DescriptionFileUrl}
-          width="100%"
-          height="100%"
-        ></iframe>
-      </div>
-    );
-  }
+  return (
+    <>
+      <div dangerouslySetInnerHTML={{ __html: ShortDescription }} />
+    </>
+  );
 };
 
 export default ProductDescription;

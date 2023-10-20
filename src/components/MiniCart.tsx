@@ -274,7 +274,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
                   color="primary"
                   variant="contained"
                   sx={{ mb: "0.75rem", height: "40px" }}
-                  onClick={handleNavigate("/cart")}
+                  onClick={handleNavigate("/carrinho")}
                 >
                   Carrinho ({currency(getTotalPrice())})
                 </Button>

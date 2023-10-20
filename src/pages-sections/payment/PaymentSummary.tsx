@@ -56,21 +56,25 @@ const PaymentSummary: FC = () => {
         <Span color="grey.600">Total:</Span>
 
         <Span fontSize={18} fontWeight={600} lineHeight="1">
-          <div>
-            <p
-              style={{
-                display: "flex",
-                justifyContent: "end",
-              }}
-            >
-              {currency(localProducts.Price)}
-            </p>
-            <p style={{ fontSize: "13px" }}>
-              ou em até 12x de {currency(localProducts.Price / 12)}
-            </p>
-          </div>
+          {currency(localProducts.Price)}
         </Span>
       </FlexBetween>
+      <div style={{ display: "flex", justifyContent: "end" }}>
+        <Paragraph
+          fontSize={13}
+          fontWeight={600}
+          lineHeight="1"
+          textAlign={"end"}
+          sx={{ width: "150px" }}
+        >
+          ou em até{" "}
+          <span style={{ color: "red", fontWeight: "bold" }}>12x </span> de{" "}
+          <span style={{ color: "red", fontWeight: "bold" }}>
+            {currency(localProducts.Price / 12)}
+          </span>{" "}
+          no cartão de crédito
+        </Paragraph>
+      </div>
     </Card1>
   );
 };

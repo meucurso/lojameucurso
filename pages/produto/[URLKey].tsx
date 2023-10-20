@@ -9,6 +9,8 @@ import ProductDescription from "pages-sections/product-details/ProductDescriptio
 import Product from "models/Product.model";
 import SEO from "components/SEO";
 import api from "../../src/utils/__api__/meu-curso";
+import ProductDescriptionPDF from "pages-sections/product-details/ProductDescriptionPDF";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
 
 // styled component
 const StyledTabs = styled(Tabs)(({ theme }) => ({
@@ -54,9 +56,19 @@ const updateChildrenSelected = (item) => {
 
 const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
   const router = useRouter();
-  const [selectedOption, setSelectedOption] = useState(0);
 
-  const handleOptionClick = (_, value: number) => setSelectedOption(value);
+  const initialSelectedOption = singleProduct.ShortDescription ? "0" : "1";
+
+  const [selectedOption, setSelectedOption] = useState(
+    initialSelectedOption
+  );
+
+  const handleOptionClick = (
+    event: React.SyntheticEvent,
+    newOption: string
+  ) => {
+    setSelectedOption(newOption);
+  };
 
   const [updatedProduct, setUpdatedProduct] = useState(singleProduct);
 
@@ -71,8 +83,6 @@ const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
     return <h1>Carregando...</h1>;
   }
 
-  console.log(singleProduct);
-
   return (
     <ShopLayout1>
       <SEO
@@ -83,22 +93,27 @@ const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
         {/* PRODUCT DETAILS INFO AREA */}
         <ProductIntro singleProduct={updatedProduct} />
 
-        {/* PRODUCT DESCRIPTION AND REVIEW */}
-        <StyledTabs
-          textColor="primary"
-          value={selectedOption}
-          indicatorColor="primary"
-          onChange={handleOptionClick}
-        >
-          <Tab className="inner-tab" label="Descrição" />
-          {/* <Tab className="inner-tab" label="Review (3)" /> */}
-        </StyledTabs>
+        <TabContext value={selectedOption}>
+          <>
+            <Box sx={{ borderBottom: 1, borderColor: "#d3d3d3" }}>
+              <TabList onChange={handleOptionClick}>
+                <Tab
+                  label="Descrição"
+                  value="0"
+                  disabled={singleProduct.ShortDescription === null}
+                />
+                <Tab label="Descritivo" value="1" />
+              </TabList>
+            </Box>
 
-        <Box mb={6}>
-          {selectedOption === 0 && (
-            <ProductDescription product={updatedProduct} />
-          )}
-        </Box>
+            <TabPanel value="0">
+              <ProductDescription product={updatedProduct} />
+            </TabPanel>
+            <TabPanel value="1">
+              <ProductDescriptionPDF product={updatedProduct} />
+            </TabPanel>
+          </>
+        </TabContext>
       </Container>
     </ShopLayout1>
   );

@@ -7,48 +7,81 @@ const navigations = [
   {
     icon: BalanceOutlinedIcon,
     title: "OAB 1ª Fase",
-    href: "/cursos-oab-1fase",
-    menuComponent: "MegaMenu1",
+    href: "cursos/cursos-oab-1fase",
+    menuComponent: "MegaMenu2",
+    menuData: [
+      {
+        title: "TOP10 e Reta Final",
+        href: "/categorias/oab-1-fase-top10-e-reta-final",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "Eventos",
+        href: "/categorias/oab-1-fase-eventos",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "Cursos Gratuitos",
+        href: "/categorias/oab-1-fase-cursos-gratuitos",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "Associados AASP",
+        href: "/categorias/oab-1-fase-associados-aasp",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "39º Exame",
+        href: "/categorias/oab-1-fase-39-exame",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "40º Exame",
+        href: "/categorias/oab-1-fase-40-exame",
+        megaMenu: "MegaMenu1",
+      },
+    ],
   },
+
   {
     icon: BalanceOutlinedIcon,
     title: "OAB 2ª Fase",
-    href: "/cursos-oab-2fase",
+    href: "cursos/cursos-oab-2fase",
     menuComponent: "MegaMenu2",
     menuData: [
       {
         title: "Administrativo",
-        href: "/searchCategory?CategoryId=5",
+        href: "/categorias/oab-2-fase-administrativo",
         megaMenu: "MegaMenu1",
       },
       {
         title: "Civil",
-        href: "/searchCategory?CategoryId=6",
+        href: "/categorias/oab-2-fase-civil",
         megaMenu: "MegaMenu1",
       },
       {
         title: "Constitucional",
-        href: "/searchCategory?CategoryId=7",
+        href: "/categorias/oab-2-fase-constitucional",
         megaMenu: "MegaMenu1",
       },
       {
         title: "Empresarial",
-        href: "/searchCategory?CategoryId=8",
+        href: "/categorias/oab-2-fase-empresarial",
         megaMenu: "MegaMenu1",
       },
       {
         title: "Penal",
-        href: "/searchCategory?CategoryId=9",
+        href: "/categorias/oab-2-fase-penal",
         megaMenu: "MegaMenu1",
       },
       {
         title: "Trabalho",
-        href: "/searchCategory?CategoryId=10",
+        href: "/categorias/oab-2-fase-trabalho",
         megaMenu: "MegaMenu1",
       },
       {
         title: "Tributário",
-        href: "/searchCategory?CategoryId=11",
+        href: "/categorias/oab-2-fase-tributario",
         megaMenu: "MegaMenu1",
       },
     ],
@@ -57,50 +90,50 @@ const navigations = [
   {
     icon: SchoolOutlinedIcon,
     title: "Pós Graduação",
-    href: "/pos-graduacao",
+    href: "cursos/pos-graduacao",
     menuComponent: "MegaMenu2",
     menuData: [
       {
         title: "Cursos",
-        href: "/searchCategory?CategoryId=3",
+        href: "/categorias/pos-graduacao",
         megaMenu: "MegaMenu1",
       },
-      {
-        title: "Congressos Digitais",
-        href: "/searchCategory?CategoryId=100",
-        megaMenu: 2,
-      },
-      {
-        title: "Eventos Gratuitos",
-        href: "/searchCategory?CategoryId=99",
-        megaMenu: 3,
-      },
+      // {
+      //   title: "Congressos Digitais",
+      //   href: "/categorias/",
+      //   megaMenu: 2,
+      // },
+      // {
+      //   title: "Eventos Gratuitos",
+      //   href: "/searchCategory?CategoryId=99",
+      //   megaMenu: 3,
+      // },
     ],
   },
   {
     icon: GavelOutlinedIcon,
     title: "Concursos Públicos",
-    href: "/concursos-publicos",
+    href: "cursos/concursos-publicos",
     menuComponent: "MegaMenu2",
     menuData: [
       {
         title: "Carreiras Policiais",
-        href: "/searchCategory?CategoryId=137",
+        href: "/categorias/concursos-publicos-carreiras-policiais",
         megaMenu: "MegaMenu1",
       },
       {
         title: "Tribunais",
-        href: "/searchCategory?CategoryId=139",
+        href: "/categorias/concursos-publicos-tribunais",
         megaMenu: "MegaMenu1",
       },
       {
         title: "Procuradorias",
-        href: "/searchCategory?CategoryId=140",
+        href: "/categorias/concursos-publicos-procuradorias",
         megaMenu: 2,
       },
       {
-        title: "Assinaturas",
-        href: "/searchCategory?CategoryId=141",
+        title: "Planos de Assinatura",
+        href: "/categorias/concursos-publicos-planos-de-assinatura",
         megaMenu: 2,
       },
     ],
@@ -108,7 +141,7 @@ const navigations = [
   {
     icon: LocalLibraryOutlinedIcon,
     title: "Atualização e Prática",
-    href: "/atualizacao-e-pratica",
+    href: "cursos/atualizacao-e-pratica",
     menuComponent: "MegaMenu2",
     menuData: [
       {
@@ -121,51 +154,59 @@ const navigations = [
               title: "Administrativo",
               href: "/searchCategory?CategoryId=77",
             },
-            { title: "Ambiental", href: "/searchCategory?CategoryId=78" },
-            { title: "Civil", href: "/searchCategory?CategoryId=79" },
+            {
+              title: "Ambiental",
+              href: "/categorias/atualizacao-e-pratica-ambiental",
+            },
+            {
+              title: "Civil",
+              href: "/categorias/atualizacao-e-pratica-civil",
+            },
             {
               title: "Competências Emocionais",
-              href: "/searchCategory?CategoryId=81",
+              href: "/categorias/atualizacao-e-pratica-competencias-emocionais",
             },
             {
-              title: "Compilance e Digital",
-              href: "/searchCategory?CategoryId=82",
-            },
-            {
-              title: "Direito Médio",
-              href: "/searchCategory?CategoryId=83",
+              title: "Direito Digital e Compliance",
+              href: "/categorias/atualizacao-e-pratica-direito-digital-e-compliance",
             },
             {
               title: "Direito Público",
-              href: "/searchCategory?CategoryId=84",
+              href: "/categorias/atualizacao-e-pratica-direito-publico",
             },
-            { title: "Diversos", href: "/searchCategory?CategoryId=85" },
+            {
+              title: "Direito Médico",
+              href: "/categorias/atualizacao-e-pratica-direito-medico",
+            },
+            {
+              title: "Diversos",
+              href: "/categorias/atualizacao-e-pratica-diversos",
+            },
             {
               title: "Empresarial",
-              href: "/searchCategory?CategoryId=86",
-            },
-            { title: "Penal", href: "/" },
-            {
-              title: "Primeiros Passos",
-              href: "/searchCategory?CategoryId=87",
+              href: "/categorias/atualizacao-e-pratica-empresarial",
             },
             {
-              title: "Trabalhista e Previdenciário",
-              href: "/searchCategory?CategoryId=88",
+              title: "Penal",
+              href: "/categorias/atualizacao-e-pratica-penal",
+            },
+            {
+              title: "Previdenciário",
+              href: "/categorias/atualizacao-e-pratica-previdenciario",
+            },
+            {
+              title: "Trabalhista",
+              href: "/categorias/atualizacao-e-pratica-trabalhista",
             },
           ],
         },
-      },
-      {
-        title: "Eventos Gratuitos",
-        href: "/searchCategory?CategoryId=89",
       },
     ],
   },
   {
     icon: BalanceOutlinedIcon,
     title: "Primeiros Passos",
-    href: "/primeiros-passos-na-advocacia",
+    href: "cursos/primeiros-passos-na-advocacia",
     menuComponent: "MegaMenu1",
   },
 ];

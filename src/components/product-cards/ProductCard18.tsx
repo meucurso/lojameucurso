@@ -90,7 +90,7 @@ const ProductCard18: FC<ProductCardProps> = ({ product }) => {
           />
         )}
 
-        <Link href={`/product/${product.URLKey}`}>
+        <Link href={`/produto/${product.URLKey}`}>
           <img
             alt={product.Name}
             loading="lazy"

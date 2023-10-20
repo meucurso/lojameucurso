@@ -147,7 +147,7 @@ const ProductCard1: FC<ProductCardProps> = ({
           </IconButton>
         </HoverIconWrapper> */}
 
-        <Link href={`/product/${URLKey}`}>
+        <Link href={`/produto/${URLKey}`}>
           {/* <LazyImage
             priority
             src={imgUrl}

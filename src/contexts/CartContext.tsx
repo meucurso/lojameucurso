@@ -18,7 +18,7 @@ export const CartProvider = ({ children }) => {
   const { data: session } = useSession();
 
   const fetchCartItems = useCallback(async () => {
-    if (session) {
+    if (localProducts) {
       try {
         const response = await axios.get(
           `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${localProducts?.OrderId}`,
@@ -54,8 +54,10 @@ export const CartProvider = ({ children }) => {
   }, [localProducts, session]);
 
   useEffect(() => {
-    fetchCartItems();
-  }, [fetchCartItems, setCartProducts]);
+    if (session) {
+      fetchCartItems();
+    }
+  }, [fetchCartItems, session, setCartProducts]);
 
   const contextValue = useMemo(
     () => ({
