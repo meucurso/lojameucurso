@@ -24,16 +24,10 @@ const CheckoutNavLayout: FC<CheckoutNavLayoutProps> = ({ children }) => {
   const handleStepChange = (step: number) => {
     switch (step) {
       case 0:
-        router.push("/cart");
+        router.push("/carrinho");
         break;
       case 1:
-        router.push("/payment");
-        break;
-      case 2:
-        router.push("/checkout");
-        break;
-      case 3:
-        router.push("/orders");
+        router.push("/pagamento");
         break;
       default:
         break;
@@ -42,14 +36,11 @@ const CheckoutNavLayout: FC<CheckoutNavLayoutProps> = ({ children }) => {
 
   useEffect(() => {
     switch (pathname) {
-      case "/cart":
+      case "/carrinho":
         setSelectedStep(1);
         break;
-      case "/payment":
+      case "/pagamento":
         setSelectedStep(2);
-        break;
-      case "/checkout":
-        setSelectedStep(3);
         break;
       default:
         break;

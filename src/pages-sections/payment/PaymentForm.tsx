@@ -4,6 +4,11 @@ import { FC, Fragment, useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   Grid,
   Radio,
@@ -17,7 +22,7 @@ import * as yup from "yup";
 import { Formik, useFormik } from "formik";
 import Card1 from "components/Card1";
 import { FlexBox } from "components/flex-box";
-import { Paragraph } from "components/Typography";
+import { H2, Paragraph } from "components/Typography";
 import useWindowSize from "hooks/useWindowSize";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -33,23 +38,15 @@ const PaymentForm: FC = () => {
   const [paymentInstallments, setPaymentInstallments] = useState([]);
   const [loadingPayment, setLoadingPayment] = useState(false);
   const [paymentSucceeded, setPaymentSucceed] = useState<any>();
+  const [paymentSucceededPix, setPaymentSucceedPix] = useState<any>();
   const [open, setOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    router.push("/");
-  };
+  const [openPixModal, setOpenPixModal] = useState(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
   const { data: session } = useSession();
 
   const width = useWindowSize();
-  const router = useRouter();
-  const isMobile = width < 769;
 
   const fetchLocalItems = useCallback(() => {
     const response = JSON.parse(localStorage.getItem("apiResponseData"));
@@ -70,6 +67,56 @@ const PaymentForm: FC = () => {
     }
   }, [session, setPaymentInstallments]);
 
+  const handlePixPayment = async () => {
+    setLoadingPayment(true);
+    const requestPayment: any = {};
+
+    if (
+      localProducts.BillingAddressId &&
+      localProducts.BillingAddressId.length > 0
+    ) {
+      requestPayment.BillingAddressId = localProducts.BillingAddressId;
+    } else {
+      requestPayment.BillingAddressId = localProducts.DigitalAdressId;
+    }
+
+    if (
+      localProducts.ShippingAddressId &&
+      localProducts.ShippingAddressId.length > 0
+    ) {
+      requestPayment.ShippingAddressId = localProducts.BillingAddressId;
+    } else {
+      requestPayment.ShippingAddressId = localProducts.DigitalAdressId;
+    }
+
+    requestPayment.OrderId = localProducts.OrderId;
+    requestPayment.OrderShippingPackage =
+      localProducts.OrderShippingPackages;
+    requestPayment.Coupon = localProducts.Coupon;
+
+    console.log(requestPayment);
+
+    await axios
+      .post(
+        "https://apiecommerce.meucurso.com.br/BIPEStore/ProcessPaymentPix",
+
+        requestPayment,
+        { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
+      )
+      .then((response) => {
+        setLoadingPayment(false),
+          setPaymentSucceedPix(response.data),
+          console.log(response.data);
+        localStorage.removeItem("apiResponseData"), setOpenPixModal(true);
+      })
+      .catch((err) => {
+        setLoadingPayment(false),
+          enqueueSnackbar(err.response.data, {
+            variant: "error",
+          });
+      });
+  };
+
   const handleFormSubmit = async (values: any) => {
     setLoadingPayment(true);
     const Card = {
@@ -84,19 +131,23 @@ const PaymentForm: FC = () => {
       PaymentMethodId: 2,
     };
 
-    const requestPayment = {
-      BillingAddressId: 267951,
+    const requestPayment: any = {};
 
-      Card: Card,
+    if (
+      localProducts.BillingAddressId &&
+      localProducts.BillingAddressId.length > 0
+    ) {
+      requestPayment.BillingAddressId = localProducts.BillingAddressId;
+    } else {
+      requestPayment.BillingAddressId = localProducts.DigitalAdressId;
+    }
 
-      OrderId: localProducts.OrderId,
-
-      ShippingAddressId: 267951,
-
-      OrderShippingPackage: localProducts.OrderShippingPackages,
-
-      Coupon: localProducts.Coupon,
-    };
+    requestPayment.Card = Card;
+    requestPayment.OrderId = localProducts.OrderId;
+    requestPayment.ShippingAddressId = localProducts.BillingAddressId;
+    requestPayment.OrderShippingPackage =
+      localProducts.OrderShippingPackages;
+    requestPayment.Coupon = localProducts.Coupon;
 
     await axios
       .post(
@@ -175,7 +226,7 @@ const PaymentForm: FC = () => {
   };
 
   const style = {
-    position: "absolute" as "absolute",
+    position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
@@ -188,14 +239,9 @@ const PaymentForm: FC = () => {
 
   return (
     <Fragment>
-      <div>
-        <Button onClick={handleOpenModal}>Open modal</Button>
-        <Modal
-          open={open}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
+      <Dialog open={open}>
+        <Box sx={{ padding: 5 }}>
+          <DialogTitle>
             <CheckCircleIcon
               color="success"
               sx={{
@@ -205,71 +251,142 @@ const PaymentForm: FC = () => {
                 display: "flex",
               }}
             />
-            <Typography
-              textAlign={"center"}
-              id="modal-modal-title"
-              variant="h6"
-              component="h2"
-              sx={{ mt: 5 }}
-            >
+            <H2 textAlign={"center"} sx={{ mt: 5 }}>
               Compra Finalizada com Sucesso!
-            </Typography>
-            <Typography
-              textAlign={"center"}
-              id="modal-modal-title"
-              variant="h6"
-              component="h2"
-              sx={{ mt: 3 }}
-            >
+            </H2>
+            <H2 textAlign={"center"} sx={{ mt: 3 }}>
               Ordem:#{paymentSucceeded?.OrderId}
-            </Typography>
-
-            <Typography
-              fontSize={20}
-              textAlign={"center"}
-              id="modal-modal-description"
-              sx={{ mt: 2 }}
-            >
-              Acesse sua rota clicando{" "}
-              <a
-                style={{
-                  color: "green",
-                  fontWeight: "bold",
-                  textDecoration: "underline",
-                }}
-                target="_blank"
-                href="https://aluno.meucurso.com.br/StudyRoute/Index/"
-              >
-                aqui
-              </a>
-            </Typography>
-            <Typography
-              textAlign={"center"}
-              fontSize={15}
-              id="modal-modal-description"
-              sx={{ mt: 2 }}
-            >
-              Ou veja mais informações de sua compra clicando{" "}
-              <a
-                target="_blank"
-                style={{ color: "green", textDecoration: "underline" }}
-                href="https://aluno.meucurso.com.br/BIPEStore/Orders"
-              >
-                aqui
-              </a>
-            </Typography>
+            </H2>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <Paragraph fontSize={20} textAlign={"center"} sx={{ mt: 2 }}>
+                Acesse sua rota clicando{" "}
+                <a
+                  style={{
+                    color: "green",
+                    fontWeight: "bold",
+                    textDecoration: "underline",
+                  }}
+                  target="_blank"
+                  href="https://aluno.meucurso.com.br/StudyRoute/Index/"
+                >
+                  aqui
+                </a>
+              </Paragraph>
+              <Paragraph textAlign={"center"} fontSize={15} sx={{ mt: 2 }}>
+                Ou veja mais informações de sua compra clicando{" "}
+                <a
+                  target="_blank"
+                  style={{ color: "green", textDecoration: "underline" }}
+                  href="https://aluno.meucurso.com.br/BIPEStore/Orders"
+                >
+                  aqui
+                </a>
+              </Paragraph>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
             <Button
               color="success"
               variant="contained"
               sx={{ marginTop: 5, color: "white" }}
               fullWidth
-              onClick={handleCloseModal}
+              href="/"
             >
               Volta para a Tela Inicial
             </Button>
-          </Box>
-        </Modal>
-      </div>
+          </DialogActions>
+        </Box>
+      </Dialog>
+
+      <Dialog open={openPixModal}>
+        <Box sx={{ padding: 5 }}>
+          <DialogTitle>
+            <CheckCircleIcon
+              color="success"
+              sx={{
+                fontSize: 75,
+                textAlign: "center",
+                margin: "0 auto",
+                display: "flex",
+              }}
+            />
+            <H2 textAlign={"center"} sx={{ mt: 5 }}>
+              Compra Finalizada com Sucesso!
+            </H2>
+            <H2 textAlign={"center"} sx={{ mt: 3 }}>
+              Ordem:#{paymentSucceededPix?.OrderId}
+            </H2>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <Paragraph
+                textAlign={"center"}
+                fontSize={20}
+                fontWeight={"bold"}
+                sx={{ mt: 3 }}
+              >
+                QRCODE
+              </Paragraph>
+
+              <img
+                style={{ width: "100%" }}
+                src={paymentSucceededPix?.QrCodeImage}
+                alt="QR Code Pagamento"
+              />
+              <Paragraph
+                textAlign={"center"}
+                fontSize={20}
+                fontWeight={"bold"}
+                sx={{ mt: 3 }}
+              >
+                Link para pagamento
+              </Paragraph>
+              <Paragraph textAlign={"center"} fontSize={15} sx={{ mt: 3 }}>
+                <a target="_blank" href={paymentSucceededPix?.PaymentLink}>
+                  {paymentSucceededPix?.PaymentLink}
+                </a>
+              </Paragraph>
+              <Paragraph
+                textAlign={"center"}
+                fontSize={15}
+                fontWeight={"bold"}
+                sx={{ mt: 3 }}
+              >
+                Informações adicionais:
+              </Paragraph>
+              <Paragraph textAlign={"center"} fontSize={15} sx={{ mt: 3 }}>
+                - Você possui o prazo de 1 hora para o pagamento. Ao passar
+                deste prazo, o código é expirado.
+              </Paragraph>
+              <Paragraph textAlign={"center"} fontSize={15} sx={{ mt: 3 }}>
+                - Caso perca o código ou QRCODE, clique{" "}
+                <a
+                  target="_blank"
+                  style={{ color: "green" }}
+                  href="https://aluno.meucurso.com.br/BIPEStore/Orders"
+                >
+                  aqui
+                </a>{" "}
+                e veja suas compras recentes
+              </Paragraph>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              color="success"
+              variant="contained"
+              sx={{ marginTop: 5, color: "white" }}
+              fullWidth
+              href="/"
+            >
+              Volta para a Tela Inicial
+            </Button>
+          </DialogActions>
+        </Box>
+      </Dialog>
+
       <Card1 sx={{ mb: 4 }}>
         <FormControlLabel
           sx={{ mb: 3 }}
@@ -424,22 +541,6 @@ const PaymentForm: FC = () => {
               </Grid>
             </Box>
 
-            {/* <Button
-              type="submit"
-              variant="outlined"
-              color="primary"
-              sx={{ mb: 4 }}
-            >
-              Enviar
-            </Button> */}
-            {/* <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              fullWidth
-            >
-              Finalizar Compra
-            </Button> */}
             <LoadingButton
               variant="contained"
               color="primary"
@@ -454,7 +555,7 @@ const PaymentForm: FC = () => {
           </form>
         )}
 
-        {/* <FormControlLabel
+        <FormControlLabel
           name="pix"
           sx={{ mb: 3 }}
           onChange={handlePaymentMethodChange}
@@ -472,47 +573,19 @@ const PaymentForm: FC = () => {
 
         {paymentMethod === "pix" && (
           <Fragment>
-            <FlexBox alignItems="flex-end" mb={4}>
-              <TextField
-                fullWidth
-                name="email"
-                type="email"
-                label="Email do PayPal"
-                sx={{ mr: isMobile ? "1rem" : "30px" }}
-              />
-              <Button variant="outlined" color="primary" type="button">
-                Submit
-              </Button>
-            </FlexBox>
+            <LoadingButton
+              variant="contained"
+              color="primary"
+              type="submit"
+              fullWidth
+              loading={loadingPayment}
+              onClick={handlePixPayment}
+            >
+              Finalizar Compra
+            </LoadingButton>
           </Fragment>
-        )} */}
+        )}
       </Card1>
-
-      {/* <Grid container spacing={7}>
-        <Grid item sm={6} xs={12}>
-          <Button
-            LinkComponent={Link}
-            href="/cart"
-            variant="outlined"
-            color="primary"
-            type="button"
-            fullWidth
-          >
-            Voltar para o Carrinho
-          </Button>
-        </Grid>
-
-        <Grid item sm={6} xs={12}>
-          <Button
-            variant="contained"
-            color="primary"
-            type="submit"
-            fullWidth
-          >
-            Finalizar Compra
-          </Button>
-        </Grid>
-      </Grid> */}
     </Fragment>
   );
 };

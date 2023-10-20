@@ -29,7 +29,7 @@ type ShopLayout1Props = {
 // ===================================================
 const WhatsApp = styled("img")({
   position: "fixed",
-  bottom: "10px",
+  bottom: "30px",
   right: "10px",
 });
 
@@ -75,7 +75,11 @@ const ShopLayout1: FC<ShopLayout1Props> = ({
         target="_blank"
         href="https://web.whatsapp.com/send?l=&phone=5511913494089&text=Oi! Gostaria de saber mais sobre alguns cursos, pode me ajudar?"
       >
-        <WhatsApp src="icone_whatsapp.png" width={60} height={60} />
+        <WhatsApp
+          src="https://imagepng.org/whatsapp-icone-icon/whatsapp-icone/"
+          width={60}
+          height={60}
+        />
       </a>
       {/* FOOTER */}
       <Footer1 />

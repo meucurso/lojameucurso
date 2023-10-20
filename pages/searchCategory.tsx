@@ -6,8 +6,6 @@ import {
   Container,
   Grid,
   Skeleton,
-  Theme,
-  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import SEO from "components/SEO";

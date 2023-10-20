@@ -274,7 +274,7 @@ const Navbar: FC<NavbarProps> = ({
             <StyledNavLink href={"/searchCategory?CategoryId=133"}>
               Planos de assinatura
             </StyledNavLink>
-            <StyledNavLink href={""}>Livraria</StyledNavLink>
+            <StyledNavLink href={"/livraria"}>Livraria</StyledNavLink>
             <StyledNavLink href={"/embaixadores"}>
               Embaixadores / Parceiros
             </StyledNavLink>

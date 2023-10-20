@@ -4,7 +4,7 @@ import PaymentForm from "pages-sections/payment/PaymentForm";
 import PaymentSummary from "pages-sections/payment/PaymentSummary";
 import CheckoutNavLayout from "components/layouts/CheckoutNavLayout";
 
-const Checkout: NextPage = () => {
+const Pagamento: NextPage = () => {
   return (
     <CheckoutNavLayout>
       <Grid container flexWrap="wrap-reverse" spacing={3}>
@@ -20,4 +20,4 @@ const Checkout: NextPage = () => {
   );
 };
 
-export default Checkout;
+export default Pagamento;

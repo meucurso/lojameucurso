@@ -1,10 +1,15 @@
 import Link from "next/link";
 import { FC, useEffect, useState } from "react";
 import { Add, Remove } from "@mui/icons-material";
-import { Avatar, Box, Button, Chip, Grid } from "@mui/material";
-import LazyImage from "components/LazyImage";
-import BazaarRating from "components/BazaarRating";
-import { H1, H2, H3, H6 } from "components/Typography";
+import {
+  Avatar,
+  Box,
+  Button,
+  Chip,
+  Grid,
+  IconButton,
+} from "@mui/material";
+import { H1, H2, H3, H6, Paragraph } from "components/Typography";
 import { useAppContext } from "contexts/AppContext";
 import { FlexBox, FlexRowCenter } from "../../components/flex-box";
 import Product from "models/Product.model";
@@ -15,6 +20,8 @@ import axios from "axios";
 import { LoadingButton } from "@mui/lab";
 import { useSnackbar } from "notistack";
 import { useCart } from "contexts/CartContext";
+import ExpandCircleDownIcon from "@mui/icons-material/ExpandCircleDown";
+import { ReadMore } from "components/ReadMore";
 
 // ================================================================
 type ProductIntroProps = { singleProduct: Product };
@@ -203,15 +210,31 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             justifyContent={"center"}
             mb={1}
           >
-            {/* <div
-              dangerouslySetInnerHTML={{
-                __html: singleProduct.ShortDescription,
-              }}
-            /> */}
+            {/* <Box>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: singleProduct.ShortDescription,
+                }}
+              />
+              <Box
+                sx={{ width: "100%" }}
+                component={Button}
+                p={0.5}
+                bgcolor="grey.200"
+              >
+                <Paragraph>ver mais</Paragraph>
+                <ExpandCircleDownIcon sx={{ ml: 1 }} />
+              </Box>
+            </Box> */}
+            {singleProduct.ShortDescription && (
+              <ReadMore>{singleProduct.ShortDescription}</ReadMore>
+            )}
+            {singleProduct.ShortDescription === null ||
+              (singleProduct.ShortDescription === "" && <></>)}
           </FlexBox>
 
           <>
-            <h4>Selecione a opção: </h4>
+            {/* <h4>Selecione a opção: </h4> */}
             <ChildrenTree
               selectedChild={productChild}
               setSelectedChild={setProductChild}

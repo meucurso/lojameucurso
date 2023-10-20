@@ -1,32 +1,16 @@
 import BazaarImage from "components/BazaarImage";
-import MainCarouselItem from "models/Market-1.model";
 
-type Props = { bannerData?: MainCarouselItem[] };
-
-const ResponsiveBanners = ({ bannerData }: Props) => {
+const ResponsiveBanners = ({ bannerData }: any) => {
   return (
     <>
-      {bannerData?.map((item, index) => (
-        <div key={index}>
-          <BazaarImage
-            src={item.imgUrl}
-            sx={{
-              display: { xs: "none", md: "block" },
-              maxWidth: "100%",
-              height: "auto",
-            }}
-          />
-          <BazaarImage
-            src={item.imgUrlMobile}
-            sx={{
-              display: { xs: "block", md: "none" },
-
-              maxWidth: "100%",
-              height: "auto",
-            }}
-          />
-        </div>
-      ))}
+      <BazaarImage
+        src={bannerData}
+        sx={{
+          display: { xs: "none", md: "block" },
+          maxWidth: "100%",
+          height: "auto",
+        }}
+      />
     </>
   );
 };
