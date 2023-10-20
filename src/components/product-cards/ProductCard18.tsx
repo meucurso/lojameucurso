@@ -97,6 +97,7 @@ const ProductCard18: FC<ProductCardProps> = ({ product }) => {
             src={product.SmallImageUrl}
             width={"100%"}
             height={"100%"}
+            style={{ objectFit: "contain" }}
           />
         </Link>
 

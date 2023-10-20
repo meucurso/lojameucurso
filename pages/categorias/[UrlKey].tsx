@@ -1,43 +1,117 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import axios from "axios"; // Importe o axios ou outra biblioteca que preferir
+import api from "../../src/utils/__api__/meu-curso";
+import ShopLayout1 from "components/layouts/ShopLayout1";
+import {
+  Box,
+  Card,
+  Container,
+  Grid,
+  Skeleton,
+  Theme,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import SEO from "components/SEO";
+import { H5, Paragraph } from "components/Typography";
+import ProductCard1 from "components/product-cards/ProductCard1";
 
-const TEST = () => {
-  const router = useRouter();
-  const { UrlKey } = router.query;
-  const [categories, setCategories] = useState([]);
+export const getStaticPaths = async () => {
+  const categories = await api.getProductsCategories();
 
-  useEffect(() => {
-    if (UrlKey) {
-      axios
-        .get(
-          `https://apiecommerce.meucurso.com.br/ProductCategories/List?UrlKey=${UrlKey}`,
-          {
-            headers: {
-              Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IkFQSUVjb21tZXJjZSIsIkFwaUNsaWVudElkIjoiNCIsInJvbGUiOiJBZG1pbiIsIm5iZiI6MTY5NzYzNjI2NiwiZXhwIjoxNjk4MjQxMDY2LCJpYXQiOjE2OTc2MzYyNjYsImlzcyI6Imh0dHA6Ly9hcGllY29tbWVyY2UubWV1Y3Vyc28uY29tLmJyIiwiYXVkIjoiaHR0cDovL2FwaWVjb21tZXJjZS5tZXVjdXJzby5jb20uYnIifQ.fVA2b-7pVR3axwnQnttYvEjUzFew0W7N6icYFCRbWU4`,
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-          setCategories(response.data);
-        })
-        .catch((error) => {
-          console.error("Erro ao buscar categorias:", error);
-        });
+  const generatePaths = (category, parentPath = "") => {
+    const currentPath = parentPath ? category.UrlKey : category.UrlKey;
+
+    if (category.children && category.children.length > 0) {
+      const childPaths = category.children.reduce((acc, childCategory) => {
+        return acc.concat(generatePaths(childCategory, currentPath));
+      }, []);
+      return [currentPath, ...childPaths];
     }
-  }, [UrlKey]);
+
+    return [currentPath];
+  };
+
+  const paths = categories.reduce((acc, category) => {
+    return acc.concat(generatePaths(category));
+  }, []);
+
+  return {
+    paths: paths.map((path) => ({ params: { UrlKey: path } })),
+    fallback: false,
+  };
+};
+
+export const getStaticProps = async ({ params }) => {
+  const categories = await api.getProductsCategoriesByUrlKey(
+    params.UrlKey
+  );
+
+  const categoryId = categories.map((category) => category.id);
+  const categoryName = categories.map((category) => category.text);
+
+  const products = await api.getProductsById(categoryId);
+
+  console.log(categoryId);
+
+  return {
+    props: {
+      categoryName,
+      products,
+    },
+  };
+};
+
+const Categories = ({ categoryName, products }) => {
+  const theme = useTheme();
 
   return (
-    <>
-      <h1>test categorias</h1>
-      <ul>
-        {categories.map((category) => (
-          <li key={category.id}>{category.Name}</li>
-        ))}
-      </ul>
-    </>
+    <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
+      <SEO
+        title={categoryName}
+        sitename="MeuCurso - Do seu jeito.  No seu tempo."
+      />
+      <Container sx={{ mt: 4 }}>
+        <Card
+          elevation={1}
+          sx={{
+            mb: "55px",
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            p: {
+              sm: "1rem 1.25rem",
+              md: "0.5rem 1.25rem",
+              xs: "1.25rem 1.25rem 0.25rem",
+            },
+          }}
+        >
+          <Box>
+            <H5>{categoryName}</H5>
+            <Paragraph color="grey.600">
+              {products.length} resultados encontrados
+            </Paragraph>
+          </Box>
+        </Card>
+        {/* PRODUCT LIST AREA */}
+
+        <Grid container spacing={3} minHeight={500}>
+          {products.map((item) => (
+            <Grid item lg={3} md={4} sm={6} xs={12} key={item.ProductId}>
+              <ProductCard1
+                title={item.Name}
+                SpecialPrice={item.SpecialPrice}
+                price={item.Price}
+                imgUrl={item.SmallImageUrl}
+                URLKey={item.URLKey}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </ShopLayout1>
   );
 };
 
-export default TEST;
+export default Categories;

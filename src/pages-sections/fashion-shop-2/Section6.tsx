@@ -19,8 +19,7 @@ const Section6: FC<Section6Props> = ({ products }) => {
     if (width < 426) setVisibleSlides(1);
     else if (width < 650) setVisibleSlides(2);
     else if (width < 1024) setVisibleSlides(3);
-    else if (width < 1200) setVisibleSlides(4);
-    else setVisibleSlides(5);
+    else setVisibleSlides(4);
   }, [width]);
 
   return (

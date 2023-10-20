@@ -7,7 +7,7 @@ const navigations = [
   {
     icon: BalanceOutlinedIcon,
     title: "OAB 1ª Fase",
-    href: "cursos/cursos-oab-1fase",
+    href: "/cursos/cursos-oab-1fase",
     menuComponent: "MegaMenu2",
     menuData: [
       {
@@ -46,7 +46,7 @@ const navigations = [
   {
     icon: BalanceOutlinedIcon,
     title: "OAB 2ª Fase",
-    href: "cursos/cursos-oab-2fase",
+    href: "/cursos/cursos-oab-2fase",
     menuComponent: "MegaMenu2",
     menuData: [
       {
@@ -90,7 +90,7 @@ const navigations = [
   {
     icon: SchoolOutlinedIcon,
     title: "Pós Graduação",
-    href: "cursos/pos-graduacao",
+    href: "/cursos/pos-graduacao",
     menuComponent: "MegaMenu2",
     menuData: [
       {
@@ -113,7 +113,7 @@ const navigations = [
   {
     icon: GavelOutlinedIcon,
     title: "Concursos Públicos",
-    href: "cursos/concursos-publicos",
+    href: "/cursos/concursos-publicos",
     menuComponent: "MegaMenu2",
     menuData: [
       {
@@ -141,7 +141,7 @@ const navigations = [
   {
     icon: LocalLibraryOutlinedIcon,
     title: "Atualização e Prática",
-    href: "cursos/atualizacao-e-pratica",
+    href: "/cursos/atualizacao-e-pratica",
     menuComponent: "MegaMenu2",
     menuData: [
       {
@@ -206,7 +206,7 @@ const navigations = [
   {
     icon: BalanceOutlinedIcon,
     title: "Primeiros Passos",
-    href: "cursos/primeiros-passos-na-advocacia",
+    href: "/cursos/primeiros-passos-na-advocacia",
     menuComponent: "MegaMenu1",
   },
 ];

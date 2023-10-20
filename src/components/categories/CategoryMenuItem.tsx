@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { FC, ReactNode } from "react";
-import { Box, MenuItem, styled } from "@mui/material";
+import { Box, MenuItem, styled, Button } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import useSettings from "hooks/useSettings";
+import { useRouter } from "next/router";
+import { Paragraph } from "components/Typography";
 
 //styled component
 const Wrapper = styled(Box)(({ theme }) => ({
@@ -44,9 +46,14 @@ const CategoryMenuItem: FC<CategoryMenuItemProps> = (props) => {
 
   const { settings } = useSettings();
 
+  const router = useRouter();
+  const handlepage = () => {
+    router.push(href);
+  };
+
   return (
     <Wrapper>
-      <Link href={href}>
+      <Box onClick={handlepage}>
         <MenuItem className="category-dropdown-link">
           {rest.icon && <rest.icon fontSize="small" color="inherit" />}
           <span className="title">{title}</span>
@@ -57,7 +64,7 @@ const CategoryMenuItem: FC<CategoryMenuItemProps> = (props) => {
               <ChevronLeft fontSize="small" />
             ))}
         </MenuItem>
-      </Link>
+      </Box>
 
       {children}
     </Wrapper>
