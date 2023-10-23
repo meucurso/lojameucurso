@@ -142,12 +142,22 @@ const PaymentForm: FC = () => {
       requestPayment.BillingAddressId = localProducts.DigitalAdressId;
     }
 
+    if (
+      localProducts.ShippingAddressId &&
+      localProducts.ShippingAddressId.length > 0
+    ) {
+      requestPayment.ShippingAddressId = localProducts.ShippingAddressId;
+    } else {
+      requestPayment.ShippingAddressId = localProducts.DigitalAdressId;
+    }
+
     requestPayment.Card = Card;
     requestPayment.OrderId = localProducts.OrderId;
-    requestPayment.ShippingAddressId = localProducts.BillingAddressId;
     requestPayment.OrderShippingPackage =
       localProducts.OrderShippingPackages;
     requestPayment.Coupon = localProducts.Coupon;
+
+    console.log(requestPayment);
 
     await axios
       .post(
@@ -255,7 +265,7 @@ const PaymentForm: FC = () => {
               Compra Finalizada com Sucesso!
             </H2>
             <H2 textAlign={"center"} sx={{ mt: 3 }}>
-              Ordem:#{paymentSucceeded?.OrderId}
+              Número do pedido:#{paymentSucceeded?.OrderId}
             </H2>
           </DialogTitle>
           <DialogContent>
@@ -294,7 +304,7 @@ const PaymentForm: FC = () => {
               fullWidth
               href="/"
             >
-              Volta para a Tela Inicial
+              Voltar para a Tela Inicial
             </Button>
           </DialogActions>
         </Box>
@@ -316,7 +326,7 @@ const PaymentForm: FC = () => {
               Compra Finalizada com Sucesso!
             </H2>
             <H2 textAlign={"center"} sx={{ mt: 3 }}>
-              Ordem:#{paymentSucceededPix?.OrderId}
+              Número do pedido:#{paymentSucceededPix?.OrderId}
             </H2>
           </DialogTitle>
           <DialogContent>
@@ -381,7 +391,7 @@ const PaymentForm: FC = () => {
               fullWidth
               href="/"
             >
-              Volta para a Tela Inicial
+              Voltar para a Tela Inicial
             </Button>
           </DialogActions>
         </Box>

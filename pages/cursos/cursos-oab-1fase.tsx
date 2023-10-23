@@ -10,13 +10,18 @@ import SEO from "components/SEO";
 import ExclusiveTools from "components/exclusive-tools/ExclusiveTools";
 import OABExamTeam from "components/oab-examteam/OABExamTeam";
 import Section6 from "pages-sections/fashion-shop-2/Section6";
-import ResponsiveBanners from "components/responsive-banners/ResponsiveBanners";
-import axios from "axios";
 import Section1 from "pages-sections/fashion-shop-2/Section1";
+import { useProducts } from "hooks/useProducts";
+import { useBanners } from "hooks/useBanners";
 
-const CursosOAB1Fase = (props) => {
+const CursosOAB1Fase = () => {
   const width = useWindowSize();
   const [visibleSlides, setVisibleSlides] = useState(4);
+
+  const { products } = useProducts(api.getProductsById("128"));
+  const { products: oab40 } = useProducts(api.getProductsById("129"));
+
+  const { banners } = useBanners(api.getIndexBanners("5"));
 
   useEffect(() => {
     if (width < 426) setVisibleSlides(1);
@@ -35,7 +40,7 @@ const CursosOAB1Fase = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <Section1 carouselData={props.indexBannersData} />
+          <Section1 carouselData={banners} />
           <Container>
             <Grid container spacing={2} marginTop={5}>
               <Grid item md={6}>
@@ -96,9 +101,9 @@ const CursosOAB1Fase = (props) => {
             </Grid>
           </Container>
           <h1 style={{ textAlign: "center" }}>Cursos 39º Exame</h1>
-          <Section6 products={props.oab39Products} />
+          <Section6 category="oab-1-fase-39-exame" products={products} />
           <h1 style={{ textAlign: "center" }}>Cursos 40º Exame</h1>
-          <Section6 products={props.oab40Products} />
+          <Section6 category="oab-1-fase-40-exame" products={oab40} />
           <Box sx={{ backgroundColor: "#fff" }}>
             <Container>
               <Grid container spacing={2} justifyContent={"center"}>
@@ -203,17 +208,3 @@ const CursosOAB1Fase = (props) => {
   );
 };
 export default CursosOAB1Fase;
-
-export const getStaticProps: GetStaticProps = async () => {
-  const oab39Products = await api.getProductsById("128");
-  const oab40Products = await api.getProductsById("129");
-  const indexBannersData = await api.getIndexBanners("5");
-  return {
-    props: {
-      oab39Products,
-      oab40Products,
-      indexBannersData,
-    },
-    revalidate: 25,
-  };
-};

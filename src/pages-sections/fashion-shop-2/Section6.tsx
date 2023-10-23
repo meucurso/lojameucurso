@@ -6,13 +6,16 @@ import Carousel from "components/carousel/Carousel";
 import { carouselStyled } from "components/carousel/styles";
 import ProductCard18 from "components/product-cards/ProductCard18";
 import Product from "models/Product.model";
+import { Button, Box } from "@mui/material";
+import { useRouter } from "next/router";
 
 // ======================================================================
-type Section6Props = { products: Product[] };
+type Section6Props = { products: Product[]; category: string };
 // ======================================================================
 
-const Section6: FC<Section6Props> = ({ products }) => {
+const Section6: FC<Section6Props> = ({ products, category }) => {
   const width = useWindowSize();
+  const router = useRouter();
   const [visibleSlides, setVisibleSlides] = useState(4);
 
   useEffect(() => {
@@ -21,6 +24,10 @@ const Section6: FC<Section6Props> = ({ products }) => {
     else if (width < 1024) setVisibleSlides(3);
     else setVisibleSlides(4);
   }, [width]);
+
+  const handlePush = () => {
+    router.push(`/categorias/${category}`);
+  };
 
   return (
     <Fragment>
@@ -39,6 +46,11 @@ const Section6: FC<Section6Props> = ({ products }) => {
             <ProductCard18 key={product.ProductId} product={product} />
           ))}
         </Carousel>
+        <Box sx={{ display: "flex", justifyContent: "end" }}>
+          <Button onClick={handlePush} variant="outlined">
+            Ver mais
+          </Button>
+        </Box>
       </Container>
     </Fragment>
   );

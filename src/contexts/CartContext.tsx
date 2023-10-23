@@ -18,10 +18,10 @@ export const CartProvider = ({ children }) => {
   const { data: session } = useSession();
 
   const fetchCartItems = useCallback(async () => {
-    if (localProducts) {
+    if (session) {
       try {
         const response = await axios.get(
-          `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${localProducts?.OrderId}`,
+          `https://apiecommerce.meucurso.com.br/BIPEStore/GetLatestOrder?CustomerId=${session?.user?.CustomerId}`,
           { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
         );
 
@@ -51,13 +51,13 @@ export const CartProvider = ({ children }) => {
         console.log(err);
       }
     }
-  }, [localProducts, session]);
+  }, [session]);
 
   useEffect(() => {
     if (session) {
       fetchCartItems();
     }
-  }, [fetchCartItems, session, setCartProducts]);
+  }, [fetchCartItems, session]);
 
   const contextValue = useMemo(
     () => ({

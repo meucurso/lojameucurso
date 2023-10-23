@@ -10,10 +10,16 @@ import Section6 from "pages-sections/fashion-shop-2/Section6";
 import { H1 } from "components/Typography";
 
 import Section1 from "pages-sections/fashion-shop-2/Section1";
+import { useProducts } from "hooks/useProducts";
+import { useBanners } from "hooks/useBanners";
 
-const ConcursosPublicos = (props) => {
+const ConcursosPublicos = () => {
   const width = useWindowSize();
   const [visibleSlides, setVisibleSlides] = useState(4);
+
+  const { products } = useProducts(api.getProductsById("4"));
+
+  const { banners } = useBanners(api.getIndexBanners("7"));
 
   useEffect(() => {
     if (width < 426) setVisibleSlides(1);
@@ -32,7 +38,7 @@ const ConcursosPublicos = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <Section1 carouselData={props.indexBannersData} />
+          <Section1 carouselData={banners} />
           <Box
             py={5}
             my={5}
@@ -48,7 +54,10 @@ const ConcursosPublicos = (props) => {
                   <H1>Cursos em Destaque</H1>
                 </Grid>
               </Grid>
-              <Section6 products={props.contestProducts} />
+              <Section6
+                category="concursos-publicos"
+                products={products}
+              />
             </Container>
           </Box>
           <Box sx={{ backgroundColor: "#fff" }}></Box>
@@ -58,15 +67,3 @@ const ConcursosPublicos = (props) => {
   );
 };
 export default ConcursosPublicos;
-
-export const getStaticProps: GetStaticProps = async () => {
-  const contestProducts = await api.getProductsById("94");
-  const indexBannersData = await api.getIndexBanners("7");
-
-  return {
-    props: {
-      contestProducts,
-      indexBannersData,
-    },
-  };
-};

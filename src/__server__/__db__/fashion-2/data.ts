@@ -111,7 +111,7 @@ export const categories = [
   {
     id: "76f4a1dd-fd27-461e-8b59-bfc3c1da6895",
     name: "Pós Graduação",
-    url: "/pos-graduacao",
+    url: "/cursos/pos-graduacao",
     icon: null,
     image: "/assets/images/capa_site_pos.jpg",
     slug: null,
@@ -125,7 +125,7 @@ export const categories = [
   {
     id: "e6d2c2e3-d973-4367-98d8-0c140fbaf390",
     name: "Atualização e Prática",
-    url: "/atualizacao-e-pratica",
+    url: "/cursos/atualizacao-e-pratica",
     icon: null,
     image: "/assets/images/capa_site_atualizacao.jpg",
     slug: null,
@@ -139,7 +139,7 @@ export const categories = [
   {
     id: "f7b1da64-4d03-4a10-b364-67a2589b9de1",
     name: "Concursos Públicos",
-    url: "/concursos-publicos",
+    url: "/cursos/concursos-publicos",
     icon: null,
     image: "/assets/images/capa_site_concursos.jpg",
     slug: null,

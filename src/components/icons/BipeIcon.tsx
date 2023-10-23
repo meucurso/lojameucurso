@@ -6,7 +6,7 @@ const BipeIcon = (props: any) => {
     <Image
       width={25}
       height={25}
-      src={"/assets/iconStudent1.png"}
+      src={"/assets/bipe_test (1).png"}
       alt="botão área do aluno"
     />
   );

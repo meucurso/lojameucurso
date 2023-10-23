@@ -1,37 +1,63 @@
 import categoriesMegaMenu from "./categoriesMegaMenu";
 
-// MEGAMENU DATA
-const megaMenus = [
-  [
-    {
-      title: "Cursos",
-      child: [
-        { title: "Administrativo", url: "/" },
-        { title: "Ambiental", url: "/" },
-        { title: "Civil", url: "/" },
-        { title: "Competências Emocionais", url: "/" },
-        { title: "Compilance Digital", url: "/" },
-        { title: "Direito Médio", url: "/" },
-        { title: "Direito Público", url: "/" },
-        { title: "Diversos", url: "/" },
-        { title: "Empresatial", url: "/" },
-        { title: "Penal", url: "/" },
-        { title: "Primeiros Passos", url: "/" },
-        { title: "Trabalhista e Previdênciario", url: "/" },
-      ],
-    },
-  ],
-];
-
 // MAIN NAVIGATION DATA
 const navbarNavigations = [
   {
-    title: "OAB",
+    title: "OAB 1ª Fase",
     megaMenu: false,
     megaMenuWithSub: false,
     child: [
-      { title: "1ª Fase OAB", url: "/cursos-oab-1fase" },
-      { title: "2ª Fase OAB", url: "/cursos-oab-2fase" },
+      {
+        title: "Conheça o curso",
+        url: "/cursos/cursos-oab-1fase",
+      },
+      {
+        title: "TOP10 e Reta Final",
+        url: "/categorias/oab-1-fase-top10-e-reta-final",
+      },
+      { title: "Eventos", url: "/categorias/oab-1-fase-eventos" },
+      {
+        title: "Cursos Gratuitos",
+        url: "/categorias/oab-1-fase-cursos-gratuitos",
+      },
+      {
+        title: "Associados AASP",
+        url: "/categorias/oab-1-fase-associados-aasp",
+      },
+      { title: "39º Exame", url: "/categorias/oab-1-fase-39-exame" },
+      { title: "40º Exame", url: "/categorias/oab-1-fase-40-exame" },
+    ],
+  },
+  {
+    title: "OAB 2ª Fase",
+    megaMenu: false,
+    megaMenuWithSub: false,
+    child: [
+      {
+        title: "Conheça o curso",
+        url: "/cursos/cursos-oab-2fase",
+      },
+      {
+        title: "Administrativo",
+        url: "/categorias/oab-2-fase-administrativo",
+      },
+      { title: "Civil", url: "/categorias/oab-2-fase-civil" },
+      {
+        title: "Constitucional",
+        url: "/categorias/oab-2-fase-constitucional",
+      },
+      { title: "Empresarial", url: "/categorias/oab-2-fase-empresarial" },
+      { title: "Penal", url: "/categorias/oab-2-fase-penal" },
+      { title: "Trabalho", url: "/categorias/oab-2-fase-trabalho" },
+      { title: "Tributário", url: "/categorias/oab-2-fase-tributario" },
+    ],
+  },
+  {
+    megaMenu: false,
+    megaMenuWithSub: false,
+    title: "Pós Graduação",
+    child: [
+      { title: "Conheça os cursos", url: "/categorias/pos-graduacao" },
     ],
   },
 
@@ -40,9 +66,23 @@ const navbarNavigations = [
     megaMenuWithSub: false,
     title: "Concursos Públicos",
     child: [
-      { title: "Tribunais", url: "/searchCategory?CategoryId=101" },
-      { title: "Procuradorias", url: "/searchCategory?CategoryId=74" },
-      { title: "Assinaturas", url: "/searchCategory?CategoryId=75" },
+      { title: "Conhheça os cursos", url: "/cursos/concursos-publicos" },
+      {
+        title: "Carreiras Policiais",
+        url: "/categorias/concursos-publicos-carreiras-policiais",
+      },
+      {
+        title: "Tribunais",
+        url: "/categorias/concursos-publicos-tribunais",
+      },
+      {
+        title: "Procuradorias",
+        url: "/categorias/concursos-publicos-procuradorias",
+      },
+      {
+        title: "Planos de assinatura",
+        url: "/categorias/concursos-publicos-planos-de-assinatura",
+      },
     ],
   },
   {
@@ -50,69 +90,74 @@ const navbarNavigations = [
     megaMenuWithSub: false,
     title: "Atualização e Prática",
     child: [
+      { title: "Conheça os cursos", url: "/cursos/atualizacao-e-pratica" },
       {
         title: "Cursos",
         child: [
           {
-            title: "Administrativo",
-            url: "/searchCategory?CategoryId=77",
+            title: "Ambiental",
+            url: "/categorias/atualizacao-e-pratica-ambiental",
           },
-          { title: "Ambiental", url: "/searchCategory?CategoryId=78" },
-          { title: "Civil", url: "/searchCategory?CategoryId=79" },
+          {
+            title: "Civil",
+            url: "/categorias/atualizacao-e-pratica-civil",
+          },
           {
             title: "Competências Emocionais",
-            url: "/searchCategory?CategoryId=81",
+            url: "/categorias/atualizacao-e-pratica-competencias-emocionais",
+          },
+          {
+            title: "Direito Digital e Compliance",
+            url: "/categorias/atualizacao-e-pratica-direito-digital-e-compliance",
           },
           {
             title: "Compilance Digital",
             url: "/searchCategory?CategoryId=82",
           },
-          { title: "Direito Médio", url: "/searchCategory?CategoryId=83" },
           {
             title: "Direito Público",
-            url: "/searchCategory?CategoryId=84",
-          },
-          { title: "Diversos", url: "/searchCategory?CategoryId=85" },
-          { title: "Empresatial", url: "/searchCategory?CategoryId=86" },
-          { title: "Penal", url: "/" },
-          {
-            title: "Primeiros Passos",
-            url: "/searchCategory?CategoryId=87",
+            url: "/categorias/atualizacao-e-pratica-direito-publico",
           },
           {
-            title: "Trabalhista e Previdênciario",
-            url: "/searchCategory?CategoryId=88",
+            title: "Direito Médico",
+            url: "/categorias/atualizacao-e-pratica-direito-medico",
+          },
+          {
+            title: "Diversos",
+            url: "/categorias/atualizacao-e-pratica-diversos",
+          },
+          {
+            title: "Empresatial",
+            url: "/categorias/atualizacao-e-pratica-empresarial",
+          },
+          {
+            title: "Penal",
+            url: "/categorias/atualizacao-e-pratica-penal",
+          },
+          {
+            title: "Previdenciário",
+            url: "/categorias/atualizacao-e-pratica-previdenciario",
+          },
+          {
+            title: "Trabalhista",
+            url: "/categorias/atualizacao-e-pratica-trabalhista",
           },
         ],
       },
-      { title: "Eventos Gratuitos", url: "/searchCategory?CategoryId=89" },
     ],
   },
 
   {
     megaMenu: false,
     megaMenuWithSub: false,
-    title: "Pós Graduação",
-    child: [
-      { title: "Cursos", url: "/searchCategory?CategoryId=98" },
-      {
-        title: "Congressos Digitais",
-        url: "/searchCategory?CategoryId=100",
-      },
-      { title: "Eventos Gratuitos", url: "/searchCategory?CategoryId=99" },
-    ],
+    title: "Primeiros passos",
+    url: "/cursos/primeiros-passos-na-advocacia",
   },
   {
     megaMenu: false,
     megaMenuWithSub: false,
     title: "/Professor",
     url: "/professor",
-  },
-  {
-    megaMenu: false,
-    megaMenuWithSub: false,
-    title: "Primeiros passos",
-    url: "/primeiros-passos-na-advocacia",
   },
   {
     megaMenu: false,

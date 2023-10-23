@@ -51,7 +51,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
   const { enqueueSnackbar } = useSnackbar();
   const { data: session } = useSession();
 
-  const { localProducts, setLocalProducts } = useCart();
+  const { fetchCartItems } = useCart();
 
   // CHECK PRODUCT EXIST OR NOT IN THE CART
   const cartItem = state.cart.find((item) => item.ProductId === ProductId);
@@ -162,9 +162,8 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
         )
         .then((response) => {
           setLoading(false);
-          console.log(response.data);
           const responseData = response.data;
-          setLocalProducts(response.data);
+          fetchCartItems();
           enqueueSnackbar("Produto adicionado no carrinho!", {
             variant: "success",
           });

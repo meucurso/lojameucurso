@@ -13,10 +13,16 @@ import Section6 from "pages-sections/fashion-shop-2/Section6";
 import { H2 } from "components/Typography";
 import ResponsiveBanners from "components/responsive-banners/ResponsiveBanners";
 import Section1 from "pages-sections/fashion-shop-2/Section1";
+import { useProducts } from "hooks/useProducts";
+import { useBanners } from "hooks/useBanners";
 
-const CursosOAB2Fase = (props) => {
+const CursosOAB2Fase = () => {
   const width = useWindowSize();
   const [visibleSlides, setVisibleSlides] = useState(4);
+
+  const { products } = useProducts(api.getProductsById("2"));
+
+  const { banners } = useBanners(api.getIndexBanners("6"));
 
   useEffect(() => {
     if (width < 426) setVisibleSlides(1);
@@ -35,7 +41,7 @@ const CursosOAB2Fase = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <Section1 carouselData={props.indexBannersData} />
+          <Section1 carouselData={banners} />
           <Container>
             <Grid container spacing={2} marginTop={5}>
               <Grid item xs={12} md={6}>
@@ -84,7 +90,7 @@ const CursosOAB2Fase = (props) => {
             </Grid>
           </Container>
           <H2 textAlign={"center"}>Turmas Online</H2>
-          <Section6 products={props.oab2Products} />
+          <Section6 category="oab-2-fase" products={products} />
           <Box sx={{ backgroundColor: "#fff" }}>
             <Container>
               <Grid container spacing={2} justifyContent={"center"}>
@@ -189,15 +195,3 @@ const CursosOAB2Fase = (props) => {
   );
 };
 export default CursosOAB2Fase;
-
-export const getStaticProps: GetStaticProps = async () => {
-  const oab2Products = await api.getProductsById("2");
-  const indexBannersData = await api.getIndexBanners("6");
-  return {
-    props: {
-      oab2Products,
-      indexBannersData,
-    },
-    revalidate: 25,
-  };
-};

@@ -38,7 +38,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
   const [loading, setLoading] = useState(false);
   const cartList = state.cart;
 
-  const { cartProducts, setCartProducts } = useCart();
+  const { cartProducts, setCartProducts, fetchCartItems } = useCart();
 
   const getTotalPrice = () => {
     return cartProducts.reduce(
@@ -85,28 +85,28 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
   };
 
   useEffect(() => {
-    const fetchCartItems = async () => {
-      if (session) {
-        const cartData = JSON.parse(
-          localStorage.getItem("apiResponseData")
-        );
-        await axios
-          .get(
-            `https://apiecommerce.meucurso.com.br/BIPEStore/GetOrderDetails?OrderId=${cartData?.OrderId}`,
-            {
-              headers: { Authorization: `Bearer ${session?.user?.Token}` },
-            }
-          )
-          .then((response) => {
-            setCartProducts(
-              response.data.Items.filter(
-                (item) => item.OrderItemProductLevelId === 1
-              )
-            );
-          })
-          .catch((err) => console.log(err));
-      }
-    };
+    // const fetchCartItems = async () => {
+    //   if (session) {
+    //     const cartData = JSON.parse(
+    //       localStorage.getItem("apiResponseData")
+    //     );
+    //     await axios
+    //       .get(
+    //         `https://apiecommerce.meucurso.com.br/BIPEStore/GetLatestOrder?CustomerId=${session?.user?.CustomerId}`,
+    //         {
+    //           headers: { Authorization: `Bearer ${session?.user?.Token}` },
+    //         }
+    //       )
+    //       .then((response) => {
+    //         setCartProducts(
+    //           response.data.Items.filter(
+    //             (item) => item.OrderItemProductLevelId === 1
+    //           )
+    //         );
+    //       })
+    //       .catch((err) => console.log(err));
+    //   }
+    // };
     const fetchLocalItems = async () => {
       const response = JSON.parse(localStorage.getItem("apiResponseData"));
       setLocalProducts(response);
@@ -114,7 +114,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
 
     fetchCartItems();
     fetchLocalItems();
-  }, [session, setCartProducts]);
+  }, [session, setCartProducts, fetchCartItems]);
 
   return (
     <>

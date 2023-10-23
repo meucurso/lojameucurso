@@ -201,14 +201,13 @@ const ProductCard1: FC<ProductCardProps> = ({
             )}
 
             <FlexBox alignItems="center" gap={1} mt={0.5}>
+              <Box color="grey.600" fontWeight="600">
+                <del>{currency(price)}</del>
+              </Box>
               <Box fontWeight="600" color="primary.main">
                 {/* {calculateDiscount(SpecialPrice, discount)} */}
 
                 {currency(SpecialPrice)}
-              </Box>
-
-              <Box color="grey.600" fontWeight="600">
-                <del>{currency(price)}</del>
               </Box>
             </FlexBox>
           </Box>

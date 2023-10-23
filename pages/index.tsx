@@ -18,6 +18,8 @@ import { useState, useEffect } from "react";
 import { Iron } from "@mui/icons-material";
 import { CookieConsent } from "components/CookieConsent";
 import { Section11 } from "pages-sections/fashion-shop-2/Section11";
+import { useProducts } from "hooks/useProducts";
+import { useBanners } from "hooks/useBanners";
 
 // =======================================================
 type IndexPageProps = {
@@ -40,6 +42,9 @@ type IndexPageProps = {
 const IndexPage: NextPage<IndexPageProps> = (props) => {
   const theme = useTheme();
 
+  const { products } = useProducts(api.getProductsById("145"));
+  const { banners } = useBanners(api.getIndexBanners("1"));
+
   return (
     <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
       <SEO
@@ -50,7 +55,7 @@ const IndexPage: NextPage<IndexPageProps> = (props) => {
       <Box bgcolor="white">
         {/* HERO SECTION CAROUSEL */}
 
-        <Section1 carouselData={props.indexBannersData} />
+        <Section1 carouselData={banners} />
 
         {/* BEST SELLING CATEGORIES */}
         <Section3 categories={props.categories} />
@@ -59,7 +64,7 @@ const IndexPage: NextPage<IndexPageProps> = (props) => {
         <Section2 serviceList={props.serviceList} />
 
         {/* BEST SELLING PRODUCTS */}
-        <Section4 products={props.products} />
+        <Section4 products={products} />
 
         <Section11 />
 
@@ -98,31 +103,13 @@ const IndexPage: NextPage<IndexPageProps> = (props) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const blogs = await api.getBlogs();
-  const brands = await api.getBrands();
-  const products = await api.getProductsById("145");
   const serviceList = await api.getServices();
   const categories = await api.getCategories();
-  const saleProducts = await api.getSaleProducts();
-  const latestProducts = await api.getLatestProducts();
-  const popularProducts = await api.getPopularProducts();
-  const featureProducts = await api.getFeatureProducts();
-  const bestWeekProducts = await api.getBestWeekProducts();
-  const indexBannersData = await api.getIndexBanners("1");
 
   return {
     props: {
-      blogs,
-      brands,
-      products,
       categories,
       serviceList,
-      saleProducts,
-      latestProducts,
-      popularProducts,
-      featureProducts,
-      bestWeekProducts,
-      indexBannersData,
     },
     revalidate: 25,
   };
