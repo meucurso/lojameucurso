@@ -10,10 +10,16 @@ import Section6 from "pages-sections/fashion-shop-2/Section6";
 import { H1 } from "components/Typography";
 
 import Section1 from "pages-sections/fashion-shop-2/Section1";
+import { useProducts } from "hooks/useProducts";
+import { useBanners } from "hooks/useBanners";
 
-const AtualizacaoEPratica = (props) => {
+const AtualizacaoEPratica = () => {
   const width = useWindowSize();
   const [visibleSlides, setVisibleSlides] = useState(4);
+
+  const { products } = useProducts(api.getProductsById("12"));
+
+  const { banners } = useBanners(api.getIndexBanners("8"));
 
   useEffect(() => {
     if (width < 426) setVisibleSlides(1);
@@ -22,6 +28,7 @@ const AtualizacaoEPratica = (props) => {
     else if (width < 1200) setVisibleSlides(4);
     else setVisibleSlides(5);
   }, [width]);
+
   const theme = useTheme();
 
   return (
@@ -32,7 +39,7 @@ const AtualizacaoEPratica = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <Section1 carouselData={props.indexBannersData} />
+          <Section1 carouselData={banners} />
           <Box
             py={5}
             my={5}
@@ -48,7 +55,10 @@ const AtualizacaoEPratica = (props) => {
                   <H1>Cursos em Destaque</H1>
                 </Grid>
               </Grid>
-              <Section6 products={props.updatePracticceProducts} />
+              <Section6
+                category="atualizacao-e-pratica"
+                products={products}
+              />
             </Container>
           </Box>
           <Box sx={{ backgroundColor: "#fff" }}></Box>
@@ -58,16 +68,3 @@ const AtualizacaoEPratica = (props) => {
   );
 };
 export default AtualizacaoEPratica;
-
-export const getStaticProps: GetStaticProps = async () => {
-  const updatePracticceProducts = await api.getProductsById("96");
-  const indexBannersData = await api.getIndexBanners("8");
-
-  return {
-    props: {
-      updatePracticceProducts,
-      indexBannersData,
-    },
-    revalidate: 25,
-  };
-};

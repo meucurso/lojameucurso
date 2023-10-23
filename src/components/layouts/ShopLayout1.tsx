@@ -31,6 +31,11 @@ const WhatsApp = styled("img")({
   position: "fixed",
   bottom: "30px",
   right: "10px",
+  "@media (max-width: 600px)": {
+    width: "40px",
+    height: "40px",
+    bottom: "130px",
+  },
 });
 
 // ===================================================

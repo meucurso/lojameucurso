@@ -12,10 +12,16 @@ import OABExamTeam from "components/oab-examteam/OABExamTeam";
 import Section6 from "pages-sections/fashion-shop-2/Section6";
 
 import Section1 from "pages-sections/fashion-shop-2/Section1";
+import { useProducts } from "hooks/useProducts";
+import { useBanners } from "hooks/useBanners";
 
-const PrimeirosPassosNaAdvocacia = (props) => {
+const PrimeirosPassosNaAdvocacia = () => {
   const width = useWindowSize();
   const [visibleSlides, setVisibleSlides] = useState(4);
+
+  const { products } = useProducts(api.getProductsById("28"));
+
+  const { banners } = useBanners(api.getIndexBanners("28"));
 
   useEffect(() => {
     if (width < 426) setVisibleSlides(1);
@@ -34,7 +40,7 @@ const PrimeirosPassosNaAdvocacia = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <Section1 carouselData={props.indexBannersData} />
+          <Section1 carouselData={banners} />
           <Container>
             <Grid container spacing={2} marginTop={5}>
               <Grid item md={6}>
@@ -85,7 +91,7 @@ const PrimeirosPassosNaAdvocacia = (props) => {
             <Grid container>
               <Grid item md={12} textAlign={"center"}></Grid>
             </Grid>
-            <Section6 products={props.firstStepsProducts} />
+            <Section6 category="Primeiros-Passos" products={products} />
           </Container>
         </Container>
       </ShopLayout1>
@@ -93,15 +99,3 @@ const PrimeirosPassosNaAdvocacia = (props) => {
   );
 };
 export default PrimeirosPassosNaAdvocacia;
-
-export const getStaticProps: GetStaticProps = async () => {
-  const firstStepsProducts = await api.getProductsById("28");
-  const indexBannersData = await api.getIndexBanners("28");
-  return {
-    props: {
-      firstStepsProducts,
-      indexBannersData,
-    },
-    revalidate: 25,
-  };
-};

@@ -271,7 +271,9 @@ const Navbar: FC<NavbarProps> = ({
             {/* <StyledNavLink href={"/primeiros-passos-na-advocacia"}>
               Primeiros Passos
             </StyledNavLink> */}
-            <StyledNavLink href={"/searchCategory?CategoryId=133"}>
+            <StyledNavLink
+              href={"/categorias/oab-1-fase-planos-de-assinatura"}
+            >
               Planos de assinatura
             </StyledNavLink>
             <StyledNavLink href={"/livraria"}>Livraria</StyledNavLink>

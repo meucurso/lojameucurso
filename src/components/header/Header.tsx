@@ -39,6 +39,7 @@ import { useSession, signOut } from "next-auth/react";
 import HelpIcon from "@mui/icons-material/Help";
 import axios from "axios";
 import BipeIcon from "components/icons/BipeIcon";
+import DescriptionIcon from "@mui/icons-material/Description";
 import { useCart } from "contexts/CartContext";
 
 // styled component
@@ -88,7 +89,6 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sidenavOpen, setSidenavOpen] = useState(false);
   const [searchBarOpen, setSearchBarOpen] = useState(false);
-  // const [cartProducts, setCartProducts] = useState<any>([]);
   const isMobile = useMediaQuery(theme.breakpoints.down("xs"));
   const downMd = useMediaQuery(theme.breakpoints.down(1150));
 
@@ -97,7 +97,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
   const toggleSearchBar = () => setSearchBarOpen(!searchBarOpen);
 
   const { data: session } = useSession();
-  const { cartProducts, setCartProducts, fetchCartItems } = useCart();
+  const { cartProducts } = useCart();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openModal, setOpenModal] = useState(false);
@@ -107,18 +107,21 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
 
   useEffect(() => {
     const fetchUserConfigs = async () => {
-      await axios
-        .get(
-          `https://apiecommerce.meucurso.com.br/Student/%7BcustomerId%7D?customerId=${session?.user?.CustomerId}`,
-          { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
-        )
-        .then((response) => setUserConfigs(response.data))
-        .catch((err) => console.log(err));
+      if (session) {
+        await axios
+          .get(
+            `https://apiecommerce.meucurso.com.br/Student/%7BcustomerId%7D?customerId=${session?.user?.CustomerId}`,
+            {
+              headers: { Authorization: `Bearer ${session?.user?.Token}` },
+            }
+          )
+          .then((response) => setUserConfigs(response.data))
+          .catch((err) => console.log(err));
+      }
     };
     fetchUserConfigs();
-    fetchCartItems();
   }, [
-    fetchCartItems,
+    session,
     session?.user?.CustomerId,
     session?.user?.Token,
     setUserConfigs,
@@ -186,15 +189,6 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
             <FlexBox justifyContent="end" flex={1}>
               <Box component={IconButton} onClick={toggleSearchBar}>
                 <Icon.Search sx={ICON_STYLE} />
-              </Box>
-
-              <Box pt={2} color={"grey"} component={Button}>
-                <Link
-                  href={"https://aluno.meucurso.com.br/"}
-                  target="_blank"
-                >
-                  <School />
-                </Link>
               </Box>
 
               <Box component={Button} onClick={toggleSidenav}>
@@ -272,19 +266,36 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
                 {userConfigs?.MainPhone}
               </p>
             </Typography>
-            <Button
-              style={{ display: "block", margin: "0 auto " }}
-              variant="outlined"
-              color="success"
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                mt: 5,
+              }}
             >
-              <a
-                target="_blank"
-                href="https://aluno.meucurso.com.br/Account/MyAccount"
+              <Button
+                style={{ display: "block", margin: "0 auto " }}
+                variant="outlined"
+                color="success"
               >
-                {" "}
-                Editar
-              </a>
-            </Button>
+                <a
+                  target="_blank"
+                  href="https://aluno.meucurso.com.br/Account/MyAccount"
+                >
+                  {" "}
+                  Editar
+                </a>
+              </Button>
+              <Button
+                onClick={handleCloseModal}
+                style={{ display: "block", margin: "0 auto " }}
+                variant="outlined"
+                color="error"
+              >
+                Sair
+              </Button>
+            </Box>
           </Box>
         </Modal>
         {/* LEFT CONTENT - LOGO AND CATEGORY */}
@@ -386,24 +397,28 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
               >
-                {/* <MenuItem onClick={handleClose}>
-              <Avatar /> Profile
-            </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <Avatar /> My account
-            </MenuItem> */}
-
                 <MenuItem onClick={handleOpenModal}>
                   <ListItemIcon>
                     <Settings fontSize="small" />
                   </ListItemIcon>
                   Configurações
                 </MenuItem>
+                <Link
+                  target="_blank"
+                  href={"https://aluno.meucurso.com.br/BIPEStore/Orders"}
+                >
+                  <MenuItem>
+                    <ListItemIcon>
+                      <DescriptionIcon fontSize="small" />
+                    </ListItemIcon>
+                    Meus Pedidos
+                  </MenuItem>
+                </Link>
                 <MenuItem onClick={handleSignOut}>
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>
-                  Sair
+                  Sair da conta
                 </MenuItem>
               </Menu>
             </>

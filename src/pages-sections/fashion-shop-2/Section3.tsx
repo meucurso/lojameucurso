@@ -4,12 +4,15 @@ import { Container, Grid } from "@mui/material";
 import CategoryCard1 from "components/category-cards/CategoryCard1";
 import Category from "models/Category.model";
 import Link from "next/link";
+import { useRouter } from "next/dist/client/router";
 
 // ===========================================================
 type Section3Props = { categories: Category[] };
 // ===========================================================
 
 const Section3: FC<Section3Props> = ({ categories }) => {
+  const router = useRouter();
+
   return (
     <Container sx={{ mt: 8 }}>
       <Grid container spacing={3}>

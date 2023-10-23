@@ -28,6 +28,9 @@ const Cookie = styled(Box)({
     //   backgroundColor: "red",
     // },
   },
+  "@media (max-width: 600px)": {
+    bottom: 50,
+  },
 });
 
 export function CookieConsent({}: CookieConsentProps) {

@@ -15,10 +15,16 @@ import ResponsiveBanners from "components/responsive-banners/ResponsiveBanners";
 import Section1 from "pages-sections/fashion-shop-2/Section1";
 import { H1, Paragraph } from "components/Typography";
 import TenMotives from "components/tenmotives-postgraduate/TenMotives";
+import { useProducts } from "hooks/useProducts";
+import { useBanners } from "hooks/useBanners";
 
-const PosGraduacao = (props) => {
+const PosGraduacao = () => {
   const width = useWindowSize();
   const [visibleSlides, setVisibleSlides] = useState(4);
+
+  const { products } = useProducts(api.getProductsById("3"));
+
+  const { banners } = useBanners(api.getIndexBanners("9"));
 
   useEffect(() => {
     if (width < 426) setVisibleSlides(1);
@@ -37,7 +43,7 @@ const PosGraduacao = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <Section1 carouselData={props.indexBannersData} />
+          <Section1 carouselData={banners} />
           <Container>
             <Grid container spacing={2} marginTop={5}>
               <Grid item md={6}>
@@ -86,7 +92,7 @@ const PosGraduacao = (props) => {
                   <h1>Cursos em Destaque</h1>
                 </Grid>
               </Grid>
-              <Section6 products={props.postGraduateProducts} />
+              <Section6 category="pos-graduacao" products={products} />
             </Container>
           </Box>
           <TenMotives />
@@ -96,16 +102,3 @@ const PosGraduacao = (props) => {
   );
 };
 export default PosGraduacao;
-
-export const getStaticProps: GetStaticProps = async () => {
-  const postGraduateProducts = await api.getProductsById("3");
-  const indexBannersData = await api.getIndexBanners("9");
-
-  return {
-    props: {
-      postGraduateProducts,
-      indexBannersData,
-    },
-    revalidate: 25,
-  };
-};

@@ -1,5 +1,5 @@
-import { FC } from "react";
-import { Badge, Button, Box } from "@mui/material";
+import { FC, useEffect } from "react";
+import { Badge, Button, Box, Typography, Modal } from "@mui/material";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -15,10 +15,30 @@ import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { useState } from "react";
 import Link from "next/link";
+import BipeIcon from "components/icons/BipeIcon";
+import DescriptionIcon from "@mui/icons-material/Description";
+import axios from "axios";
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "none",
+  borderRadius: "10px",
+  boxShadow: 24,
+  p: 4,
+};
 
 const MobileNavigationBar: FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [userConfigs, setUserConfigs] = useState<any>();
   const open = Boolean(anchorEl);
+  const [openModal, setOpenModal] = useState(false);
+  const handleOpenModal = () => setOpenModal(true);
+  const handleCloseModal = () => setOpenModal(false);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -30,8 +50,92 @@ const MobileNavigationBar: FC = () => {
   const { state } = useAppContext();
   const { data: session } = useSession();
 
+  useEffect(() => {
+    const fetchUserConfigs = async () => {
+      if (session) {
+        await axios
+          .get(
+            `https://apiecommerce.meucurso.com.br/Student/%7BcustomerId%7D?customerId=${session?.user?.CustomerId}`,
+            {
+              headers: { Authorization: `Bearer ${session?.user?.Token}` },
+            }
+          )
+          .then((response) => setUserConfigs(response.data))
+          .catch((err) => console.log(err));
+      }
+    };
+    fetchUserConfigs();
+  }, [session, setUserConfigs]);
+
   return width <= 900 ? (
     <Wrapper>
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            textAlign={"center"}
+          >
+            Configurações
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <p>
+              {" "}
+              <strong>Nome:</strong> {userConfigs?.FirstName}
+            </p>
+            <p>
+              {" "}
+              <strong>Sobrenome:</strong> {userConfigs?.LastName}
+            </p>
+            <p>
+              <strong>Email:</strong> {userConfigs?.Email}
+            </p>
+            <p>
+              {" "}
+              <strong>CPF:</strong> {userConfigs?.CPF}
+            </p>
+            <p>
+              <strong>Telefone Principal:</strong> {userConfigs?.MainPhone}
+            </p>
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              mt: 5,
+            }}
+          >
+            <Button
+              style={{ display: "block", margin: "0 auto " }}
+              variant="outlined"
+              color="success"
+            >
+              <a
+                target="_blank"
+                href="https://aluno.meucurso.com.br/Account/MyAccount"
+              >
+                {" "}
+                Editar
+              </a>
+            </Button>
+            <Button
+              onClick={handleCloseModal}
+              style={{ display: "block", margin: "0 auto " }}
+              variant="outlined"
+              color="error"
+            >
+              Sair
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
       {list.map((item) => (
         <StyledNavLink href={item.href} key={item.title}>
           {item.title === "Cart" ? (
@@ -46,23 +150,26 @@ const MobileNavigationBar: FC = () => {
         </StyledNavLink>
       ))}
       {!session && (
-        <Button
-          sx={{
-            ":hover": {
-              color: "#D23F57",
-            },
-            transition: "0.2s",
-            flex: "1 1 0",
-            display: "flex",
-            fontSize: "13px",
-            alignItems: "center",
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
-        >
-          <User2 fontSize="small" />
-          Conta
-        </Button>
+        <>
+          <Button
+            href="/login"
+            sx={{
+              ":hover": {
+                color: "#D23F57",
+              },
+              transition: "0.2s",
+              flex: "1 1 0",
+              display: "flex",
+              fontSize: "13px",
+              alignItems: "center",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <User2 fontSize="small" />
+            Conta
+          </Button>
+        </>
       )}
       {session && (
         <>
@@ -135,17 +242,28 @@ const MobileNavigationBar: FC = () => {
               <Avatar /> My account
             </MenuItem> */}
 
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleOpenModal}>
               <ListItemIcon>
                 <Settings fontSize="small" />
               </ListItemIcon>
               Configurações
             </MenuItem>
+            <Link
+              target="_blank"
+              href={"https://aluno.meucurso.com.br/BIPEStore/Orders"}
+            >
+              <MenuItem>
+                <ListItemIcon>
+                  <DescriptionIcon fontSize="small" />
+                </ListItemIcon>
+                Meus Pedidos
+              </MenuItem>
+            </Link>
             <MenuItem onClick={() => signOut()}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>
-              Sair
+              Sair da conta
             </MenuItem>
           </Menu>
         </>
@@ -156,7 +274,11 @@ const MobileNavigationBar: FC = () => {
 
 const list = [
   { title: "Início", icon: Home, href: "/" },
-  { title: "Carrinho", icon: ShoppingBagOutlined, href: "/cart" },
+  {
+    title: "Área do Aluno",
+    icon: BipeIcon,
+    href: "https://aluno.meucurso.com.br/",
+  },
   // { title: "Conta", icon: User2, href: "/profile" },
 ];
 

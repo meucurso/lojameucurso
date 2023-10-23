@@ -48,7 +48,7 @@ const Carrinho: NextPage = () => {
   const [cupomText, setCoupomText] = useState("");
   const [sedex, setSedex] = useState<any>(false);
   const [radioValue, setRadioValue] = useState("retirarnaloja");
-  const [loading, setLoading] = useState(false);
+
   const [loadingAddress, setLoadingAddress] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [pickupInStore, setPickupInStore] = useState(false);
@@ -70,7 +70,7 @@ const Carrinho: NextPage = () => {
     if (session) {
       try {
         const response = await axios.get(
-          `http://apiecommerce.meucurso.com.br/Student/Address?CustomerId=${session?.user?.CustomerId}`,
+          `https://apiecommerce.meucurso.com.br/Student/Address?CustomerId=${session?.user?.CustomerId}`,
           { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
         );
         setLoadingAddress(false);
@@ -269,7 +269,7 @@ const Carrinho: NextPage = () => {
 
   return (
     <>
-      {loading && (
+      {/* {loading && (
         <>
           <CheckoutNavLayout>
             <Grid container spacing={3}>
@@ -282,305 +282,327 @@ const Carrinho: NextPage = () => {
             </Grid>
           </CheckoutNavLayout>
         </>
-      )}
-      {!loading && (
-        <>
-          {!cartProducts.length && (
-            <ShopLayout1>
+      )} */}
+      {/* {!loading && ( */}
+      <>
+        {!cartProducts.length && (
+          <ShopLayout1>
+            <SEO
+              title="Carrinho"
+              sitename="MeuCurso - Do seu jeito. No seu tempo."
+            />
+
+            <Grid container>
+              <Grid item md={12} textAlign={"center"}>
+                <h1>Seu carrinho está vazio!</h1>
+              </Grid>
+            </Grid>
+          </ShopLayout1>
+        )}
+        {session && cartProducts.length > 0 && (
+          <>
+            <CheckoutNavLayout>
               <SEO
                 title="Carrinho"
                 sitename="MeuCurso - Do seu jeito. No seu tempo."
               />
 
-              <Grid container>
-                <Grid item md={12} textAlign={"center"}>
-                  <h1>Seu carrinho está vazio!</h1>
+              <Grid container spacing={3}>
+                {/* CART PRODUCT LIST */}
+                {/* {loading && (
+                    <Skeleton variant="rounded" width={500} height={600} />
+                  )} */}
+                {/* {!loading && ( */}
+                <Grid item md={8} xs={12}>
+                  {cartProducts.map((item) => (
+                    <ProductCard7
+                      onClickFunction={() =>
+                        handleDeleteCartItems(
+                          localProducts?.OrderId,
+                          localProducts?.StoreId,
+                          item.SKU
+                        )
+                      }
+                      key={item.OrderItemId}
+                      {...item}
+                    />
+                  ))}
+                </Grid>
+                {/* )} */}
+
+                {/* CHECKOUT FORM */}
+                <Grid item md={4} xs={12}>
+                  <Card sx={{ padding: 3 }}>
+                    <FlexBetween mb={2}>
+                      <Span color="grey.600">Subtotal:</Span>
+
+                      <Span fontSize={18} fontWeight={600} lineHeight="1">
+                        {currency(getSubTotalPrice())}
+                      </Span>
+                    </FlexBetween>
+                    <FlexBetween mb={2}>
+                      <Span color="grey.600">Cupom:</Span>
+
+                      <Span
+                        fontSize={18}
+                        fontWeight={600}
+                        lineHeight="1"
+                        color={"green"}
+                      >
+                        - {currency(coupoms?.DiscountAmount)}
+                      </Span>
+                    </FlexBetween>
+                    <FlexBetween mb={2}>
+                      <Span color="grey.600">Frete:</Span>
+
+                      <Span
+                        fontSize={18}
+                        fontWeight={600}
+                        lineHeight="1"
+                        color={"#D23F57"}
+                      >
+                        +{currency(shippingPrice)}
+                      </Span>
+                    </FlexBetween>
+                    <FlexBetween>
+                      <Span color="grey.600">Total:</Span>
+
+                      <Span fontSize={18} fontWeight={600} lineHeight="1">
+                        {shippingPrice === undefined ? (
+                          <div>
+                            <p
+                              style={{
+                                display: "flex",
+                                justifyContent: "end",
+                              }}
+                            >
+                              {currency(getSubTotalPrice())}
+                            </p>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "end",
+                              }}
+                            >
+                              <Paragraph
+                                fontSize={13}
+                                fontWeight={600}
+                                lineHeight="1"
+                                textAlign={"end"}
+                                sx={{ width: "150px" }}
+                              >
+                                ou em até{" "}
+                                <span
+                                  style={{
+                                    color: "red",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  12x{" "}
+                                </span>{" "}
+                                de{" "}
+                                <span
+                                  style={{
+                                    color: "red",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {currency(getSubTotalPrice() / 12)}
+                                </span>{" "}
+                                no cartão de crédito
+                              </Paragraph>
+                            </div>
+                          </div>
+                        ) : (
+                          <div>
+                            <p
+                              style={{
+                                display: "flex",
+                                justifyContent: "end",
+                              }}
+                            >
+                              {currency(getTotalPrice())}
+                            </p>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "end",
+                              }}
+                            >
+                              <Paragraph
+                                fontSize={13}
+                                fontWeight={600}
+                                lineHeight="1"
+                                textAlign={"end"}
+                                sx={{ width: "150px" }}
+                              >
+                                ou em até{" "}
+                                <span
+                                  style={{
+                                    color: "red",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  12x{" "}
+                                </span>{" "}
+                                de{" "}
+                                <span
+                                  style={{
+                                    color: "red",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {currency(getTotalPrice() / 12)}
+                                </span>{" "}
+                                no cartão de crédito
+                              </Paragraph>
+                            </div>
+                          </div>
+                        )}
+                      </Span>
+                    </FlexBetween>
+
+                    <Divider sx={{ mb: 2 }} />
+
+                    <TextField
+                      value={coupomValue}
+                      onChange={(e) => setCoupomValue(e.target.value)}
+                      fullWidth
+                      size="small"
+                      label="Cupom"
+                      variant="outlined"
+                      placeholder="Cupom"
+                      helperText={cupomText}
+                    />
+
+                    <Button
+                      disabled={coupomValue.length <= 0}
+                      onClick={() => handleCoupom(coupomValue)}
+                      variant="outlined"
+                      color="primary"
+                      fullWidth
+                      sx={{ mt: 2, mb: 4 }}
+                    >
+                      Aplicar Cupom
+                    </Button>
+
+                    <Divider sx={{ mb: 2 }} />
+                    {shippingProduct && (
+                      <>
+                        <FormControl sx={{ mb: 2 }}>
+                          <FormLabel id="demo-radio-buttons-group-label">
+                            <Span color="grey.600">Tipo de entrega</Span>
+                          </FormLabel>
+                          <RadioGroup
+                            aria-labelledby="demo-radio-buttons-group-label"
+                            defaultValue="female"
+                            name="radio-buttons-group"
+                            onChange={handleRadioChange}
+                            value={radioValue}
+                          >
+                            <FormControlLabel
+                              onClick={handlePickUpStore}
+                              value="retirarnaloja"
+                              control={<Radio />}
+                              label="Retirar na Loja"
+                            />
+                            <FormControlLabel
+                              onClick={handleSedex}
+                              value="sedex"
+                              control={<Radio />}
+                              label="Sedex"
+                            />
+                          </RadioGroup>
+                        </FormControl>
+                        {sedex && (
+                          <>
+                            <TextField
+                              helperText={
+                                <LinkHelper
+                                  target="_blank"
+                                  href="https://aluno.meucurso.com.br/Account/MyAccount"
+                                >
+                                  Caso queira registrar um novo endereço,
+                                  clique aqui!
+                                </LinkHelper>
+                              }
+                              select
+                              value={address}
+                              fullWidth
+                              size="small"
+                              label="Endereços"
+                              variant="outlined"
+                              placeholder="Selecione seu endereço"
+                              onChange={handleAddressChange}
+                            >
+                              {studentAddress.map((item, index) => (
+                                <MenuItem
+                                  value={item.StudentAddressId}
+                                  key={index}
+                                >
+                                  {item.AddressLine1} - {item.Number} -{" "}
+                                  {item.CityName}- {item.StateName}
+                                </MenuItem>
+                              ))}
+                            </TextField>
+
+                            <TextField
+                              disabled
+                              fullWidth
+                              size="small"
+                              label="C.E.P"
+                              placeholder="3100"
+                              variant="outlined"
+                              sx={{
+                                mt: 2,
+                                color: "#2b3445",
+                                "& .MuiInputBase-input.Mui-disabled": {
+                                  WebkitTextFillColor: "#2b3445",
+                                },
+                                "& .MuiFormLabel-root.Mui-disabled": {
+                                  color: "#2b3445",
+                                },
+                              }}
+                              value={cep}
+                              onChange={(e) => setCep(e.target.value)}
+                            />
+                            <LoadingButton
+                              loading={loadingButton}
+                              disabled={
+                                cep.length === 0 && address.length === 0
+                              }
+                              onClick={() => handleShippingDetails(cep)}
+                              variant="outlined"
+                              color="primary"
+                              fullWidth
+                              sx={{ my: 2 }}
+                            >
+                              Calcular frete
+                            </LoadingButton>
+                          </>
+                        )}
+                      </>
+                    )}
+
+                    <Button
+                      onClick={handleCheckout}
+                      disabled={sedex === true && !cepValue}
+                      fullWidth
+                      color="primary"
+                      // href="/payment"
+                      variant="contained"
+                      LinkComponent={Link}
+                    >
+                      Finalizar Compra
+                    </Button>
+                  </Card>
                 </Grid>
               </Grid>
-            </ShopLayout1>
-          )}
-          {session && cartProducts.length > 0 && (
-            <>
-              <CheckoutNavLayout>
-                <SEO
-                  title="Carrinho"
-                  sitename="MeuCurso - Do seu jeito. No seu tempo."
-                />
-
-                <Grid container spacing={3}>
-                  {/* CART PRODUCT LIST */}
-                  {loading && (
-                    <Skeleton variant="rounded" width={500} height={600} />
-                  )}
-                  {!loading && (
-                    <Grid item md={8} xs={12}>
-                      {cartProducts.map((item) => (
-                        <ProductCard7
-                          onClickFunction={() =>
-                            handleDeleteCartItems(
-                              localProducts?.OrderId,
-                              localProducts?.StoreId,
-                              item.SKU
-                            )
-                          }
-                          key={item.OrderItemId}
-                          {...item}
-                        />
-                      ))}
-                    </Grid>
-                  )}
-
-                  {/* CHECKOUT FORM */}
-                  <Grid item md={4} xs={12}>
-                    <Card sx={{ padding: 3 }}>
-                      <FlexBetween mb={2}>
-                        <Span color="grey.600">Subtotal:</Span>
-
-                        <Span
-                          fontSize={18}
-                          fontWeight={600}
-                          lineHeight="1"
-                        >
-                          {currency(getSubTotalPrice())}
-                        </Span>
-                      </FlexBetween>
-                      <FlexBetween mb={2}>
-                        <Span color="grey.600">Cupom:</Span>
-
-                        <Span
-                          fontSize={18}
-                          fontWeight={600}
-                          lineHeight="1"
-                          color={"green"}
-                        >
-                          - {currency(coupoms?.DiscountAmount)}
-                        </Span>
-                      </FlexBetween>
-                      <FlexBetween mb={2}>
-                        <Span color="grey.600">Frete:</Span>
-
-                        <Span
-                          fontSize={18}
-                          fontWeight={600}
-                          lineHeight="1"
-                          color={"#D23F57"}
-                        >
-                          +{currency(shippingPrice)}
-                        </Span>
-                      </FlexBetween>
-                      <FlexBetween>
-                        <Span color="grey.600">Total:</Span>
-
-                        <Span
-                          fontSize={18}
-                          fontWeight={600}
-                          lineHeight="1"
-                        >
-                          {shippingPrice === undefined ? (
-                            <div>
-                              <p
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "end",
-                                }}
-                              >
-                                {currency(getSubTotalPrice())}
-                              </p>
-                              <p style={{ fontSize: "13px" }}>
-                                ou em até 12x de{" "}
-                                {currency(getSubTotalPrice() / 12)}
-                              </p>
-                            </div>
-                          ) : (
-                            <div>
-                              <p
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "end",
-                                }}
-                              >
-                                {currency(getTotalPrice())}
-                              </p>
-                            </div>
-                          )}
-                        </Span>
-                      </FlexBetween>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "end",
-                        }}
-                      >
-                        <Paragraph
-                          fontSize={13}
-                          fontWeight={600}
-                          lineHeight="1"
-                          textAlign={"end"}
-                          sx={{ width: "150px" }}
-                        >
-                          ou em até{" "}
-                          <span
-                            style={{
-                              color: "red",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            12x{" "}
-                          </span>{" "}
-                          de{" "}
-                          <span
-                            style={{
-                              color: "red",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {currency(localProducts.Price / 12)}
-                          </span>{" "}
-                          no cartão de crédito
-                        </Paragraph>
-                      </div>
-
-                      <Divider sx={{ mb: 2 }} />
-
-                      <TextField
-                        value={coupomValue}
-                        onChange={(e) => setCoupomValue(e.target.value)}
-                        fullWidth
-                        size="small"
-                        label="Cupom"
-                        variant="outlined"
-                        placeholder="Cupom"
-                        helperText={cupomText}
-                      />
-
-                      <Button
-                        disabled={coupomValue.length <= 0}
-                        onClick={() => handleCoupom(coupomValue)}
-                        variant="outlined"
-                        color="primary"
-                        fullWidth
-                        sx={{ mt: 2, mb: 4 }}
-                      >
-                        Aplicar Cupom
-                      </Button>
-
-                      <Divider sx={{ mb: 2 }} />
-                      {shippingProduct && (
-                        <>
-                          <FormControl sx={{ mb: 2 }}>
-                            <FormLabel id="demo-radio-buttons-group-label">
-                              <Span color="grey.600">Tipo de entrega</Span>
-                            </FormLabel>
-                            <RadioGroup
-                              aria-labelledby="demo-radio-buttons-group-label"
-                              defaultValue="female"
-                              name="radio-buttons-group"
-                              onChange={handleRadioChange}
-                              value={radioValue}
-                            >
-                              <FormControlLabel
-                                onClick={handlePickUpStore}
-                                value="retirarnaloja"
-                                control={<Radio />}
-                                label="Retirar na Loja"
-                              />
-                              <FormControlLabel
-                                onClick={handleSedex}
-                                value="sedex"
-                                control={<Radio />}
-                                label="Sedex"
-                              />
-                            </RadioGroup>
-                          </FormControl>
-                          {sedex && (
-                            <>
-                              <TextField
-                                helperText={
-                                  <LinkHelper
-                                    target="_blank"
-                                    href="https://aluno.meucurso.com.br/Account/MyAccount"
-                                  >
-                                    Caso queira registrar um novo endereço,
-                                    clique aqui!
-                                  </LinkHelper>
-                                }
-                                select
-                                value={address}
-                                fullWidth
-                                size="small"
-                                label="Endereços"
-                                variant="outlined"
-                                placeholder="Selecione seu endereço"
-                                onChange={handleAddressChange}
-                              >
-                                {studentAddress.map((item, index) => (
-                                  <MenuItem
-                                    value={item.StudentAddressId}
-                                    key={index}
-                                  >
-                                    {item.AddressLine1} - {item.Number} -{" "}
-                                    {item.CityName}- {item.StateName}
-                                  </MenuItem>
-                                ))}
-                              </TextField>
-
-                              <TextField
-                                disabled
-                                fullWidth
-                                size="small"
-                                label="C.E.P"
-                                placeholder="3100"
-                                variant="outlined"
-                                sx={{
-                                  mt: 2,
-                                  color: "#2b3445",
-                                  "& .MuiInputBase-input.Mui-disabled": {
-                                    WebkitTextFillColor: "#2b3445",
-                                  },
-                                  "& .MuiFormLabel-root.Mui-disabled": {
-                                    color: "#2b3445",
-                                  },
-                                }}
-                                value={cep}
-                                onChange={(e) => setCep(e.target.value)}
-                              />
-                              <LoadingButton
-                                loading={loadingButton}
-                                disabled={
-                                  cep.length === 0 && address.length === 0
-                                }
-                                onClick={() => handleShippingDetails(cep)}
-                                variant="outlined"
-                                color="primary"
-                                fullWidth
-                                sx={{ my: 2 }}
-                              >
-                                Calcular frete
-                              </LoadingButton>
-                            </>
-                          )}
-                        </>
-                      )}
-
-                      <Button
-                        onClick={handleCheckout}
-                        disabled={sedex === true && !cepValue}
-                        fullWidth
-                        color="primary"
-                        // href="/payment"
-                        variant="contained"
-                        LinkComponent={Link}
-                      >
-                        Finalizar Compra
-                      </Button>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </CheckoutNavLayout>
-            </>
-          )}
-        </>
-      )}
+            </CheckoutNavLayout>
+          </>
+        )}
+      </>
+      {/* )} */}
     </>
   );
 };

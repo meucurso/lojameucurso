@@ -10,10 +10,16 @@ import Section6 from "pages-sections/fashion-shop-2/Section6";
 import { H1 } from "components/Typography";
 
 import Section1 from "pages-sections/fashion-shop-2/Section1";
+import { useProducts } from "hooks/useProducts";
+import { useBanners } from "hooks/useBanners";
 
-const Livraria = (props) => {
+const Livraria = () => {
   const width = useWindowSize();
   const [visibleSlides, setVisibleSlides] = useState(4);
+
+  const { products } = useProducts(api.getProductsById("13"));
+
+  const { banners } = useBanners(api.getIndexBanners("12"));
 
   useEffect(() => {
     if (width < 426) setVisibleSlides(1);
@@ -32,7 +38,7 @@ const Livraria = (props) => {
           sitename="MeuCurso - Do seu jeito.  No seu tempo."
         />
         <Container maxWidth="xl" disableGutters={true}>
-          <Section1 carouselData={props.indexBannersData} />
+          <Section1 carouselData={banners} />
           <Box
             py={5}
             my={5}
@@ -46,7 +52,7 @@ const Livraria = (props) => {
                   <H1>Livros em Destaque</H1>
                 </Grid>
               </Grid>
-              <Section6 products={props.booksProducts} />
+              <Section6 category="Livraria" products={products} />
             </Container>
           </Box>
           <Box sx={{ backgroundColor: "#fff" }}></Box>
@@ -56,15 +62,3 @@ const Livraria = (props) => {
   );
 };
 export default Livraria;
-
-export const getStaticProps: GetStaticProps = async () => {
-  const booksProducts = await api.getProductsById("13");
-  const indexBannersData = await api.getIndexBanners("12");
-
-  return {
-    props: {
-      booksProducts,
-      indexBannersData,
-    },
-  };
-};
