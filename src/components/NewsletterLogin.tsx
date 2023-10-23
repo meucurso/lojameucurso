@@ -53,7 +53,7 @@ const NewsletterLogin: FC<Props> = ({
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    debounce(() => setOpen(true), 2000)();
+    debounce(() => setOpen(true), 300)();
   }, []);
 
   return (
