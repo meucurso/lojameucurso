@@ -179,8 +179,8 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
             {/* MIDDLE CONTENT - LOGO */}
             <Link href="/">
               <Image
-                height={30}
-                src="/assets/images/logo_colorido.png"
+                height={60}
+                src="/assets/images/logos meu curso oab concurso pos-02.png"
                 alt="logo"
               />
             </Link>
@@ -302,8 +302,8 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
         <FlexBox mr={2} minWidth="170px" alignItems="center">
           <Link href="/">
             <Image
-              height={35}
-              src="/assets/images/logo_colorido.png"
+              height={60}
+              src="/assets/images/logos meu curso oab concurso pos-02.png"
               alt="logo"
             />
           </Link>
