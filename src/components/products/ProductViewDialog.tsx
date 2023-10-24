@@ -94,7 +94,7 @@ const ProductViewDialog: FC<ProductViewDialogProps> = (props) => {
                   color="primary"
                   variant="contained"
                   sx={{ height: 45 }}
-                  href={`/product/${product.URLKey}`}
+                  href={`/produto/${product.URLKey}`}
                 >
                   Mais detalhes
                 </Button>

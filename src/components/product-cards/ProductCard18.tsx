@@ -81,16 +81,16 @@ const ProductCard18: FC<ProductCardProps> = ({ product }) => {
 
   return (
     <Card>
-      <CardMedia>
-        {product.Price !== product.SpecialPrice && (
-          <StyledChip
-            color="primary"
-            size="small"
-            label={`${totalPercentDiscount.toFixed()}% OFF`}
-          />
-        )}
+      <Link href={`/produto/${product.URLKey}`}>
+        <CardMedia>
+          {product.Price !== product.SpecialPrice && (
+            <StyledChip
+              color="primary"
+              size="small"
+              label={`${totalPercentDiscount.toFixed()}% OFF`}
+            />
+          )}
 
-        <Link href={`/produto/${product.URLKey}`}>
           <img
             alt={product.Name}
             loading="lazy"
@@ -99,20 +99,19 @@ const ProductCard18: FC<ProductCardProps> = ({ product }) => {
             height={"100%"}
             style={{ objectFit: "contain" }}
           />
-        </Link>
 
-        <QuickViewButton
-          fullWidth
-          size="large"
-          color="dark"
-          variant="contained"
-          className="product-view-action"
-          onClick={() => setOpenDialog(true)}
-        >
-          Pré-Visualização
-        </QuickViewButton>
-      </CardMedia>
-
+          <QuickViewButton
+            fullWidth
+            size="large"
+            color="dark"
+            variant="contained"
+            className="product-view-action"
+            onClick={() => setOpenDialog(true)}
+          >
+            Pré-Visualização
+          </QuickViewButton>
+        </CardMedia>
+      </Link>
       <ProductViewDialog
         openDialog={openDialog}
         handleCloseDialog={() => setOpenDialog(false)}

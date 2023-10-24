@@ -95,7 +95,7 @@ const ProductCard7: FC<ProductCardProps> = ({
       </IconButton>
 
       <FlexBox p={2} rowGap={2} width="100%" flexDirection="column">
-        <Link href={`/product/${URLKey}`}>
+        <Link href={`/produto/${URLKey}`}>
           <Span ellipsis fontWeight="600" fontSize={18}>
             {ProductName}
           </Span>

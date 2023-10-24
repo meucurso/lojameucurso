@@ -162,6 +162,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
         )
         .then((response) => {
           setLoading(false);
+          console.log(response.data);
           const responseData = response.data;
           fetchCartItems();
           enqueueSnackbar("Produto adicionado no carrinho!", {

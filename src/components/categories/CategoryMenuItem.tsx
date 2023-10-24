@@ -26,7 +26,7 @@ const Wrapper = styled(Box)(({ theme }) => ({
     },
     "& > .mega-menu": {
       display: "block",
-      height: 220,
+      height: 540,
     },
   },
 }));
@@ -43,29 +43,47 @@ type CategoryMenuItemProps = {
 
 const CategoryMenuItem: FC<CategoryMenuItemProps> = (props) => {
   const { href, title, caret, children, ...rest } = props;
-
   const { settings } = useSettings();
-
   const router = useRouter();
-  const handlepage = () => {
-    router.push(href);
+
+  const handlePage = () => {
+    if (href.includes("marketplace/index/")) {
+    } else {
+      router.push(href);
+    }
   };
 
   return (
     <Wrapper>
-      <Box onClick={handlepage}>
-        <MenuItem className="category-dropdown-link">
-          {rest.icon && <rest.icon fontSize="small" color="inherit" />}
-          <span className="title">{title}</span>
-          {caret &&
-            (settings.direction === "ltr" ? (
-              <ChevronRight fontSize="small" />
-            ) : (
-              <ChevronLeft fontSize="small" />
-            ))}
-        </MenuItem>
+      <Box onClick={handlePage}>
+        {href.includes("marketplace/index/") ? (
+          <a
+            className="category-dropdown-link"
+            target="_blank"
+            href={href}
+          >
+            {rest.icon && <rest.icon fontSize="small" color="inherit" />}
+            <span className="title">{title}</span>
+            {caret &&
+              (settings.direction === "ltr" ? (
+                <ChevronRight fontSize="small" />
+              ) : (
+                <ChevronLeft fontSize="small" />
+              ))}
+          </a>
+        ) : (
+          <MenuItem className="category-dropdown-link">
+            {rest.icon && <rest.icon fontSize="small" color="inherit" />}
+            <span className="title">{title}</span>
+            {caret &&
+              (settings.direction === "ltr" ? (
+                <ChevronRight fontSize="small" />
+              ) : (
+                <ChevronLeft fontSize="small" />
+              ))}
+          </MenuItem>
+        )}
       </Box>
-
       {children}
     </Wrapper>
   );

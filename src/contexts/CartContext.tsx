@@ -14,6 +14,7 @@ const CartContext = createContext(null);
 export const CartProvider = ({ children }) => {
   const [cartProducts, setCartProducts] = useState([]);
   const [localProducts, setLocalProducts] = useState<any>();
+  const [orderId, setOrderId] = useState();
 
   const { data: session } = useSession();
 
@@ -24,7 +25,7 @@ export const CartProvider = ({ children }) => {
           `https://apiecommerce.meucurso.com.br/BIPEStore/GetLatestOrder?CustomerId=${session?.user?.CustomerId}`,
           { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
         );
-
+        setOrderId(response.data.OrderId);
         const processedData = response.data.Items.map((item) => {
           if (item.OrderItemProductLevelId === 1) {
             const matchingItem = response.data.Items.find(
@@ -62,6 +63,7 @@ export const CartProvider = ({ children }) => {
   const contextValue = useMemo(
     () => ({
       cartProducts,
+      orderId,
       setCartProducts,
       fetchCartItems,
       localProducts,
@@ -69,6 +71,7 @@ export const CartProvider = ({ children }) => {
     }),
     [
       cartProducts,
+      orderId,
       setCartProducts,
       fetchCartItems,
       localProducts,

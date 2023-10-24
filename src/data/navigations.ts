@@ -146,7 +146,7 @@ const navigations = [
     menuData: [
       {
         title: "Cursos",
-        href: "/searchCategory?CategoryId=76",
+        href: "/categorias/atualizacao-e-pratica",
         megaMenu: "MegaMenu3",
         menuData: {
           categories: [
@@ -204,6 +204,74 @@ const navigations = [
     title: "Primeiros Passos",
     href: "/cursos/primeiros-passos-na-advocacia",
     menuComponent: "MegaMenu1",
+  },
+  {
+    icon: GavelOutlinedIcon,
+    title: "/Professor",
+    href: "/professor",
+    menuComponent: "MegaMenu2",
+    menuData: [
+      {
+        title: "Alessandro Spilborghs",
+        href: "https://aluno.meucurso.com.br/marketplace/index/alessandrospilborghs",
+      },
+      {
+        title: "Carol Macaubal",
+        href: "https://aluno.meucurso.com.br/marketplace/index/carolmacaubal",
+      },
+      {
+        title: "Conrado Paulino",
+        href: "https://aluno.meucurso.com.br/marketplace/index/conradopaulino",
+      },
+      {
+        title: "Daniel Lamounier",
+        href: "https://aluno.meucurso.com.br/marketplace/index/lamounierdaniel",
+      },
+      {
+        title: "Darlan Barroso",
+        href: "https://aluno.meucurso.com.br/marketplace/index/darlanbarroso",
+      },
+      {
+        title: "Enki Pimenta",
+        href: "https://aluno.meucurso.com.br/marketplace/index/enkipimenta",
+      },
+      {
+        title: "Marcelle Tasoko",
+        href: "https://aluno.meucurso.com.br/marketplace/index/marcelletasoko",
+      },
+      {
+        title: "Marcos Oliveira",
+        href: "https://aluno.meucurso.com.br/marketplace/index/marcosoliveira",
+      },
+      {
+        title: "Priscila Souto",
+        href: "https://aluno.meucurso.com.br/marketplace/index/priscilasouto",
+      },
+      {
+        title: "Savio Chalita",
+        href: "https://aluno.meucurso.com.br/marketplace/index/saviochalita",
+      },
+      {
+        title: "Vanderlei Garcia",
+        href: "https://aluno.meucurso.com.br/marketplace/index/vanderlei-garcia",
+      },
+      {
+        title: "Yuri Carneiro",
+        href: "https://aluno.meucurso.com.br/marketplace/index/yuricarneiro",
+      },
+      {
+        title: "Anselmo Gonzalez",
+        href: "https://aluno.meucurso.com.br/marketplace/index/anselmogonzalez",
+      },
+      {
+        title: "Ivana David",
+        href: "https://aluno.meucurso.com.br/marketplace/index/ivanadavid",
+      },
+      {
+        title: "Sérgio Gabriel",
+        href: "https://aluno.meucurso.com.br/marketplace/index/sergiogabriel",
+      },
+    ],
   },
 ];
 

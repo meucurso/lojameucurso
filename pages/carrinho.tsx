@@ -24,7 +24,7 @@ import ShopLayout1 from "components/layouts/ShopLayout1";
 import styled from "@emotion/styled";
 import axios from "axios";
 import { LoadingButton } from "@mui/lab";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useCart } from "contexts/CartContext";
 
 const LinkHelper = styled(Link)({
@@ -47,13 +47,15 @@ const Carrinho: NextPage = () => {
   const [coupomValue, setCoupomValue] = useState<any>("");
   const [cupomText, setCoupomText] = useState("");
   const [sedex, setSedex] = useState<any>(false);
-  const [radioValue, setRadioValue] = useState("retirarnaloja");
+  const [radioValue, setRadioValue] = useState("");
+  const [shippingPrice, setShippingPrice] = useState(0);
 
   const [loadingAddress, setLoadingAddress] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [pickupInStore, setPickupInStore] = useState(false);
 
-  const { cartProducts, setCartProducts, fetchCartItems } = useCart();
+  const { cartProducts, setCartProducts, fetchCartItems, orderId } =
+    useCart();
 
   const getSubTotalPrice = () =>
     cartProducts.reduce((accum, item) => accum + item.Price * item.Qty, 0);
@@ -65,41 +67,59 @@ const Carrinho: NextPage = () => {
     return subTotal + shippingPrice - discountAmount;
   };
 
-  const fetchAddress = useCallback(async () => {
-    setLoadingAddress(true);
-    if (session) {
-      try {
-        const response = await axios.get(
-          `https://apiecommerce.meucurso.com.br/Student/Address?CustomerId=${session?.user?.CustomerId}`,
-          { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
-        );
-        setLoadingAddress(false);
-        setStudentAddress(response.data);
-      } catch (err) {
-        setLoadingAddress(false);
-        console.log(err);
-      }
+  const handleCheckout = () => {
+    const apiResponseData = JSON.parse(
+      localStorage.getItem("apiResponseData")
+    );
+    if (sedex) {
+      apiResponseData.Coupon = coupomValue;
+      apiResponseData.OrderShippingPackages = shippingSEDEXInformations;
+      apiResponseData.BillingAddressId = address;
+      apiResponseData.DigitalAdressId = billingAndShippingId[0];
+      apiResponseData.ShippingAddressId = address;
+      apiResponseData.Price = getTotalPrice();
+      apiResponseData.SubTotalPrice = getSubTotalPrice();
+      apiResponseData.Frete = shippingPrice;
+      apiResponseData.Cupom = coupoms?.DiscountAmount;
+
+      localStorage.setItem(
+        "apiResponseData",
+        JSON.stringify(apiResponseData)
+      );
+    } else if (pickupInStore) {
+      const pickStore = {
+        ServiceCode: 0,
+        ServiceDescription: "Retirar na loja",
+        DeliveryTime: 0,
+        ShippingPrice: 0,
+      };
+
+      apiResponseData.Coupon = coupomValue;
+      apiResponseData.OrderShippingPackages = [pickStore];
+      apiResponseData.BillingAddressId = address;
+      apiResponseData.DigitalAdressId = billingAndShippingId[0];
+      apiResponseData.ShippingAddressId = address;
+      apiResponseData.Price = getTotalPrice();
+      apiResponseData.SubTotalPrice = getSubTotalPrice();
+      apiResponseData.Frete = shippingPrice;
+      apiResponseData.Cupom = coupoms?.DiscountAmount;
+
+      localStorage.setItem(
+        "apiResponseData",
+        JSON.stringify(apiResponseData)
+      );
+    } else {
+      apiResponseData.Coupon = coupomValue;
+      apiResponseData.OrderShippingPackages = [];
+      apiResponseData.BillingAddressId = address;
+      apiResponseData.DigitalAdressId = billingAndShippingId[0];
+      apiResponseData.ShippingAddressId = address;
+      apiResponseData.Price = getTotalPrice();
+      apiResponseData.SubTotalPrice = getSubTotalPrice();
+      apiResponseData.Frete = shippingPrice;
+      apiResponseData.Cupom = coupoms?.DiscountAmount;
     }
-  }, [session]);
-
-  const fetchLocalItems = useCallback(() => {
-    const response = JSON.parse(localStorage.getItem("apiResponseData"));
-    setLocalProducts(response);
-  }, []);
-
-  const handleShippingDetails = async (cepValue) => {
-    setLoadingButton(true);
-    const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
-    axios
-      .get(
-        `https://apiecommerce.meucurso.com.br/Shipping/GetShippingDetails?OrderId=${cartData.OrderId}&StoreId=${cartData.StoreId}&Cep=${cepValue}`,
-        { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
-      )
-      .then((response) => {
-        setLoadingButton(false);
-        setCepValue(response.data);
-      })
-      .catch((err) => console.log(err));
+    router.push("/pagamento");
   };
 
   const handleCoupom = async (coupomName) => {
@@ -123,10 +143,10 @@ const Carrinho: NextPage = () => {
       });
   };
 
-  const handleDeleteCartItems = (OrderId, StoreId, SKU) => {
+  const handleDeleteCartItems = (OrderId, SKU) => {
     axios
       .delete(
-        `https://apiecommerce.meucurso.com.br/BIPEStore/DeleteFromCart?OrderId=${OrderId}&StoreId=${StoreId}&SKU=${SKU}`,
+        `https://apiecommerce.meucurso.com.br/BIPEStore/DeleteFromCart?OrderId=${OrderId}&SKU=${SKU}`,
         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
       )
       .then(() => {
@@ -170,32 +190,29 @@ const Carrinho: NextPage = () => {
     }
   };
 
-  const handleSedex = () => {
-    setSedex(true);
-  };
-  const handlePickUpStore = () => {
-    setSedex(false);
-    setPickupInStore(true);
-  };
-
   const handleRadioChange = (e) => {
     setRadioValue(e.target.value);
-    if (e.target.value === "retirarnaloja") {
+    if (e.target.value === "SEDEX") {
+      setPickupInStore(false);
+      setSedex(true);
+      const selectedCarrier = shippingInfo.find(
+        (carrier) => carrier.ServiceDescription === "SEDEX"
+      );
+      if (selectedCarrier) {
+        setShippingPrice(Number(selectedCarrier.ShippingPrice));
+      } else {
+        setShippingPrice(0);
+      }
+    } else if (e.target.value === "Retirar na loja") {
       setPickupInStore(true);
+      setSedex(false);
+      setShippingPrice(0);
     } else {
       setPickupInStore(false);
+      setSedex(false);
+      setShippingPrice(0);
     }
   };
-
-  const shippingPrice = pickupInStore
-    ? 0
-    : cepValue
-        ?.flatMap((value) =>
-          value.ShippingInformations.filter(
-            (item) => item.ServiceDescription === "SEDEX"
-          ).map((value) => Number(value.ShippingPrice))
-        )
-        .shift() || 0;
 
   const shippingSEDEXInformations = cepValue?.flatMap((value) =>
     value.ShippingInformations.filter(
@@ -206,403 +223,357 @@ const Carrinho: NextPage = () => {
     }))
   );
 
-  const shippingProduct = localProducts?.Items?.some(
-    (product) =>
-      product.Product?.ProductTypeId === 4 ||
-      product.Product?.ProductTypeId === 2
+  const shippingProduct = cartProducts.some(
+    (product) => product.ProductTypeId === 4 || product.ProductTypeId === 2
   );
 
   const billingAndShippingId = studentAddress.map(
     (address) => address.StudentAddressId
   );
 
-  const handleCheckout = () => {
-    const apiResponseData = JSON.parse(
-      localStorage.getItem("apiResponseData")
-    );
-    if (sedex) {
-      apiResponseData.Coupon = coupomValue;
-      apiResponseData.OrderShippingPackages = shippingSEDEXInformations;
-      apiResponseData.BillingAddressId = address;
-      apiResponseData.DigitalAdressId = billingAndShippingId[0];
-      apiResponseData.ShippingAddressId = address;
-      apiResponseData.Price = getTotalPrice();
-      apiResponseData.SubTotalPrice = getSubTotalPrice();
-      apiResponseData.Frete = shippingPrice;
-      apiResponseData.Cupom = coupoms?.DiscountAmount;
-
-      localStorage.setItem(
-        "apiResponseData",
-        JSON.stringify(apiResponseData)
-      );
-    } else {
-      const pickStore = {
-        ServiceCode: 0,
-        ServiceDescription: "Retirar na loja",
-        DeliveryTime: 0,
-        ShippingPrice: 0,
-      };
-
-      apiResponseData.Coupon = coupomValue;
-      apiResponseData.OrderShippingPackages = [pickStore];
-      apiResponseData.BillingAddressId = address;
-      apiResponseData.DigitalAdressId = billingAndShippingId[0];
-      apiResponseData.ShippingAddressId = address;
-      apiResponseData.Price = getTotalPrice();
-      apiResponseData.SubTotalPrice = getSubTotalPrice();
-      apiResponseData.Frete = shippingPrice;
-      apiResponseData.Cupom = coupoms?.DiscountAmount;
-
-      localStorage.setItem(
-        "apiResponseData",
-        JSON.stringify(apiResponseData)
-      );
+  const fetchAddress = useCallback(async () => {
+    setLoadingAddress(true);
+    if (session) {
+      try {
+        const response = await axios.get(
+          `https://apiecommerce.meucurso.com.br/Student/Address?CustomerId=${session?.user?.CustomerId}`,
+          { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
+        );
+        setLoadingAddress(false);
+        setStudentAddress(response.data);
+      } catch (err) {
+        setLoadingAddress(false);
+        console.log(err);
+      }
     }
-    router.push("/pagamento");
-  };
+  }, [session]);
+
+  const fetchLocalItems = useCallback(() => {
+    const response = JSON.parse(localStorage.getItem("apiResponseData"));
+    setLocalProducts(response);
+  }, []);
 
   useEffect(() => {
+    const fetchShippingDetails = async (cepValue) => {
+      setLoadingButton(true);
+      axios
+        .get(
+          `https://apiecommerce.meucurso.com.br/Shipping/GetShippingDetails?OrderId=${orderId}&StoreId=5&Cep=${cepValue}`,
+          { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
+        )
+        .then((response) => {
+          setLoadingButton(false);
+          setCepValue(response.data);
+        })
+        .catch((err) => console.log(err));
+    };
+
     fetchCartItems();
     fetchLocalItems();
     fetchAddress();
-  }, [fetchCartItems, fetchLocalItems, fetchAddress, shippingProduct]);
+    if (cep) {
+      fetchShippingDetails(cep);
+    }
+  }, [
+    fetchCartItems,
+    fetchLocalItems,
+    fetchAddress,
+    cep,
+    orderId,
+    session?.user?.Token,
+  ]);
+
+  const shippingInfo = cepValue?.flatMap(
+    (item) => item.ShippingInformations
+  );
 
   return (
     <>
-      {/* {loading && (
+      {!cartProducts.length && (
+        <ShopLayout1>
+          <SEO
+            title="Carrinho"
+            sitename="MeuCurso - Do seu jeito. No seu tempo."
+          />
+
+          <Grid container>
+            <Grid item md={12} textAlign={"center"}>
+              <h1>Seu carrinho está vazio!</h1>
+            </Grid>
+          </Grid>
+        </ShopLayout1>
+      )}
+      {session && cartProducts.length > 0 && (
         <>
           <CheckoutNavLayout>
-            <Grid container spacing={3}>
-              <Grid item md={8}>
-                <Skeleton variant="rounded" width={"100%"} height={150} />
-              </Grid>
-              <Grid item md={4}>
-                <Skeleton variant="rounded" width={"100%"} height={570} />
-              </Grid>
-            </Grid>
-          </CheckoutNavLayout>
-        </>
-      )} */}
-      {/* {!loading && ( */}
-      <>
-        {!cartProducts.length && (
-          <ShopLayout1>
             <SEO
               title="Carrinho"
               sitename="MeuCurso - Do seu jeito. No seu tempo."
             />
 
-            <Grid container>
-              <Grid item md={12} textAlign={"center"}>
-                <h1>Seu carrinho está vazio!</h1>
-              </Grid>
-            </Grid>
-          </ShopLayout1>
-        )}
-        {session && cartProducts.length > 0 && (
-          <>
-            <CheckoutNavLayout>
-              <SEO
-                title="Carrinho"
-                sitename="MeuCurso - Do seu jeito. No seu tempo."
-              />
-
-              <Grid container spacing={3}>
-                {/* CART PRODUCT LIST */}
-                {/* {loading && (
+            <Grid container spacing={3}>
+              {/* CART PRODUCT LIST */}
+              {/* {loading && (
                     <Skeleton variant="rounded" width={500} height={600} />
                   )} */}
-                {/* {!loading && ( */}
-                <Grid item md={8} xs={12}>
-                  {cartProducts.map((item) => (
-                    <ProductCard7
-                      onClickFunction={() =>
-                        handleDeleteCartItems(
-                          localProducts?.OrderId,
-                          localProducts?.StoreId,
-                          item.SKU
-                        )
-                      }
-                      key={item.OrderItemId}
-                      {...item}
-                    />
-                  ))}
-                </Grid>
-                {/* )} */}
+              {/* {!loading && ( */}
+              <Grid item md={8} xs={12}>
+                {cartProducts.map((item) => (
+                  <ProductCard7
+                    onClickFunction={() =>
+                      handleDeleteCartItems(orderId, item.SKU)
+                    }
+                    key={item.OrderItemId}
+                    {...item}
+                  />
+                ))}
+              </Grid>
+              {/* )} */}
 
-                {/* CHECKOUT FORM */}
-                <Grid item md={4} xs={12}>
-                  <Card sx={{ padding: 3 }}>
-                    <FlexBetween mb={2}>
-                      <Span color="grey.600">Subtotal:</Span>
+              {/* CHECKOUT FORM */}
+              <Grid item md={4} xs={12}>
+                <Card sx={{ padding: 3 }}>
+                  <FlexBetween mb={2}>
+                    <Span color="grey.600">Subtotal:</Span>
 
-                      <Span fontSize={18} fontWeight={600} lineHeight="1">
-                        {currency(getSubTotalPrice())}
-                      </Span>
-                    </FlexBetween>
-                    <FlexBetween mb={2}>
-                      <Span color="grey.600">Cupom:</Span>
+                    <Span fontSize={18} fontWeight={600} lineHeight="1">
+                      {currency(getSubTotalPrice())}
+                    </Span>
+                  </FlexBetween>
+                  <FlexBetween mb={2}>
+                    <Span color="grey.600">Cupom:</Span>
 
-                      <Span
-                        fontSize={18}
-                        fontWeight={600}
-                        lineHeight="1"
-                        color={"green"}
-                      >
-                        - {currency(coupoms?.DiscountAmount)}
-                      </Span>
-                    </FlexBetween>
-                    <FlexBetween mb={2}>
-                      <Span color="grey.600">Frete:</Span>
-
-                      <Span
-                        fontSize={18}
-                        fontWeight={600}
-                        lineHeight="1"
-                        color={"#D23F57"}
-                      >
-                        +{currency(shippingPrice)}
-                      </Span>
-                    </FlexBetween>
-                    <FlexBetween>
-                      <Span color="grey.600">Total:</Span>
-
-                      <Span fontSize={18} fontWeight={600} lineHeight="1">
-                        {shippingPrice === undefined ? (
-                          <div>
-                            <p
-                              style={{
-                                display: "flex",
-                                justifyContent: "end",
-                              }}
-                            >
-                              {currency(getSubTotalPrice())}
-                            </p>
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "end",
-                              }}
-                            >
-                              <Paragraph
-                                fontSize={13}
-                                fontWeight={600}
-                                lineHeight="1"
-                                textAlign={"end"}
-                                sx={{ width: "150px" }}
-                              >
-                                ou em até{" "}
-                                <span
-                                  style={{
-                                    color: "red",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  12x{" "}
-                                </span>{" "}
-                                de{" "}
-                                <span
-                                  style={{
-                                    color: "red",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  {currency(getSubTotalPrice() / 12)}
-                                </span>{" "}
-                                no cartão de crédito
-                              </Paragraph>
-                            </div>
-                          </div>
-                        ) : (
-                          <div>
-                            <p
-                              style={{
-                                display: "flex",
-                                justifyContent: "end",
-                              }}
-                            >
-                              {currency(getTotalPrice())}
-                            </p>
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "end",
-                              }}
-                            >
-                              <Paragraph
-                                fontSize={13}
-                                fontWeight={600}
-                                lineHeight="1"
-                                textAlign={"end"}
-                                sx={{ width: "150px" }}
-                              >
-                                ou em até{" "}
-                                <span
-                                  style={{
-                                    color: "red",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  12x{" "}
-                                </span>{" "}
-                                de{" "}
-                                <span
-                                  style={{
-                                    color: "red",
-                                    fontWeight: "bold",
-                                  }}
-                                >
-                                  {currency(getTotalPrice() / 12)}
-                                </span>{" "}
-                                no cartão de crédito
-                              </Paragraph>
-                            </div>
-                          </div>
-                        )}
-                      </Span>
-                    </FlexBetween>
-
-                    <Divider sx={{ mb: 2 }} />
-
-                    <TextField
-                      value={coupomValue}
-                      onChange={(e) => setCoupomValue(e.target.value)}
-                      fullWidth
-                      size="small"
-                      label="Cupom"
-                      variant="outlined"
-                      placeholder="Cupom"
-                      helperText={cupomText}
-                    />
-
-                    <Button
-                      disabled={coupomValue.length <= 0}
-                      onClick={() => handleCoupom(coupomValue)}
-                      variant="outlined"
-                      color="primary"
-                      fullWidth
-                      sx={{ mt: 2, mb: 4 }}
+                    <Span
+                      fontSize={18}
+                      fontWeight={600}
+                      lineHeight="1"
+                      color={"green"}
                     >
-                      Aplicar Cupom
-                    </Button>
+                      - {currency(coupoms?.DiscountAmount)}
+                    </Span>
+                  </FlexBetween>
+                  <FlexBetween mb={2}>
+                    <Span color="grey.600">Frete:</Span>
 
-                    <Divider sx={{ mb: 2 }} />
-                    {shippingProduct && (
-                      <>
-                        <FormControl sx={{ mb: 2 }}>
-                          <FormLabel id="demo-radio-buttons-group-label">
-                            <Span color="grey.600">Tipo de entrega</Span>
-                          </FormLabel>
+                    <Span
+                      fontSize={18}
+                      fontWeight={600}
+                      lineHeight="1"
+                      color={"#D23F57"}
+                    >
+                      +{currency(shippingPrice)}
+                    </Span>
+                  </FlexBetween>
+                  <FlexBetween>
+                    <Span color="grey.600">Total:</Span>
+
+                    <Span fontSize={18} fontWeight={600} lineHeight="1">
+                      {shippingPrice === undefined ? (
+                        <div>
+                          <p
+                            style={{
+                              display: "flex",
+                              justifyContent: "end",
+                            }}
+                          >
+                            {currency(getSubTotalPrice())}
+                          </p>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "end",
+                            }}
+                          >
+                            <Paragraph
+                              fontSize={13}
+                              fontWeight={600}
+                              lineHeight="1"
+                              textAlign={"end"}
+                              sx={{ width: "150px" }}
+                            >
+                              ou em até{" "}
+                              <span
+                                style={{
+                                  color: "red",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                12x{" "}
+                              </span>{" "}
+                              de{" "}
+                              <span
+                                style={{
+                                  color: "red",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {currency(getSubTotalPrice() / 12)}
+                              </span>{" "}
+                              no cartão de crédito
+                            </Paragraph>
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          <p
+                            style={{
+                              display: "flex",
+                              justifyContent: "end",
+                            }}
+                          >
+                            {currency(getTotalPrice())}
+                          </p>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "end",
+                            }}
+                          >
+                            <Paragraph
+                              fontSize={13}
+                              fontWeight={600}
+                              lineHeight="1"
+                              textAlign={"end"}
+                              sx={{ width: "150px" }}
+                            >
+                              ou em até{" "}
+                              <span
+                                style={{
+                                  color: "red",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                12x{" "}
+                              </span>{" "}
+                              de{" "}
+                              <span
+                                style={{
+                                  color: "red",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                {currency(getTotalPrice() / 12)}
+                              </span>{" "}
+                              no cartão de crédito
+                            </Paragraph>
+                          </div>
+                        </div>
+                      )}
+                    </Span>
+                  </FlexBetween>
+
+                  <Divider sx={{ mb: 2 }} />
+
+                  <TextField
+                    value={coupomValue}
+                    onChange={(e) => setCoupomValue(e.target.value)}
+                    fullWidth
+                    size="small"
+                    label="Cupom"
+                    variant="outlined"
+                    placeholder="Cupom"
+                    helperText={cupomText}
+                  />
+
+                  <Button
+                    disabled={coupomValue.length <= 0}
+                    onClick={() => handleCoupom(coupomValue)}
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    sx={{ mt: 2, mb: 4 }}
+                  >
+                    Aplicar Cupom
+                  </Button>
+                  <TextField
+                    helperText={
+                      <LinkHelper
+                        target="_blank"
+                        href="https://aluno.meucurso.com.br/Account/MyAccount"
+                      >
+                        Caso queira registrar um novo endereço, clique
+                        aqui!
+                      </LinkHelper>
+                    }
+                    select
+                    value={address}
+                    fullWidth
+                    size="small"
+                    label="Endereços"
+                    variant="outlined"
+                    onChange={handleAddressChange}
+                  >
+                    {studentAddress.map((item, index) => (
+                      <MenuItem value={item.StudentAddressId} key={index}>
+                        {item.AddressLine1} - {item.Number} -{" "}
+                        {item.CityName}- {item.StateName}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
+                  <TextField
+                    disabled
+                    fullWidth
+                    size="small"
+                    label="C.E.P"
+                    placeholder="3100"
+                    variant="outlined"
+                    sx={{
+                      mt: 2,
+                      color: "#2b3445",
+                      "& .MuiInputBase-input.Mui-disabled": {
+                        WebkitTextFillColor: "#2b3445",
+                      },
+                      "& .MuiFormLabel-root.Mui-disabled": {
+                        color: "#2b3445",
+                      },
+                    }}
+                    value={cep}
+                    onChange={(e) => setCep(e.target.value)}
+                  />
+                  <Divider sx={{ mb: 2 }} />
+                  {shippingProduct && address && (
+                    <>
+                      <FormControl sx={{ mb: 2 }}>
+                        <FormLabel id="demo-radio-buttons-group-label">
+                          <Span color="grey.600">Tipo de entrega</Span>
+                        </FormLabel>
+                        {shippingInfo?.map((carriers, index) => (
                           <RadioGroup
+                            key={index}
                             aria-labelledby="demo-radio-buttons-group-label"
-                            defaultValue="female"
+                            defaultValue=""
                             name="radio-buttons-group"
                             onChange={handleRadioChange}
                             value={radioValue}
                           >
                             <FormControlLabel
-                              onClick={handlePickUpStore}
-                              value="retirarnaloja"
+                              value={carriers.ServiceDescription}
                               control={<Radio />}
-                              label="Retirar na Loja"
-                            />
-                            <FormControlLabel
-                              onClick={handleSedex}
-                              value="sedex"
-                              control={<Radio />}
-                              label="Sedex"
+                              label={carriers.ServiceDescription}
                             />
                           </RadioGroup>
-                        </FormControl>
-                        {sedex && (
-                          <>
-                            <TextField
-                              helperText={
-                                <LinkHelper
-                                  target="_blank"
-                                  href="https://aluno.meucurso.com.br/Account/MyAccount"
-                                >
-                                  Caso queira registrar um novo endereço,
-                                  clique aqui!
-                                </LinkHelper>
-                              }
-                              select
-                              value={address}
-                              fullWidth
-                              size="small"
-                              label="Endereços"
-                              variant="outlined"
-                              placeholder="Selecione seu endereço"
-                              onChange={handleAddressChange}
-                            >
-                              {studentAddress.map((item, index) => (
-                                <MenuItem
-                                  value={item.StudentAddressId}
-                                  key={index}
-                                >
-                                  {item.AddressLine1} - {item.Number} -{" "}
-                                  {item.CityName}- {item.StateName}
-                                </MenuItem>
-                              ))}
-                            </TextField>
+                        ))}
+                      </FormControl>
+                    </>
+                  )}
 
-                            <TextField
-                              disabled
-                              fullWidth
-                              size="small"
-                              label="C.E.P"
-                              placeholder="3100"
-                              variant="outlined"
-                              sx={{
-                                mt: 2,
-                                color: "#2b3445",
-                                "& .MuiInputBase-input.Mui-disabled": {
-                                  WebkitTextFillColor: "#2b3445",
-                                },
-                                "& .MuiFormLabel-root.Mui-disabled": {
-                                  color: "#2b3445",
-                                },
-                              }}
-                              value={cep}
-                              onChange={(e) => setCep(e.target.value)}
-                            />
-                            <LoadingButton
-                              loading={loadingButton}
-                              disabled={
-                                cep.length === 0 && address.length === 0
-                              }
-                              onClick={() => handleShippingDetails(cep)}
-                              variant="outlined"
-                              color="primary"
-                              fullWidth
-                              sx={{ my: 2 }}
-                            >
-                              Calcular frete
-                            </LoadingButton>
-                          </>
-                        )}
-                      </>
-                    )}
-
-                    <Button
-                      onClick={handleCheckout}
-                      disabled={sedex === true && !cepValue}
-                      fullWidth
-                      color="primary"
-                      // href="/payment"
-                      variant="contained"
-                      LinkComponent={Link}
-                    >
-                      Finalizar Compra
-                    </Button>
-                  </Card>
-                </Grid>
+                  <Button
+                    onClick={handleCheckout}
+                    disabled={!address}
+                    fullWidth
+                    color="primary"
+                    variant="contained"
+                    LinkComponent={Link}
+                  >
+                    Finalizar Compra
+                  </Button>
+                </Card>
               </Grid>
-            </CheckoutNavLayout>
-          </>
-        )}
-      </>
-      {/* )} */}
+            </Grid>
+          </CheckoutNavLayout>
+        </>
+      )}
     </>
   );
 };

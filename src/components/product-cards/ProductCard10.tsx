@@ -186,7 +186,7 @@ const ProductCard10: FC<ProductCardProps> = (props) => {
         )}
 
         <ImageBox className="hoverImgBox">
-          <Link href={`/product/${URLKey}`}>
+          <Link href={`/produto/${URLKey}`}>
             <LazyImage alt={title} width={190} height={190} src={imgUrl} />
           </Link>
         </ImageBox>
@@ -254,7 +254,7 @@ const ProductCard10: FC<ProductCardProps> = (props) => {
       </ImageWrapper>
 
       <ContentWrapper>
-        <Link href={`/product/${URLKey}`}>
+        <Link href={`/produto/${URLKey}`}>
           <H3
             mb={1}
             title={title}

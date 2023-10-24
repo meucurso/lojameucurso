@@ -28,7 +28,7 @@ export const getStaticPaths = async () => {
 
   return {
     paths: paths.map((path) => ({ params: { UrlKey: path } })),
-    fallback: false,
+    fallback: "blocking",
   };
 };
 
@@ -51,6 +51,7 @@ export const getStaticProps = async ({ params }) => {
       categoryBanner,
       products,
     },
+    revalidate: 1,
   };
 };
 

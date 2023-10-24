@@ -83,19 +83,15 @@ const NewsletterLogin: FC<Props> = ({
                 <Paragraph mt={5} mb={1}>
                   Caros clientes,
                 </Paragraph>
-                <Paragraph mb={5}>
-                  Queremos mantê-los sempre atualizados sobre as melhorias
-                  que fazemos em nosso E-commerce para proporcionar a
-                  melhor experiência de compras online. Estamos empolgados
-                  em anunciar uma atualização{" "}
+                <Paragraph mb={10}>
+                  Anteriormente, você usava um login separado para acessar
+                  o E-commerce, mas agora simplificamos o processo para
+                  tornar sua experiência ainda mais conveniente. A partir
+                  de agora, você precisará usar as mesmas{" "}
                   <Span sx={{ fontWeight: "bold" }} color="primary.main">
-                    importante
+                    credenciais
                   </Span>{" "}
-                  em nosso sistema de login. Anteriormente, você usava um
-                  login separado para acessar o E-commerce, mas agora
-                  simplificamos o processo para tornar sua experiência
-                  ainda mais conveniente. A partir de agora, você precisará
-                  usar as mesmas credenciais que utiliza em nossa{" "}
+                  que utiliza em nossa{" "}
                   <Span sx={{ fontWeight: "bold" }} color="primary.main">
                     Área do Aluno.
                   </Span>

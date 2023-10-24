@@ -99,7 +99,7 @@ const ProductCard9: FC<ProductCardProps> = (props) => {
             height="100%"
             p={2}
           >
-            <Link href={`/product/${URLKey}`}>
+            <Link href={`/produto/${URLKey}`}>
               <H5 fontWeight="600" my="0.5rem">
                 {title}
               </H5>
