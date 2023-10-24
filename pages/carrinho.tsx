@@ -108,7 +108,7 @@ const Carrinho: NextPage = () => {
         "apiResponseData",
         JSON.stringify(apiResponseData)
       );
-    } else {
+    } else if (radioValue === "") {
       apiResponseData.Coupon = coupomValue;
       apiResponseData.OrderShippingPackages = [];
       apiResponseData.BillingAddressId = address;
@@ -118,6 +118,11 @@ const Carrinho: NextPage = () => {
       apiResponseData.SubTotalPrice = getSubTotalPrice();
       apiResponseData.Frete = shippingPrice;
       apiResponseData.Cupom = coupoms?.DiscountAmount;
+
+      localStorage.setItem(
+        "apiResponseData",
+        JSON.stringify(apiResponseData)
+      );
     }
     router.push("/pagamento");
   };
