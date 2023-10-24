@@ -177,7 +177,7 @@ const ProductCard1: FC<ProductCardProps> = ({
       <ContentWrapper>
         <FlexBox>
           <Box flex="1 1 0" minWidth="0px" mr={1}>
-            <Link href={`/product/${URLKey}`}>
+            <Link href={`/produto/${URLKey}`}>
               <H3
                 mb={1}
                 title={title}

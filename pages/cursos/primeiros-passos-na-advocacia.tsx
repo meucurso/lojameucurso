@@ -21,7 +21,7 @@ const PrimeirosPassosNaAdvocacia = () => {
 
   const { products } = useProducts(api.getProductsById("28"));
 
-  const { banners } = useBanners(api.getIndexBanners("28"));
+  const { banners } = useBanners(api.getIndexBanners("10"));
 
   useEffect(() => {
     if (width < 426) setVisibleSlides(1);

@@ -36,18 +36,33 @@ export default function ChildrenTree({
 
   const renderChildButton = (child) => {
     const isSelected = selectedButtonId === child.SKU;
+    const isOutOfStock =
+      child.ProductGroupId === 1 &&
+      !child.Selected &&
+      child.InStock === false;
 
     if (child.ProductGroupId === 1 && !child.Selected) {
+      const buttonLabel = isOutOfStock
+        ? `${child.Name} - FORA DE ESTOQUE`
+        : child.Name;
+      const isDisabled = isOutOfStock;
+
       return (
         <Button
           onClick={() => handleButtonClick(child)}
           style={{
             marginBottom: "10px",
             backgroundColor: isSelected ? "#D23F57" : "#e1e1e1e1",
-            color: isSelected ? "white" : "black",
+            color: isSelected
+              ? "white"
+              : isOutOfStock
+              ? "#00000042"
+              : "black",
+            cursor: "not-allowed",
           }}
+          disabled={isDisabled}
         >
-          {child.Name}
+          {buttonLabel}
         </Button>
       );
     }

@@ -38,7 +38,8 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
   const [loading, setLoading] = useState(false);
   const cartList = state.cart;
 
-  const { cartProducts, setCartProducts, fetchCartItems } = useCart();
+  const { cartProducts, setCartProducts, fetchCartItems, orderId } =
+    useCart();
 
   const getTotalPrice = () => {
     return cartProducts.reduce(
@@ -52,10 +53,10 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
     push(path);
   };
 
-  const handleDeleteCartItems = (OrderId, StoreId, SKU) => {
+  const handleDeleteCartItems = (OrderId, SKU) => {
     axios
       .delete(
-        `https://apiecommerce.meucurso.com.br/BIPEStore/DeleteFromCart?OrderId=${OrderId}&StoreId=${StoreId}&SKU=${SKU}`,
+        `https://apiecommerce.meucurso.com.br/BIPEStore/DeleteFromCart?OrderId=${OrderId}&SKU=${SKU}`,
         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
       )
       .then(() => {
@@ -85,28 +86,6 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
   };
 
   useEffect(() => {
-    // const fetchCartItems = async () => {
-    //   if (session) {
-    //     const cartData = JSON.parse(
-    //       localStorage.getItem("apiResponseData")
-    //     );
-    //     await axios
-    //       .get(
-    //         `https://apiecommerce.meucurso.com.br/BIPEStore/GetLatestOrder?CustomerId=${session?.user?.CustomerId}`,
-    //         {
-    //           headers: { Authorization: `Bearer ${session?.user?.Token}` },
-    //         }
-    //       )
-    //       .then((response) => {
-    //         setCartProducts(
-    //           response.data.Items.filter(
-    //             (item) => item.OrderItemProductLevelId === 1
-    //           )
-    //         );
-    //       })
-    //       .catch((err) => console.log(err));
-    //   }
-    // };
     const fetchLocalItems = async () => {
       const response = JSON.parse(localStorage.getItem("apiResponseData"));
       setLocalProducts(response);
@@ -254,8 +233,8 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
                     size="small"
                     onClick={() =>
                       handleDeleteCartItems(
-                        localProducts?.OrderId,
-                        localProducts?.StoreId,
+                        orderId,
+
                         item.SKU
                       )
                     }

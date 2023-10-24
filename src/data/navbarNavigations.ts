@@ -158,6 +158,69 @@ const navbarNavigations = [
     megaMenuWithSub: false,
     title: "/Professor",
     url: "/professor",
+    child: [
+      { title: "Conhheça os cursos", url: "/cursos/concursos-publicos" },
+      {
+        title: "Alessandro Spilborghs",
+        url: "https://aluno.meucurso.com.br/marketplace/index/alessandrospilborghs",
+      },
+      {
+        title: "Carol Macaubal",
+        url: "https://aluno.meucurso.com.br/marketplace/index/carolmacaubal",
+      },
+      {
+        title: "Conrado Paulino",
+        url: "https://aluno.meucurso.com.br/marketplace/index/conradopaulino",
+      },
+      {
+        title: "Daniel Lamounier",
+        url: "https://aluno.meucurso.com.br/marketplace/index/lamounierdaniel",
+      },
+      {
+        title: "Darlan Barroso",
+        url: "https://aluno.meucurso.com.br/marketplace/index/darlanbarroso",
+      },
+      {
+        title: "Enki Pimenta",
+        url: "https://aluno.meucurso.com.br/marketplace/index/enkipimenta",
+      },
+      {
+        title: "Marcelle Tasoko",
+        url: "https://aluno.meucurso.com.br/marketplace/index/marcelletasoko",
+      },
+      {
+        title: "Marcos Oliveira",
+        url: "https://aluno.meucurso.com.br/marketplace/index/marcosoliveira",
+      },
+      {
+        title: "Priscila Souto",
+        url: "https://aluno.meucurso.com.br/marketplace/index/priscilasouto",
+      },
+      {
+        title: "Savio Chalita",
+        url: "https://aluno.meucurso.com.br/marketplace/index/saviochalita",
+      },
+      {
+        title: "Vanderlei Garcia",
+        url: "https://aluno.meucurso.com.br/marketplace/index/vanderlei-garcia",
+      },
+      {
+        title: "Yuri Carneiro",
+        url: "https://aluno.meucurso.com.br/marketplace/index/yuricarneiro",
+      },
+      {
+        title: "Anselmo Gonzalez",
+        url: "https://aluno.meucurso.com.br/marketplace/index/anselmogonzalez",
+      },
+      {
+        title: "Ivana David",
+        url: "https://aluno.meucurso.com.br/marketplace/index/ivanadavid",
+      },
+      {
+        title: "Sérgio Gabriel",
+        url: "https://aluno.meucurso.com.br/marketplace/index/sergiogabriel",
+      },
+    ],
   },
   {
     megaMenu: false,

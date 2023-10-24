@@ -157,7 +157,7 @@ const ProductCard16: FC<Props> = (props) => {
           />
         )}
 
-        <Link href={`/product/${URLKey}`}>
+        <Link href={`/produto/${URLKey}`}>
           <LazyImage
             alt={title}
             width={550}
@@ -213,7 +213,7 @@ const ProductCard16: FC<Props> = (props) => {
           )}
         </FlexRowCenter>
 
-        <Link href={`/product/${URLKey}`}>
+        <Link href={`/produto/${URLKey}`}>
           <H3
             my="6px"
             title={title}

@@ -82,7 +82,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
   if (router.isFallback || !updatedProduct) {
     return <h1>Carregando...</h1>;
   }
-
+  console.log(singleProduct);
   return (
     <ShopLayout1>
       <SEO
@@ -128,7 +128,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       singleProduct: updatedProduct,
     },
-    revalidate: 25,
+    revalidate: 1,
   };
 };
 
@@ -141,7 +141,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: false,
+    fallback: "blocking",
   };
 };
 export default ProductDetails;

@@ -198,7 +198,7 @@ const ProductCard14: FC<ProductCardProps> = (props) => {
         )}
 
         <ImageBox>
-          <Link href={`/product/${URLKey}`}>
+          <Link href={`/produto/${URLKey}`}>
             <LazyImage alt={title} src={imgUrl} width={190} height={190} />
           </Link>
 
@@ -240,7 +240,7 @@ const ProductCard14: FC<ProductCardProps> = (props) => {
 
       <ContentWrapper>
         <Box flex="1 1 0" minWidth="0px" mr={1}>
-          <Link href={`/product/${URLKey}`}>
+          <Link href={`/produto/${URLKey}`}>
             <H3
               mb={1}
               title={title}
