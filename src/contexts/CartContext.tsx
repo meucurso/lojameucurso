@@ -48,6 +48,17 @@ export const CartProvider = ({ children }) => {
             (item) => item.OrderItemProductLevelId === 1
           )
         );
+
+        const existingData = localStorage.getItem("apiResponseData");
+
+        if (existingData) {
+          return;
+        } else {
+          localStorage.setItem(
+            "apiResponseData",
+            JSON.stringify(response.data)
+          );
+        }
       } catch (err) {
         console.log(err);
       }

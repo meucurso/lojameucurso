@@ -76,18 +76,18 @@ const NewsletterLogin: FC<Props> = ({
             <Grid item lg={6} md={6} xs={12} alignItems="center">
               <Box textAlign="center" p={3}>
                 <Paragraph fontSize={22} fontWeight={700}>
-                  Atenção! Importante atualização no login do nosso
-                  <Span color="primary.main"> novo E-commerce!</Span>
+                  Atenção! Importante atualização no login da nossa
+                  <Span color="primary.main"> nova loja!</Span>
                 </Paragraph>
 
                 <Paragraph mt={5} mb={1}>
-                  Caros clientes,
+                  Caros alunos,
                 </Paragraph>
                 <Paragraph mb={10}>
                   Anteriormente, você usava um login separado para acessar
-                  o E-commerce, mas agora simplificamos o processo para
-                  tornar sua experiência ainda mais conveniente. A partir
-                  de agora, você precisará usar as mesmas{" "}
+                  a loja, mas agora simplificamos o processo para tornar
+                  sua experiência ainda mais conveniente. A partir de
+                  agora, você precisará usar as mesmas{" "}
                   <Span sx={{ fontWeight: "bold" }} color="primary.main">
                     credenciais
                   </Span>{" "}
