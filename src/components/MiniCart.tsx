@@ -194,7 +194,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
               </Button> */}
                   </FlexBox>
 
-                  <Link href={`/product/${item.ProductId}`}>
+                  <Link href={`/produto/${item.URLKey}`}>
                     <Avatar
                       alt={item.ProductName}
                       src={item.SmallImageUrl}
@@ -209,15 +209,15 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
                       textOverflow: "ellipsis",
                     }}
                   >
-                    <Link href={`/product/${item.URLKey}`}>
+                    <Link href={`/produto/${item.URLKey}`}>
                       <H5 ellipsis fontSize="14px" className="title">
                         {item.ProductName}
                       </H5>
                     </Link>
 
-                    <Tiny color="grey.600">
+                    {/* <Tiny color="grey.600">
                       {currency(item.Price)} x {item.Qty}
-                    </Tiny>
+                    </Tiny> */}
 
                     <Box
                       fontWeight={600}
@@ -225,7 +225,7 @@ const MiniCart: FC<MiniCartProps> = ({ toggleSidenav }) => {
                       color="primary.main"
                       mt={0.5}
                     >
-                      {currency(item.Qty * item.Price)}
+                      {currency(item.Price)}
                     </Box>
                   </Box>
 

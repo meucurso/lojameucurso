@@ -1,9 +1,18 @@
 import Link from "next/link";
 import { NextPage } from "next";
-import { Button, Card, Divider, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Divider,
+  Grid,
+  TextField,
+} from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
 import MenuItem from "@mui/material/MenuItem";
 import SEO from "components/SEO";
-import { Paragraph, Span } from "components/Typography";
+import { H2, Paragraph, Span } from "components/Typography";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import ProductCard7 from "components/product-cards/ProductCard7";
 import CheckoutNavLayout from "components/layouts/CheckoutNavLayout";
@@ -26,6 +35,15 @@ import axios from "axios";
 import { LoadingButton } from "@mui/lab";
 import { useRouter } from "next/router";
 import { useCart } from "contexts/CartContext";
+import { useSnackbar } from "notistack";
+
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 
 const LinkHelper = styled(Link)({
   transition: "0.2s",
@@ -41,7 +59,6 @@ const Carrinho: NextPage = () => {
   const [address, setAddress] = useState("");
   const [cep, setCep] = useState("");
   const [cepValue, setCepValue] = useState<any>();
-  const [localProducts, setLocalProducts] = useState<any>([]);
   const [studentAddress, setStudentAddress] = useState<any>([]);
   const [coupoms, setCoupoms] = useState<any>();
   const [coupomValue, setCoupomValue] = useState<any>("");
@@ -53,6 +70,10 @@ const Carrinho: NextPage = () => {
   const [loadingAddress, setLoadingAddress] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [pickupInStore, setPickupInStore] = useState(false);
+
+  const [open, setOpen] = useState(false);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const { cartProducts, setCartProducts, fetchCartItems, orderId } =
     useCart();
@@ -127,12 +148,30 @@ const Carrinho: NextPage = () => {
     router.push("/pagamento");
   };
 
-  const handleCoupom = async (coupomName) => {
-    const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
+  const handlePaymentFree = () => {
+    const requestPayment: any = {};
+
+    requestPayment.OrderId = orderId;
+    requestPayment.OrderShippingPackage = [];
+    requestPayment.ShippingAddressId = address;
 
     axios
+      .post(
+        `https://apiecommerce.meucurso.com.br/BIPEStore/ProcessPaymentFree`,
+        requestPayment,
+        { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
+      )
+      .then((response) => {
+        console.log(response.data);
+        setOpen(true);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleCoupom = async (coupomName) => {
+    axios
       .get(
-        `https://apiecommerce.meucurso.com.br/Coupons/ValidCoupon?OrderId=${cartData.OrderId}&CouponName=${coupomName}&StoreId=${cartData.StoreId}`,
+        `https://apiecommerce.meucurso.com.br/Coupons/ValidCoupon?OrderId=${orderId}&CouponName=${coupomName}`,
         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
       )
       .then((response) => {
@@ -144,7 +183,9 @@ const Carrinho: NextPage = () => {
       })
       .catch((err) => {
         setCoupomText("Cupom Iinválido");
-        console.log(err);
+        enqueueSnackbar(err.response.data, {
+          variant: "error",
+        });
       });
   };
 
@@ -177,7 +218,12 @@ const Carrinho: NextPage = () => {
         setCartProducts((prev) =>
           prev.filter((product) => product.SKU !== SKU)
         );
-      });
+      })
+      .catch((err) =>
+        enqueueSnackbar(err.response.data, {
+          variant: "error",
+        })
+      );
   };
 
   const handleAddressChange = (event) => {
@@ -248,44 +294,44 @@ const Carrinho: NextPage = () => {
         setStudentAddress(response.data);
       } catch (err) {
         setLoadingAddress(false);
-        console.log(err);
+        enqueueSnackbar(err.response.data, {
+          variant: "error",
+        });
       }
     }
-  }, [session]);
-
-  const fetchLocalItems = useCallback(() => {
-    const response = JSON.parse(localStorage.getItem("apiResponseData"));
-    setLocalProducts(response);
-  }, []);
+  }, [enqueueSnackbar, session]);
 
   useEffect(() => {
     const fetchShippingDetails = async (cepValue) => {
       setLoadingButton(true);
       axios
         .get(
-          `https://apiecommerce.meucurso.com.br/Shipping/GetShippingDetails?OrderId=${orderId}&StoreId=5&Cep=${cepValue}`,
+          `https://apiecommerce.meucurso.com.br/Shipping/GetShippingDetails?OrderId=${orderId}&Cep=${cepValue}`,
           { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
         )
         .then((response) => {
           setLoadingButton(false);
           setCepValue(response.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) =>
+          enqueueSnackbar(err.response.data, {
+            variant: "error",
+          })
+        );
     };
 
     fetchCartItems();
-    fetchLocalItems();
     fetchAddress();
     if (cep) {
       fetchShippingDetails(cep);
     }
   }, [
     fetchCartItems,
-    fetchLocalItems,
     fetchAddress,
     cep,
     orderId,
     session?.user?.Token,
+    enqueueSnackbar,
   ]);
 
   const shippingInfo = cepValue?.flatMap(
@@ -315,7 +361,81 @@ const Carrinho: NextPage = () => {
               title="Carrinho"
               sitename="MeuCurso - Do seu jeito. No seu tempo."
             />
-
+            <Dialog open={open}>
+              <Box sx={{ padding: 5 }}>
+                <DialogTitle>
+                  <CheckCircleIcon
+                    color="success"
+                    sx={{
+                      fontSize: 75,
+                      textAlign: "center",
+                      margin: "0 auto",
+                      display: "flex",
+                    }}
+                  />
+                  <H2 textAlign={"center"} mt={5}>
+                    Compra Finalizada com Sucesso!
+                  </H2>
+                  <H2 textAlign={"center"} mt={3}>
+                    Número do pedido: #{orderId}
+                  </H2>
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    <p
+                      style={{
+                        fontSize: 20,
+                        textAlign: "center",
+                        marginTop: 25,
+                      }}
+                    >
+                      Acesse sua rota clicando{" "}
+                      <a
+                        style={{
+                          color: "green",
+                          fontWeight: "bold",
+                          textDecoration: "underline",
+                        }}
+                        target="_blank"
+                        href="https://aluno.meucurso.com.br/StudyRoute/Index/"
+                      >
+                        aqui
+                      </a>
+                    </p>
+                    {/* <p
+                      style={{
+                        textAlign: "center",
+                        fontSize: 15,
+                        marginTop: 2,
+                      }}
+                    >
+                      Ou veja mais informações de sua compra clicando{" "}
+                      <a
+                        target="_blank"
+                        style={{
+                          color: "green",
+                          textDecoration: "underline",
+                        }}
+                        href="https://aluno.meucurso.com.br/BIPEStore/Orders"
+                      >
+                        aqui
+                      </a>
+                    </p> */}
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    color="success"
+                    variant="contained"
+                    sx={{ marginTop: 5, color: "white" }}
+                    fullWidth
+                    href="/"
+                  >
+                    Voltar para a Tela Inicial
+                  </Button>
+                </DialogActions>
+              </Box>
+            </Dialog>
             <Grid container spacing={3}>
               {/* CART PRODUCT LIST */}
               {/* {loading && (
@@ -468,28 +588,31 @@ const Carrinho: NextPage = () => {
                   </FlexBetween>
 
                   <Divider sx={{ mb: 2 }} />
+                  {getTotalPrice() > 0 && (
+                    <>
+                      <TextField
+                        value={coupomValue}
+                        onChange={(e) => setCoupomValue(e.target.value)}
+                        fullWidth
+                        size="small"
+                        label="Cupom"
+                        variant="outlined"
+                        placeholder="Cupom"
+                        helperText={cupomText}
+                      />
 
-                  <TextField
-                    value={coupomValue}
-                    onChange={(e) => setCoupomValue(e.target.value)}
-                    fullWidth
-                    size="small"
-                    label="Cupom"
-                    variant="outlined"
-                    placeholder="Cupom"
-                    helperText={cupomText}
-                  />
-
-                  <Button
-                    disabled={coupomValue.length <= 0}
-                    onClick={() => handleCoupom(coupomValue)}
-                    variant="outlined"
-                    color="primary"
-                    fullWidth
-                    sx={{ mt: 2, mb: 4 }}
-                  >
-                    Aplicar Cupom
-                  </Button>
+                      <Button
+                        disabled={coupomValue.length <= 0}
+                        onClick={() => handleCoupom(coupomValue)}
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                        sx={{ mt: 2, mb: 4 }}
+                      >
+                        Aplicar Cupom
+                      </Button>
+                    </>
+                  )}
                   <TextField
                     helperText={
                       <LinkHelper
@@ -564,8 +687,15 @@ const Carrinho: NextPage = () => {
                   )}
 
                   <Button
-                    onClick={handleCheckout}
-                    disabled={!address}
+                    onClick={
+                      getTotalPrice() > 0
+                        ? handleCheckout
+                        : handlePaymentFree
+                    }
+                    disabled={
+                      (!address && shippingProduct) ||
+                      (!radioValue && shippingProduct)
+                    }
                     fullWidth
                     color="primary"
                     variant="contained"

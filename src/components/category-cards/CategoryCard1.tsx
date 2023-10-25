@@ -33,22 +33,42 @@ const CategoryTitle = styled(Box)({
 });
 
 // ============================================================
-type CategoryCard1Props = { image: string; title: string };
+type CategoryCard1Props = {
+  image: string;
+  title: string;
+  imageMobile: string;
+};
 // ============================================================
 
-const CategoryCard1: FC<CategoryCard1Props> = ({ image, title }) => {
+const CategoryCard1: FC<CategoryCard1Props> = ({
+  image,
+  title,
+  imageMobile,
+}) => {
   return (
     <Wrapper position="relative">
       <LazyImage
         src={image}
         width={213}
         height={213}
+        priority={true}
         alt="category"
         sx={{
           width: "100%",
           aspectRatio: "3/2",
           objectFit: "cover",
           objectPosition: "center center",
+          display: { xs: "none", md: "block" },
+        }}
+      />
+      <LazyImage
+        src={imageMobile}
+        width={213}
+        height={213}
+        priority={true}
+        alt="category"
+        sx={{
+          display: { xs: "block", md: "none" },
         }}
       />
 

@@ -208,7 +208,7 @@ const navigations = [
   {
     icon: GavelOutlinedIcon,
     title: "/Professor",
-    href: "/professor",
+    href: "/#",
     menuComponent: "MegaMenu2",
     menuData: [
       {

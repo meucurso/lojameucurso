@@ -11,15 +11,9 @@ module.exports = {
   //     },
   //   ];
   // },
+
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "arquivos.meucurso.com.br",
-        port: "",
-        pathname: "/**",
-      },
-    ],
+    domains: ["drive.google.com", "arquivos.meucurso.com.br"],
   },
   devIndicators: { buildActivity: false },
   publicRuntimeConfig: {
@@ -39,6 +33,6 @@ module.exports = {
 //   publicRuntimeConfig: {
 //     // Available on both server and client
 //     theme: "DEFAULT",
-//     currency: "USD",
+//     currency: "R$",
 //   },
 // });

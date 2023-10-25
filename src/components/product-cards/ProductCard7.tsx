@@ -102,9 +102,7 @@ const ProductCard7: FC<ProductCardProps> = ({
         </Link>
 
         <FlexBox gap={1} flexWrap="wrap" alignItems="center">
-          <Span color="grey.600">
-            {currency(Price)} * {Qty}
-          </Span>
+          <Span color="grey.600">{currency(Price)}</Span>
 
           {/* <Span fontWeight={600} color="primary.main">
             {currency(Price * Qty)}

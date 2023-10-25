@@ -40,15 +40,7 @@ const AtualizacaoEPratica = () => {
         />
         <Container maxWidth="xl" disableGutters={true}>
           <Section1 carouselData={banners} />
-          <Box
-            py={5}
-            my={5}
-            sx={{
-              backgroundImage:
-                "url(https://www.meucurso.com.br/media/wysiwyg/bg_home_extensoes_3.jpg)",
-              color: "#fff",
-            }}
-          >
+          <Box py={5} my={5}>
             <Container>
               <Grid container>
                 <Grid item md={12} textAlign={"center"}>
