@@ -58,7 +58,6 @@ export default function ChildrenTree({
               : isOutOfStock
               ? "#00000042"
               : "black",
-            cursor: "not-allowed",
           }}
           disabled={isDisabled}
         >

@@ -30,6 +30,7 @@ import { useCallback } from "react";
 import { currency } from "lib";
 import { useSnackbar } from "notistack";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import TurnLeftIcon from "@mui/icons-material/TurnLeft";
 import { LoadingButton } from "@mui/lab";
 
 const PaymentForm: FC = () => {
@@ -45,6 +46,7 @@ const PaymentForm: FC = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const { data: session } = useSession();
+  const router = useRouter();
 
   const width = useWindowSize();
 
@@ -63,9 +65,19 @@ const PaymentForm: FC = () => {
 
       setPaymentInstallments(response.data);
     } catch (err) {
-      console.log(err);
+      enqueueSnackbar(err.response.data, {
+        variant: "error",
+      });
     }
-  }, [session, setPaymentInstallments]);
+  }, [
+    enqueueSnackbar,
+    session?.user?.StudentAddress,
+    session?.user?.Token,
+  ]);
+
+  const handlePushCart = () => {
+    router.push("/carrinho");
+  };
 
   const handlePixPayment = async () => {
     setLoadingPayment(true);
@@ -173,8 +185,9 @@ const PaymentForm: FC = () => {
           setOpen(true);
       })
       .catch((err) => {
+        console.log(err);
         setLoadingPayment(false),
-          enqueueSnackbar(err.response.data, {
+          enqueueSnackbar(err.message, {
             variant: "error",
           });
       });
@@ -261,16 +274,18 @@ const PaymentForm: FC = () => {
                 display: "flex",
               }}
             />
-            <H2 textAlign={"center"} sx={{ mt: 5 }}>
+            <H2 textAlign={"center"} mt={5}>
               Compra Finalizada com Sucesso!
             </H2>
-            <H2 textAlign={"center"} sx={{ mt: 3 }}>
-              Número do pedido:#{paymentSucceeded?.OrderId}
+            <H2 textAlign={"center"} mt={3}>
+              Número do pedido: #{paymentSucceeded?.OrderId}
             </H2>
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              <Paragraph fontSize={20} textAlign={"center"} sx={{ mt: 2 }}>
+              <p
+                style={{ fontSize: 20, textAlign: "center", marginTop: 2 }}
+              >
                 Acesse sua rota clicando{" "}
                 <a
                   style={{
@@ -283,8 +298,10 @@ const PaymentForm: FC = () => {
                 >
                   aqui
                 </a>
-              </Paragraph>
-              <Paragraph textAlign={"center"} fontSize={15} sx={{ mt: 2 }}>
+              </p>
+              <p
+                style={{ textAlign: "center", fontSize: 15, marginTop: 2 }}
+              >
                 Ou veja mais informações de sua compra clicando{" "}
                 <a
                   target="_blank"
@@ -293,7 +310,7 @@ const PaymentForm: FC = () => {
                 >
                   aqui
                 </a>
-              </Paragraph>
+              </p>
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -331,46 +348,70 @@ const PaymentForm: FC = () => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              <Paragraph
-                textAlign={"center"}
-                fontSize={20}
-                fontWeight={"bold"}
-                sx={{ mt: 3 }}
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  marginTop: "3px",
+                }}
               >
                 QRCODE
-              </Paragraph>
+              </p>
 
               <img
                 style={{ width: "100%" }}
                 src={paymentSucceededPix?.QrCodeImage}
                 alt="QR Code Pagamento"
               />
-              <Paragraph
-                textAlign={"center"}
-                fontSize={20}
-                fontWeight={"bold"}
-                sx={{ mt: 3 }}
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  marginTop: "3px",
+                }}
               >
                 Link para pagamento
-              </Paragraph>
-              <Paragraph textAlign={"center"} fontSize={15} sx={{ mt: 3 }}>
+              </p>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: "15px",
+                  marginTop: "3px",
+                }}
+              >
                 <a target="_blank" href={paymentSucceededPix?.PaymentLink}>
                   {paymentSucceededPix?.PaymentLink}
                 </a>
-              </Paragraph>
-              <Paragraph
-                textAlign={"center"}
-                fontSize={15}
-                fontWeight={"bold"}
-                sx={{ mt: 3 }}
+              </p>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  marginTop: "3px",
+                }}
               >
                 Informações adicionais:
-              </Paragraph>
-              <Paragraph textAlign={"center"} fontSize={15} sx={{ mt: 3 }}>
+              </p>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: "15px",
+                  marginTop: "3px",
+                }}
+              >
                 - Você possui o prazo de 1 hora para o pagamento. Ao passar
                 deste prazo, o código é expirado.
-              </Paragraph>
-              <Paragraph textAlign={"center"} fontSize={15} sx={{ mt: 3 }}>
+              </p>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: "15px",
+                  marginTop: "3px",
+                }}
+              >
                 - Caso perca o código ou QRCODE, clique{" "}
                 <a
                   target="_blank"
@@ -380,7 +421,7 @@ const PaymentForm: FC = () => {
                   aqui
                 </a>{" "}
                 e veja suas compras recentes
-              </Paragraph>
+              </p>
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -430,6 +471,7 @@ const PaymentForm: FC = () => {
                     onBlur={handleBlur}
                     value={values.card_no}
                     onChange={(e) => formatCardNumber(e.target.value)}
+                    error={!!touched.card_no && !!errors.card_no}
                     helperText={
                       (touched.card_no && errors.card_no) as string
                     }
@@ -444,6 +486,9 @@ const PaymentForm: FC = () => {
                     onBlur={handleBlur}
                     onChange={(e) => formatMonthExpiration(e.target.value)}
                     value={values.month_exp_date}
+                    error={
+                      !!touched.month_exp_date && !!errors.month_exp_date
+                    }
                     helperText={
                       (touched.month_exp_date &&
                         errors.month_exp_date) as string
@@ -459,6 +504,9 @@ const PaymentForm: FC = () => {
                     onBlur={handleBlur}
                     onChange={(e) => formatYearExpiration(e.target.value)}
                     value={values.year_exp_date}
+                    error={
+                      !!touched.year_exp_date && !!errors.year_exp_date
+                    }
                     helperText={
                       (touched.year_exp_date &&
                         errors.year_exp_date) as string
@@ -473,17 +521,20 @@ const PaymentForm: FC = () => {
                     value={values.name}
                     label="Nome no cartão"
                     onChange={handleChange}
+                    error={!!touched.name && !!errors.name}
                     helperText={(touched.name && errors.name) as string}
                   />
                 </Grid>
                 <Grid item sm={6} xs={12}>
                   <TextField
                     fullWidth
+                    inputProps={{ maxLength: 11 }}
                     name="cpf"
                     onBlur={handleBlur}
                     value={values.cpf}
                     label="CPF"
                     onChange={handleChange}
+                    error={!!touched.cpf && !!errors.cpf}
                     helperText={(touched.cpf && errors.cpf) as string}
                   />
                 </Grid>
@@ -495,6 +546,7 @@ const PaymentForm: FC = () => {
                     value={values.cvc}
                     label="CVV"
                     onChange={(e) => formatCVC(e.target.value)}
+                    error={!!touched.cvc && !!errors.cvc}
                     helperText={(touched.cvc && errors.cvc) as string}
                   />
                 </Grid>
@@ -536,6 +588,7 @@ const PaymentForm: FC = () => {
                     value={values.installment}
                     label="Parcelas"
                     onChange={handleChange}
+                    error={!!touched.installment && !!errors.installment}
                     helperText={
                       (touched.installment && errors.installment) as string
                     }
@@ -596,6 +649,16 @@ const PaymentForm: FC = () => {
           </Fragment>
         )}
       </Card1>
+
+      <Button
+        startIcon={<TurnLeftIcon />}
+        variant="contained"
+        color="primary"
+        sx={{ p: 1 }}
+        onClick={handlePushCart}
+      >
+        Voltar para o carrinho
+      </Button>
     </Fragment>
   );
 };
@@ -628,7 +691,7 @@ const checkoutSchema = yup.object().shape({
     .matches(/^\d{1,3}$/, "CVC inválido (até 3 dígitos)"),
   cpf: yup.string().required("Digite seu CPF"),
   brand: yup.string(),
-  installment: yup.number(),
+  installment: yup.number().required("Escolha suas parcelas"),
 });
 
 export default PaymentForm;

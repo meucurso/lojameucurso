@@ -96,9 +96,16 @@ const ProductCard18: FC<ProductCardProps> = ({ product }) => {
             loading="lazy"
             src={product.SmallImageUrl}
             width={"100%"}
-            height={"100%"}
+            height={"auto"}
             style={{ objectFit: "contain" }}
           />
+          {/* <LazyImage
+            src={product.SmallImageUrl}
+            alt={product.Name}
+            width={500}
+            height={500}
+            priority
+          /> */}
 
           <QuickViewButton
             fullWidth

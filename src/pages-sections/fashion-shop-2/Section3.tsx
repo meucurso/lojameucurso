@@ -21,6 +21,7 @@ const Section3: FC<Section3Props> = ({ categories }) => {
             <a href={item?.url}>
               <CategoryCard1
                 image={item.image}
+                imageMobile={item.imageMobile}
                 title={"Conheça os cursos"}
               />
             </a>

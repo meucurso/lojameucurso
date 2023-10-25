@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import { useState } from "react";
 
 interface ReadMoreProps {
-  children: string;
+  children: string | any;
 }
 
 export function ReadMore({ children }: ReadMoreProps) {

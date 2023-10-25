@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+import Link from "next/link";
 import {
   Box,
   Grid,
@@ -75,28 +76,37 @@ const NewsletterLogin: FC<Props> = ({
             />
             <Grid item lg={6} md={6} xs={12} alignItems="center">
               <Box textAlign="center" p={3}>
-                <Paragraph fontSize={22} fontWeight={700}>
-                  Atenção! Importante atualização no login da nossa
-                  <Span color="primary.main"> nova loja!</Span>
+                <Paragraph
+                  color="primary.main"
+                  fontSize={25}
+                  fontWeight={700}
+                >
+                  Atenção!
                 </Paragraph>
 
-                <Paragraph mt={5} mb={1}>
-                  Caros alunos,
-                </Paragraph>
-                <Paragraph mb={10}>
-                  Anteriormente, você usava um login separado para acessar
-                  a loja, mas agora simplificamos o processo para tornar
-                  sua experiência ainda mais conveniente. A partir de
-                  agora, você precisará usar as mesmas{" "}
+                <Paragraph mt={10} mb={10}>
+                  Informamos que a nossa loja possui agora um{" "}
                   <Span sx={{ fontWeight: "bold" }} color="primary.main">
-                    credenciais
+                    novo site
                   </Span>{" "}
-                  que utiliza em nossa{" "}
+                  . A senha para a Área do Aluno e para o site agora são a{" "}
                   <Span sx={{ fontWeight: "bold" }} color="primary.main">
-                    Área do Aluno.
-                  </Span>
+                    mesma
+                  </Span>{" "}
+                  . Se você não se recorda da sua senha da Área do Aluno,
+                  clique no botão abaixo para recuperá-la:
                 </Paragraph>
-                <Paragraph>Atenciosamente, MeuCurso</Paragraph>
+                <Button color="error" variant="contained">
+                  <Link
+                    target="_blank"
+                    href={
+                      "https://aluno.meucurso.com.br/Account/NewPassword/"
+                    }
+                  >
+                    Recuperar senha
+                  </Link>
+                </Button>
+                <Paragraph mt={10}>Atenciosamente, MeuCurso</Paragraph>
               </Box>
             </Grid>
           </Grid>

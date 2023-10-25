@@ -23,7 +23,7 @@ const PaymentSummary: FC = () => {
       <FlexBetween mb={1}>
         <Paragraph color="grey.600">Subtotal:</Paragraph>
         <Paragraph fontSize={18} fontWeight={600} lineHeight={1}>
-          {currency(localProducts.SubTotalPrice)}
+          {currency(localProducts?.SubTotalPrice)}
         </Paragraph>
       </FlexBetween>
 
@@ -35,7 +35,7 @@ const PaymentSummary: FC = () => {
           fontWeight={600}
           lineHeight={1}
         >
-          {currency(localProducts.Frete)}
+          {currency(localProducts?.Frete)}
         </Paragraph>
       </FlexBetween>
 
@@ -47,7 +47,7 @@ const PaymentSummary: FC = () => {
           fontWeight={600}
           lineHeight={1}
         >
-          - {currency(localProducts.Cupom)}
+          - {currency(localProducts?.Cupom)}
         </Paragraph>
       </FlexBetween>
 
@@ -56,7 +56,7 @@ const PaymentSummary: FC = () => {
         <Span color="grey.600">Total:</Span>
 
         <Span fontSize={18} fontWeight={600} lineHeight="1">
-          {currency(localProducts.Price)}
+          {currency(localProducts?.Price)}
         </Span>
       </FlexBetween>
       <div style={{ display: "flex", justifyContent: "end" }}>
@@ -70,7 +70,7 @@ const PaymentSummary: FC = () => {
           ou em até{" "}
           <span style={{ color: "red", fontWeight: "bold" }}>12x </span> de{" "}
           <span style={{ color: "red", fontWeight: "bold" }}>
-            {currency(localProducts.Price / 12)}
+            {currency(localProducts?.Price / 12)}
           </span>{" "}
           no cartão de crédito
         </Paragraph>

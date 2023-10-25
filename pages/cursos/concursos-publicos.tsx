@@ -39,15 +39,7 @@ const ConcursosPublicos = () => {
         />
         <Container maxWidth="xl" disableGutters={true}>
           <Section1 carouselData={banners} />
-          <Box
-            py={5}
-            my={5}
-            sx={{
-              backgroundImage:
-                "url(https://www.meucurso.com.br/media/wysiwyg/background-row-concursos-5_1.jpg)",
-              color: "#fff",
-            }}
-          >
+          <Box py={5} my={5}>
             <Container>
               <Grid container>
                 <Grid item md={12} textAlign={"center"}>

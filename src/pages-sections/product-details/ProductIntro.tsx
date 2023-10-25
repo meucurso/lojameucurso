@@ -210,22 +210,6 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             justifyContent={"center"}
             mb={1}
           >
-            {/* <Box>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: singleProduct.ShortDescription,
-                }}
-              />
-              <Box
-                sx={{ width: "100%" }}
-                component={Button}
-                p={0.5}
-                bgcolor="grey.200"
-              >
-                <Paragraph>ver mais</Paragraph>
-                <ExpandCircleDownIcon sx={{ ml: 1 }} />
-              </Box>
-            </Box> */}
             {singleProduct.ShortDescription && (
               <ReadMore>{singleProduct.ShortDescription}</ReadMore>
             )}
