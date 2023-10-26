@@ -1105,6 +1105,12 @@ module.exports = {
         destination: "/livraria",
         permanent: true,
       },
+      {
+        source: "/imersao39",
+        destination:
+          "https://conteudo.meucurso.com.br/imersao-oab-1-fase-39-meucurso",
+        permanent: false,
+      },
     ];
   },
 
