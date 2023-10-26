@@ -7,7 +7,7 @@ import useWindowSize from "hooks/useWindowSize";
 import api from "utils/__api__/meu-curso";
 import SEO from "components/SEO";
 import Section6 from "pages-sections/fashion-shop-2/Section6";
-import { H1 } from "components/Typography";
+import { H1, H2 } from "components/Typography";
 
 import Section1 from "pages-sections/fashion-shop-2/Section1";
 import { useProducts } from "hooks/useProducts";
@@ -18,6 +18,12 @@ const Livraria = () => {
   const [visibleSlides, setVisibleSlides] = useState(4);
 
   const { products } = useProducts(api.getProductsById("13"));
+  const { products: livrariaOAB } = useProducts(
+    api.getProductsById("148")
+  );
+  const { products: livrariaConcursos } = useProducts(
+    api.getProductsById("151")
+  );
 
   const { banners } = useBanners(api.getIndexBanners("12"));
 
@@ -47,12 +53,19 @@ const Livraria = () => {
             }}
           >
             <Container>
-              <Grid container>
-                <Grid item md={12} textAlign={"center"}>
-                  <H1>Livros em Destaque</H1>
-                </Grid>
-              </Grid>
+              <H1 textAlign={"center"}>Livros em Destaque</H1>
+
               <Section6 category="Livraria" products={products} />
+              <H2 textAlign={"center"}>Livraria OAB</H2>
+              <Section6
+                category="livraria-livraria-oab"
+                products={livrariaOAB}
+              />
+              <H2 textAlign={"center"}>Livaria Concursos</H2>
+              <Section6
+                category="livraria-concursos"
+                products={livrariaConcursos}
+              />
             </Container>
           </Box>
           <Box sx={{ backgroundColor: "#fff" }}></Box>

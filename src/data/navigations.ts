@@ -206,6 +206,12 @@ const navigations = [
     menuComponent: "MegaMenu1",
   },
   {
+    icon: BalanceOutlinedIcon,
+    title: "Congressos Jovem Advocacia",
+    href: "/categorias/congressos-jovem-advocacia",
+    menuComponent: "MegaMenu1",
+  },
+  {
     icon: GavelOutlinedIcon,
     title: "/Professor",
     href: "/#",
@@ -253,7 +259,7 @@ const navigations = [
       },
       {
         title: "Vanderlei Garcia",
-        href: "https://aluno.meucurso.com.br/marketplace/index/vanderlei-garcia",
+        href: "https://aluno.meucurso.com.br/marketplace/index/vanderleijr",
       },
       {
         title: "Yuri Carneiro",

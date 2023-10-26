@@ -156,10 +156,16 @@ const navbarNavigations = [
   {
     megaMenu: false,
     megaMenuWithSub: false,
+    title: "Congressos Jovem Advocacia",
+    url: "/categorias/congressos-jovem-advocacia",
+  },
+  {
+    megaMenu: false,
+    megaMenuWithSub: false,
     title: "/Professor",
     url: "/professor",
     child: [
-      { title: "Conhheça os cursos", url: "/cursos/concursos-publicos" },
+      { title: "Conheça os cursos", url: "/#" },
       {
         title: "Alessandro Spilborghs",
         url: "https://aluno.meucurso.com.br/marketplace/index/alessandrospilborghs",
@@ -202,7 +208,7 @@ const navbarNavigations = [
       },
       {
         title: "Vanderlei Garcia",
-        url: "https://aluno.meucurso.com.br/marketplace/index/vanderlei-garcia",
+        url: "https://aluno.meucurso.com.br/marketplace/index/vanderleijr",
       },
       {
         title: "Yuri Carneiro",
