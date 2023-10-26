@@ -337,6 +337,7 @@ const Header: FC<HeaderProps> = ({ isFixed, className, searchInput }) => {
                   bgcolor="grey.200"
                   href="/login"
                   color={"grey"}
+                  disabled={!!session}
                 >
                   <PersonOutline />
                 </Box>

@@ -106,8 +106,6 @@ const PaymentForm: FC = () => {
       localProducts.OrderShippingPackages;
     requestPayment.Coupon = localProducts.Coupon;
 
-    console.log(requestPayment);
-
     await axios
       .post(
         "https://apiecommerce.meucurso.com.br/BIPEStore/ProcessPaymentPix",
@@ -118,8 +116,8 @@ const PaymentForm: FC = () => {
       .then((response) => {
         setLoadingPayment(false),
           setPaymentSucceedPix(response.data),
-          console.log(response.data);
-        localStorage.removeItem("apiResponseData"), setOpenPixModal(true);
+          localStorage.removeItem("apiResponseData"),
+          setOpenPixModal(true);
       })
       .catch((err) => {
         setLoadingPayment(false),
@@ -168,8 +166,6 @@ const PaymentForm: FC = () => {
     requestPayment.OrderShippingPackage =
       localProducts.OrderShippingPackages;
     requestPayment.Coupon = localProducts.Coupon;
-
-    console.log(requestPayment);
 
     await axios
       .post(

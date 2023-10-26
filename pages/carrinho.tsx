@@ -9,10 +9,11 @@ import {
   TextField,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import MenuItem from "@mui/material/MenuItem";
 import SEO from "components/SEO";
-import { H2, Paragraph, Span } from "components/Typography";
+import { H1, H2, Paragraph, Span } from "components/Typography";
 import { FlexBetween, FlexBox } from "components/flex-box";
 import ProductCard7 from "components/product-cards/ProductCard7";
 import CheckoutNavLayout from "components/layouts/CheckoutNavLayout";
@@ -61,14 +62,12 @@ const Carrinho: NextPage = () => {
   const [cepValue, setCepValue] = useState<any>();
   const [studentAddress, setStudentAddress] = useState<any>([]);
   const [coupoms, setCoupoms] = useState<any>();
-  const [coupomValue, setCoupomValue] = useState<any>("");
+  const [coupomValue, setCoupomValue] = useState<any>();
   const [cupomText, setCoupomText] = useState("");
   const [sedex, setSedex] = useState<any>(false);
   const [radioValue, setRadioValue] = useState("");
   const [shippingPrice, setShippingPrice] = useState(0);
-
-  const [loadingAddress, setLoadingAddress] = useState(false);
-  const [loadingButton, setLoadingButton] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [pickupInStore, setPickupInStore] = useState(false);
 
   const [open, setOpen] = useState(false);
@@ -162,16 +161,17 @@ const Carrinho: NextPage = () => {
         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
       )
       .then((response) => {
-        console.log(response.data);
         setOpen(true);
       })
       .catch((err) => console.log(err));
   };
 
   const handleCoupom = async (coupomName) => {
+    const encodedCoupomName = encodeURIComponent(coupomName);
+
     axios
       .get(
-        `https://apiecommerce.meucurso.com.br/Coupons/ValidCoupon?OrderId=${orderId}&CouponName=${coupomName}`,
+        `https://apiecommerce.meucurso.com.br/Coupons/ValidCoupon?OrderId=${orderId}&CouponName=${encodedCoupomName}`,
         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
       )
       .then((response) => {
@@ -183,9 +183,7 @@ const Carrinho: NextPage = () => {
       })
       .catch((err) => {
         setCoupomText("Cupom Iinválido");
-        enqueueSnackbar(err.response.data, {
-          variant: "error",
-        });
+        console.log(err);
       });
   };
 
@@ -283,17 +281,14 @@ const Carrinho: NextPage = () => {
   );
 
   const fetchAddress = useCallback(async () => {
-    setLoadingAddress(true);
     if (session) {
       try {
         const response = await axios.get(
           `https://apiecommerce.meucurso.com.br/Student/Address?CustomerId=${session?.user?.CustomerId}`,
           { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
         );
-        setLoadingAddress(false);
         setStudentAddress(response.data);
       } catch (err) {
-        setLoadingAddress(false);
         enqueueSnackbar(err.response.data, {
           variant: "error",
         });
@@ -303,21 +298,22 @@ const Carrinho: NextPage = () => {
 
   useEffect(() => {
     const fetchShippingDetails = async (cepValue) => {
-      setLoadingButton(true);
+      setLoading(true);
       axios
         .get(
           `https://apiecommerce.meucurso.com.br/Shipping/GetShippingDetails?OrderId=${orderId}&Cep=${cepValue}`,
           { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
         )
         .then((response) => {
-          setLoadingButton(false);
+          setLoading(false);
           setCepValue(response.data);
         })
-        .catch((err) =>
+        .catch((err) => {
+          setLoading(false);
           enqueueSnackbar(err.response.data, {
             variant: "error",
-          })
-        );
+          });
+        });
     };
 
     fetchCartItems();
@@ -337,7 +333,6 @@ const Carrinho: NextPage = () => {
   const shippingInfo = cepValue?.flatMap(
     (item) => item.ShippingInformations
   );
-
   return (
     <>
       {!cartProducts.length && (
@@ -347,9 +342,15 @@ const Carrinho: NextPage = () => {
             sitename="MeuCurso - Do seu jeito. No seu tempo."
           />
 
-          <Grid container>
-            <Grid item md={12} textAlign={"center"}>
-              <h1>Seu carrinho está vazio!</h1>
+          <Grid container textAlign={"center"} justifyContent={"center"}>
+            <Grid item m={5} md={12}>
+              <H2>Seu carrinho está vazio!</H2>
+              <img
+                loading="lazy"
+                style={{ maxWidth: "100%", height: "auto" }}
+                src="/assets/images/Bipe/_2.png"
+                alt="banner"
+              />
             </Grid>
           </Grid>
         </ShopLayout1>
@@ -602,7 +603,7 @@ const Carrinho: NextPage = () => {
                       />
 
                       <Button
-                        disabled={coupomValue.length <= 0}
+                        disabled={coupomValue?.length <= 0}
                         onClick={() => handleCoupom(coupomValue)}
                         variant="outlined"
                         color="primary"
@@ -613,76 +614,88 @@ const Carrinho: NextPage = () => {
                       </Button>
                     </>
                   )}
-                  <TextField
-                    helperText={
-                      <LinkHelper
-                        target="_blank"
-                        href="https://aluno.meucurso.com.br/Account/MyAccount"
-                      >
-                        Caso queira registrar um novo endereço, clique
-                        aqui!
-                      </LinkHelper>
-                    }
-                    select
-                    value={address}
-                    fullWidth
-                    size="small"
-                    label="Endereços"
-                    variant="outlined"
-                    onChange={handleAddressChange}
-                  >
-                    {studentAddress.map((item, index) => (
-                      <MenuItem value={item.StudentAddressId} key={index}>
-                        {item.AddressLine1} - {item.Number} -{" "}
-                        {item.CityName}- {item.StateName}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-
-                  <TextField
-                    disabled
-                    fullWidth
-                    size="small"
-                    label="C.E.P"
-                    placeholder="3100"
-                    variant="outlined"
-                    sx={{
-                      mt: 2,
-                      color: "#2b3445",
-                      "& .MuiInputBase-input.Mui-disabled": {
-                        WebkitTextFillColor: "#2b3445",
-                      },
-                      "& .MuiFormLabel-root.Mui-disabled": {
-                        color: "#2b3445",
-                      },
-                    }}
-                    value={cep}
-                    onChange={(e) => setCep(e.target.value)}
-                  />
-                  <Divider sx={{ mb: 2 }} />
-                  {shippingProduct && address && (
+                  {shippingProduct && (
                     <>
-                      <FormControl sx={{ mb: 2 }}>
-                        <FormLabel id="demo-radio-buttons-group-label">
-                          <Span color="grey.600">Tipo de entrega</Span>
-                        </FormLabel>
-                        {shippingInfo?.map((carriers, index) => (
-                          <RadioGroup
-                            key={index}
-                            aria-labelledby="demo-radio-buttons-group-label"
-                            defaultValue=""
-                            name="radio-buttons-group"
-                            onChange={handleRadioChange}
-                            value={radioValue}
+                      <TextField
+                        helperText={
+                          <LinkHelper
+                            target="_blank"
+                            href="https://aluno.meucurso.com.br/Account/MyAccount"
                           >
-                            <FormControlLabel
-                              value={carriers.ServiceDescription}
-                              control={<Radio />}
-                              label={carriers.ServiceDescription}
-                            />
-                          </RadioGroup>
+                            Caso queira registrar um novo endereço, clique
+                            aqui!
+                          </LinkHelper>
+                        }
+                        select
+                        value={address}
+                        fullWidth
+                        size="small"
+                        label="Endereços"
+                        variant="outlined"
+                        onChange={handleAddressChange}
+                      >
+                        {studentAddress.map((item, index) => (
+                          <MenuItem
+                            value={item.StudentAddressId}
+                            key={index}
+                          >
+                            {item.AddressLine1} - {item.Number} -{" "}
+                            {item.CityName}- {item.StateName}
+                          </MenuItem>
                         ))}
-                      </FormControl>
+                      </TextField>
+
+                      <TextField
+                        disabled
+                        fullWidth
+                        size="small"
+                        label="C.E.P"
+                        placeholder="3100"
+                        variant="outlined"
+                        sx={{
+                          mt: 2,
+                          color: "#2b3445",
+                          "& .MuiInputBase-input.Mui-disabled": {
+                            WebkitTextFillColor: "#2b3445",
+                          },
+                          "& .MuiFormLabel-root.Mui-disabled": {
+                            color: "#2b3445",
+                          },
+                        }}
+                        value={cep}
+                        onChange={(e) => setCep(e.target.value)}
+                      />
+                      <Divider sx={{ mb: 2 }} />
+                      {loading && shippingProduct && address && (
+                        <CircularProgress color="inherit" size={20} />
+                      )}
+                      {!loading && shippingProduct && address && (
+                        <>
+                          <FormControl sx={{ mb: 2 }}>
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              <Span color="grey.600">Tipo de entrega</Span>
+                            </FormLabel>
+                            {shippingInfo?.map((carriers, index) => (
+                              <>
+                                <RadioGroup
+                                  key={index}
+                                  aria-labelledby="demo-radio-buttons-group-label"
+                                  defaultValue=""
+                                  name="radio-buttons-group"
+                                  onChange={handleRadioChange}
+                                  value={radioValue}
+                                >
+                                  <FormControlLabel
+                                    value={carriers.ServiceDescription}
+                                    control={<Radio />}
+                                    label={carriers.ServiceDescription}
+                                  />
+                                </RadioGroup>
+                              </>
+                            ))}
+                          </FormControl>
+                        </>
+                      )}
                     </>
                   )}
 

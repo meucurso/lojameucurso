@@ -82,7 +82,6 @@ const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
   if (router.isFallback || !updatedProduct) {
     return <h1>Carregando...</h1>;
   }
-  console.log(singleProduct);
   return (
     <ShopLayout1>
       <SEO
