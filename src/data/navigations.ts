@@ -84,6 +84,16 @@ const navigations = [
         href: "/categorias/oab-2-fase-tributario",
         megaMenu: "MegaMenu1",
       },
+      {
+        title: "Repescagem",
+        href: "/categorias/oab-2-fase-repescagem",
+        megaMenu: "MegaMenu1",
+      },
+      {
+        title: "Mentoria 2ª Fase",
+        href: "/categorias/oab-2-fase-mentoria-2-fase",
+        megaMenu: "MegaMenu1",
+      },
     ],
   },
 

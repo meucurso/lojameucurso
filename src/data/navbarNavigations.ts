@@ -50,6 +50,11 @@ const navbarNavigations = [
       { title: "Penal", url: "/categorias/oab-2-fase-penal" },
       { title: "Trabalho", url: "/categorias/oab-2-fase-trabalho" },
       { title: "Tributário", url: "/categorias/oab-2-fase-tributario" },
+      { title: "Repescagem", url: "/categorias/oab-2-fase-repescagem" },
+      {
+        title: "Mentoria 2ª Fase",
+        url: "/categorias/oab-2-fase-mentoria-2-fase",
+      },
     ],
   },
   {
