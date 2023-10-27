@@ -151,6 +151,10 @@ const navigations = [
         menuData: {
           categories: [
             {
+              title: "Administrativo",
+              href: "/categorias/atualizacao-e-pratica-administrativo",
+            },
+            {
               title: "Ambiental",
               href: "/categorias/atualizacao-e-pratica-ambiental",
             },

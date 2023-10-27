@@ -95,6 +95,10 @@ const navbarNavigations = [
         title: "Cursos",
         child: [
           {
+            title: "Administrativo",
+            url: "/categorias/atualizacao-e-pratica-administrativo",
+          },
+          {
             title: "Ambiental",
             url: "/categorias/atualizacao-e-pratica-ambiental",
           },
