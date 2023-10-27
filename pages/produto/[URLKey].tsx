@@ -57,7 +57,7 @@ const updateChildrenSelected = (item) => {
 const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
   const router = useRouter();
 
-  const initialSelectedOption = singleProduct.ShortDescription ? "0" : "1";
+  const initialSelectedOption = singleProduct.Description ? "0" : "1";
 
   const [selectedOption, setSelectedOption] = useState(
     initialSelectedOption
@@ -82,6 +82,8 @@ const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
   if (router.isFallback || !updatedProduct) {
     return <h1>Carregando...</h1>;
   }
+
+  console.log(singleProduct);
   return (
     <ShopLayout1>
       <SEO
@@ -99,7 +101,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
                 <Tab
                   label="Descrição"
                   value="0"
-                  disabled={singleProduct.ShortDescription === null}
+                  disabled={singleProduct.Description === null}
                 />
                 <Tab label="Descritivo" value="1" />
               </TabList>

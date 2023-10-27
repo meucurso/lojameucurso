@@ -10,11 +10,7 @@ export const useProducts = (dataProducts) => {
     const fetchProducts = async () => {
       await dataProducts
         .then((response) => setProducts(response))
-        .catch((err) =>
-          enqueueSnackbar(err.response.data, {
-            variant: "error",
-          })
-        );
+        .catch((err) => console.log(err));
     };
 
     fetchProducts();
