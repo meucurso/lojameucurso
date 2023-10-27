@@ -57,9 +57,11 @@ const PaymentForm: FC = () => {
 
   const fetchInstallments = useCallback(async () => {
     const cartData = JSON.parse(localStorage.getItem("apiResponseData"));
+    const encodedCoupomName = encodeURIComponent(cartData.Coupon);
+
     try {
       const response = await axios.get(
-        `https://apiecommerce.meucurso.com.br/BIPEStore/ListInstallments?OrderId=${cartData.OrderId}&Coupon=${cartData.Coupon}&PaymentOperatorId=9&PaymentMethodId=2&StudentAddressId=${session.user.StudentAddress[0].StudentAddressId}`,
+        `https://apiecommerce.meucurso.com.br/BIPEStore/ListInstallments?OrderId=${cartData.OrderId}&Coupon=${encodedCoupomName}&PaymentOperatorId=9&PaymentMethodId=2&StudentAddressId=${session.user.StudentAddress[0].StudentAddressId}`,
         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
       );
 

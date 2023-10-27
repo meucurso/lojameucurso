@@ -1111,6 +1111,61 @@ module.exports = {
           "https://conteudo.meucurso.com.br/imersao-oab-1-fase-39-meucurso",
         permanent: false,
       },
+
+      {
+        source: "/simuladogratuito",
+        destination: "/produto/maratona-de-eventos-oab-39-exame-de-ordem",
+        permanent: false,
+      },
+
+      {
+        source: "/cronogramarepescagem",
+        destination:
+          "https://conteudo.meucurso.com.br/2-fase-oab-meucurso",
+        permanent: false,
+      },
+
+      {
+        source: "/queropassar",
+        destination:
+          "https://conteudo.meucurso.com.br/oab-1-fase-quer-passar-na-oab",
+        permanent: false,
+      },
+
+      {
+        source: "/oab40",
+        destination: "/categorias/oab-1-fase-40-exame",
+        permanent: false,
+      },
+
+      {
+        source: "/repescagem39 ",
+        destination: "/cursos/cursos-oab-2fase",
+        permanent: false,
+      },
+
+      {
+        source: "/detona39",
+        destination: "/categorias/oab-1-fase-eventos",
+        permanent: false,
+      },
+
+      {
+        source: "/oab39",
+        destination: "/categorias/oab-1-fase-39-exame",
+        permanent: false,
+      },
+      {
+        source: "/policiacivilsp",
+        destination: "/categorias/concursos-publicos-carreiras-policiais",
+        permanent: false,
+      },
+
+      {
+        source: "/concursos",
+        destination: "/cursos/concursos-publicos",
+        permanent: false,
+      },
     ];
   },
 
