@@ -16,6 +16,7 @@ interface Product {
   SpecialPrice?: number;
   Price?: number;
   ShortDescription?: string | null;
+  Description?: string;
   description?: string;
   shortDescription?: string;
   slug?: string;

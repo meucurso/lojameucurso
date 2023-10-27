@@ -8,11 +8,11 @@ type ProductDescriptionProps = { product: Product | null };
 // ======================================================
 
 const ProductDescription: FC<ProductDescriptionProps> = ({ product }) => {
-  const { ShortDescription } = product;
+  const { Description } = product;
 
   return (
     <>
-      <div dangerouslySetInnerHTML={{ __html: ShortDescription }} />
+      <div dangerouslySetInnerHTML={{ __html: Description }} />
     </>
   );
 };

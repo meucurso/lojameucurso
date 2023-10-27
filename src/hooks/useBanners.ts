@@ -10,11 +10,7 @@ export const useBanners = (dataBanners) => {
     const fetchBanners = async () => {
       await dataBanners
         .then((response) => setBanners(response))
-        .catch((err) =>
-          enqueueSnackbar(err.response.data, {
-            variant: "error",
-          })
-        );
+        .catch((err) => console.log(err));
     };
 
     fetchBanners();
