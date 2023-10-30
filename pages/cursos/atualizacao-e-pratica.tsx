@@ -35,8 +35,9 @@ const AtualizacaoEPratica = () => {
     <>
       <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
         <SEO
-          title="Atualização e Prática"
-          sitename="MeuCurso - Do seu jeito.  No seu tempo."
+          title="Atualização e Prática: Mantenha-se Preparado"
+          sitename="MeuCurso"
+          description="Eleve sua carreira jurídica com nossos cursos de atualização e prática. Fique à frente da concorrência e alcance o sucesso com o Meu Curso agora!"
         />
         <Container maxWidth="xl" disableGutters={true}>
           <Section1 carouselData={banners} />

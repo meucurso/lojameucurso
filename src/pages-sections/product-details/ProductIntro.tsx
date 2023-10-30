@@ -59,14 +59,24 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
   const [updatedPrice, setUpdatedPrice] = useState(
     singleProduct.SpecialPrice
   );
+  const [updatedScratchPrice, setUpdatedScratchPrice] = useState(
+    singleProduct.Price
+  );
 
   const updatePrice = (specialPrice: number) => {
     setUpdatedPrice(specialPrice);
   };
 
+  const upateScratchPrice = (price: number) => {
+    setUpdatedScratchPrice(price);
+  };
+
   useEffect(() => {
     if (productChild && productChild.SpecialPrice) {
       updatePrice(productChild.SpecialPrice);
+    }
+    if (productChild && productChild.Price) {
+      upateScratchPrice(productChild.Price);
     }
   }, [productChild]);
 
@@ -235,7 +245,7 @@ const ProductIntro: FC<ProductIntroProps> = ({ singleProduct }) => {
             <H2 color="primary.main" mb={0.5} lineHeight="1">
               12 x de {currency(updatedPrice / 12)} (PayPal)
             </H2>
-            <s>{currency(singleProduct.Price)}</s>
+            <s>{currency(updatedScratchPrice)}</s>
             <H2 color="primary.main" mb={0.5} lineHeight="1">
               {currency(updatedPrice)}
             </H2>

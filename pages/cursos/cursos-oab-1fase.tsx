@@ -36,8 +36,9 @@ const CursosOAB1Fase = () => {
     <>
       <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
         <SEO
-          title="1ª Fase OAB"
-          sitename="MeuCurso - Do seu jeito.  No seu tempo."
+          title="Preparação Completa para a Prova da OAB 1ª Fase"
+          sitename="MeuCurso"
+          description="Prepare-se de forma intensiva e eficaz para a 1ª Fase da Prova da OAB com o Meu Curso. Sucesso garantido na sua jornada jurídica. Inscreva-se!"
         />
         <Container maxWidth="xl" disableGutters={true}>
           <Section1 carouselData={banners} />

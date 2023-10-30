@@ -282,41 +282,29 @@ const CentralDeAjuda = (props) => {
                 <Grid item xs={12} md={4}>
                   <a
                     target="blank"
-                    href="http://www.meucurso.com.br/manualpos"
+                    href="https://meucursooficial-my.sharepoint.com/personal/rodrigo_reis_meucurso_com_br/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Frodrigo%5Freis%5Fmeucurso%5Fcom%5Fbr%2FDocuments%2FArquivos%20de%20Chat%20do%20Microsoft%20Teams%2FManual%20do%20aluno%20%2D%20FADEG%2Epdf&parent=%2Fpersonal%2Frodrigo%5Freis%5Fmeucurso%5Fcom%5Fbr%2FDocuments%2FArquivos%20de%20Chat%20do%20Microsoft%20Teams&ga=1"
                   >
-                    <img
-                      style={{ maxWidth: "100%", height: "auto" }}
-                      src="https://www.meucurso.com.br/media/wysiwyg/manual_da_pos.gif"
-                      alt=""
-                    />
+                    Manul Pós Graduação
                   </a>
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <a
                     target="blank"
-                    href="http://documentos.meucurso.com.br/pdfs/contrato_pos2021.pdf"
+                    href="https://arquivos.meucurso.com.br/Documentos/Contrato_Pos-2023-Registro.pdf"
                   >
-                    <img
-                      style={{ maxWidth: "100%", height: "auto" }}
-                      src="https://www.meucurso.com.br/media/wysiwyg/contrato_pos_1.gif"
-                      alt=""
-                    />
+                    Contrato Pós Graduação
                   </a>
                 </Grid>
-                <Grid item xs={12} md={4}>
+                {/* <Grid item xs={12} md={4}>
                   <a
                     target="blank"
                     href="http://documentos.meucurso.com.br/site/pdf/contrato_meucurso.pdf"
                   >
-                    <img
-                      style={{ maxWidth: "100%", height: "auto" }}
-                      src="https://www.meucurso.com.br/media/wysiwyg/contrato_cursos.gif"
-                      alt=""
-                    />
+                    Contrato MeuCurso
                   </a>
-                </Grid>
+                </Grid> */}
               </Grid>
-              <Grid container>
+              {/* <Grid container>
                 <Grid
                   display={"flex"}
                   alignItems={"end"}
@@ -352,7 +340,7 @@ const CentralDeAjuda = (props) => {
                     alt=""
                   />
                 </a>
-              </Grid>
+              </Grid> */}
 
               <Box></Box>
               <Box mt={5} display={"flex"} alignItems={"end"}>
