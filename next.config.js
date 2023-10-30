@@ -1139,7 +1139,7 @@ module.exports = {
       },
 
       {
-        source: "/repescagem39 ",
+        source: "/repescagem39",
         destination: "/cursos/cursos-oab-2fase",
         permanent: false,
       },
@@ -1164,6 +1164,31 @@ module.exports = {
       {
         source: "/concursos",
         destination: "/cursos/concursos-publicos",
+        permanent: false,
+      },
+      {
+        source: "/resgateseucurso",
+        destination:
+          "https://aluno.meucurso.com.br/BIPEStore/Campaign/5u7+TTAdhmmkXaw1JCwQ/w==",
+        permanent: false,
+      },
+
+      {
+        source: "/primeirospassos",
+        destination:
+          "https://aluno.meucurso.com.br/BIPEStore/Campaign/5u7+TTAdhmmkXaw1JCwQ/w==",
+        permanent: false,
+      },
+      {
+        source: "/nomenalista",
+        destination:
+          "https://conteudo.meucurso.com.br/nomenalista-app-meucurso",
+        permanent: false,
+      },
+
+      {
+        source: "/pos",
+        destination: "https://meucurso.com.br/cursos/pos-graduacao",
         permanent: false,
       },
     ];

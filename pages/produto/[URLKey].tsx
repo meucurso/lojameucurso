@@ -57,11 +57,7 @@ const updateChildrenSelected = (item) => {
 const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
   const router = useRouter();
 
-  const initialSelectedOption = singleProduct.Description ? "0" : "1";
-
-  const [selectedOption, setSelectedOption] = useState(
-    initialSelectedOption
-  );
+  const [selectedOption, setSelectedOption] = useState("0");
 
   const handleOptionClick = (
     event: React.SyntheticEvent,
@@ -98,11 +94,7 @@ const ProductDetails: FC<ProductDetailsProps> = ({ singleProduct }) => {
           <>
             <Box sx={{ borderBottom: 1, borderColor: "#d3d3d3" }}>
               <TabList onChange={handleOptionClick}>
-                <Tab
-                  label="Descrição"
-                  value="0"
-                  disabled={singleProduct.Description === null}
-                />
+                <Tab label="Descrição" value="0" />
                 <Tab label="Descritivo" value="1" />
               </TabList>
             </Box>

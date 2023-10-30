@@ -2,6 +2,10 @@ import Shop from "./Shop.model";
 import Review from "./Review.model";
 
 interface Product {
+  StartDate?: any | string;
+  EndDate?: any | string;
+  UnitsQuantity?: number | any;
+  Online?: boolean;
   InStock?: boolean;
   DescriptionFileUrl?: any;
   SKU?: any;
