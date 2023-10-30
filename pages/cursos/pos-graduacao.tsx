@@ -39,8 +39,9 @@ const PosGraduacao = () => {
     <>
       <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
         <SEO
-          title="Pós-Graduação"
-          sitename="MeuCurso - Do seu jeito.  No seu tempo."
+          title="Cursos de Pós-Graduação em Direito confira"
+          sitename="MeuCurso"
+          description="Aprofunde seus conhecimentos na área jurídica com nossos cursos de pós-graduação em Direito. Prepare-se para se destacar na sua carreira!"
         />
         <Container maxWidth="xl" disableGutters={true}>
           <Section1 carouselData={banners} />

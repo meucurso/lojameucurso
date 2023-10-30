@@ -40,8 +40,9 @@ const Livraria = () => {
     <>
       <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
         <SEO
-          title="Livraria"
-          sitename="MeuCurso - Do seu jeito.  No seu tempo."
+          title="Cursos de Direito: Livros Didáticos Educação Jurídica"
+          sitename="MeuCurso"
+          description="Descubra nossa livraria jurídica, onde você pode adquirir os livros necessários para seus cursos de Direito. Amplie seu conhecimento com a literatura!"
         />
         <Container maxWidth="xl" disableGutters={true}>
           <Section1 carouselData={banners} />

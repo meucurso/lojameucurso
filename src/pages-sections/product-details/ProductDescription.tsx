@@ -6,6 +6,7 @@ import Product from "models/Product.model";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { isNull } from "lodash";
 
 // ======================================================
 type ProductDescriptionProps = { product: Product | null };
@@ -17,7 +18,7 @@ const ProductDescription: FC<ProductDescriptionProps> = ({ product }) => {
 
   return (
     <>
-      <Grid textAlign={"center"} container spacing={5} mb={5}>
+      {/* <Grid textAlign={"center"} container spacing={5} mb={5}>
         <Grid item md={3}>
           <AccessTimeIcon sx={{ fontSize: 40 }} color={"primary"} />
           <H4>Carga Horária</H4>
@@ -38,7 +39,7 @@ const ProductDescription: FC<ProductDescriptionProps> = ({ product }) => {
           <H4>Data de Término</H4>
           <p> {format(new Date(EndDate), "dd/MM/yyyy")}</p>
         </Grid>
-      </Grid>
+      </Grid> */}
       <div dangerouslySetInnerHTML={{ __html: Description }} />
     </>
   );

@@ -12,7 +12,7 @@ export function ReadMore({ children }: ReadMoreProps) {
     setIsReadMore(!isReadMore);
   };
 
-  const maxLength = 150;
+  const maxLength = 350;
   const shouldShowButton = children.length > maxLength;
 
   const truncatedText = isReadMore
@@ -23,7 +23,6 @@ export function ReadMore({ children }: ReadMoreProps) {
     <>
       <div>
         <div
-          style={{ display: "grid" }}
           dangerouslySetInnerHTML={{
             __html:
               truncatedText +
@@ -31,7 +30,11 @@ export function ReadMore({ children }: ReadMoreProps) {
           }}
         />
         {shouldShowButton && (
-          <Button variant="contained" color="primary"  onClick={toggleReadMore}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={toggleReadMore}
+          >
             {isReadMore ? "ver mais" : "ver menos"}
           </Button>
         )}

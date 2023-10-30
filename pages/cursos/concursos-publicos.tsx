@@ -34,8 +34,9 @@ const ConcursosPublicos = () => {
     <>
       <ShopLayout1 topbarBgColor={theme.palette.grey[900]}>
         <SEO
-          title="Concursos Públicos"
-          sitename="MeuCurso - Do seu jeito.  No seu tempo."
+          title="Curso Preparatório para Concursos Jurídicos"
+          sitename="MeuCurso"
+          description="Alcance a sua aprovação em concursos jurídicos com nosso curso especializado. Prepare-se para o sucesso na área do Direito com o Meu Curso."
         />
         <Container maxWidth="xl" disableGutters={true}>
           <Section1 carouselData={banners} />
