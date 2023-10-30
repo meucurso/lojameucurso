@@ -31,7 +31,7 @@ export function ReadMore({ children }: ReadMoreProps) {
           }}
         />
         {shouldShowButton && (
-          <Button onClick={toggleReadMore}>
+          <Button variant="contained" color="primary"  onClick={toggleReadMore}>
             {isReadMore ? "ver mais" : "ver menos"}
           </Button>
         )}

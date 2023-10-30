@@ -1,5 +1,5 @@
 import ShopLayout1 from "components/layouts/ShopLayout1";
-import { GetStaticProps } from "next";
+
 import { Box, Button, Grid, useTheme } from "@mui/material";
 import { Container } from "@mui/system";
 
@@ -186,9 +186,9 @@ const CursosOAB2Fase = () => {
             </Container>
           </Box>
           <ExclusiveTools />
-          <Box sx={{ backgroundColor: "#fff" }}>
+          {/* <Box sx={{ backgroundColor: "#fff" }}>
             <OABExamTeam />
-          </Box>
+          </Box> */}
         </Container>
       </ShopLayout1>
     </>
