@@ -175,6 +175,7 @@ const Carrinho: NextPage = () => {
         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
       )
       .then((response) => {
+        console.log(response.data);
         setCoupoms(response.data);
         setCoupomText("Cupom aplicado!");
         if (response.data === null) {
@@ -194,6 +195,7 @@ const Carrinho: NextPage = () => {
         { headers: { Authorization: `Bearer ${session?.user?.Token}` } }
       )
       .then(() => {
+        handleCoupom(coupomValue);
         const apiResponseData = JSON.parse(
           localStorage.getItem("apiResponseData")
         );
