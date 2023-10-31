@@ -1168,15 +1168,13 @@ module.exports = {
       },
       {
         source: "/resgateseucurso",
-        destination:
-          "https://aluno.meucurso.com.br/BIPEStore/Campaign/5u7+TTAdhmmkXaw1JCwQ/w==",
+        destination: "https://l1nq.com/eIg0h",
         permanent: false,
       },
 
       {
         source: "/primeirospassos",
-        destination:
-          "https://aluno.meucurso.com.br/BIPEStore/Campaign/5u7+TTAdhmmkXaw1JCwQ/w==",
+        destination: "https://l1nq.com/eIg0h",
         permanent: false,
       },
       {

@@ -284,7 +284,7 @@ const CentralDeAjuda = (props) => {
                     target="blank"
                     href="https://meucursooficial-my.sharepoint.com/personal/rodrigo_reis_meucurso_com_br/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Frodrigo%5Freis%5Fmeucurso%5Fcom%5Fbr%2FDocuments%2FArquivos%20de%20Chat%20do%20Microsoft%20Teams%2FManual%20do%20aluno%20%2D%20FADEG%2Epdf&parent=%2Fpersonal%2Frodrigo%5Freis%5Fmeucurso%5Fcom%5Fbr%2FDocuments%2FArquivos%20de%20Chat%20do%20Microsoft%20Teams&ga=1"
                   >
-                    Manul Pós Graduação
+                    Manual Pós Graduação
                   </a>
                 </Grid>
                 <Grid item xs={12} md={4}>
