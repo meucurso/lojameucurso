@@ -126,11 +126,11 @@ module.exports = {
         permanent: true,
       },
       { source: "/carlosandre", destination: "/", permanent: true },
-      {
-        source: "/central-de-ajuda",
-        destination: "/central-de-ajuda",
-        permanent: true,
-      },
+      // {
+      //   source: "/central-de-ajuda",
+      //   destination: "/central-de-ajuda",
+      //   permanent: false,
+      // },
       {
         source: "/civil-2-fase-38-oab-regular-fds-online.html",
         destination: "/categorias/oab-2-fase-civil",
